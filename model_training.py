@@ -110,18 +110,23 @@ def main(args):
     # Data Visualization
     data_visualizator = DataVisualizator(df_train)
     # Print information on variables
-    data_visualizator.data_inforamtion()
+    data_visualizator.data_inforamtion()    
+    # Remove two first column which reffers to index, non useful to create model
+    df_train.drop(columns=['Unnamed: 0', 'index'], inplace=True)
+    data_visualizator = DataVisualizator(df_train)
+    
     data_visualizator.missing_value_plotting(length=100,width=100)
-    data_visualizator.correlation_matrix(length=100,width=100)
+    data_visualizator.correlation_matrix()
     data_visualizator.pie_chart(columns_name=df_train.columns)
     data_visualizator.bar_chart(columns_name=df_train.columns)
+    data_visualizator.histogram(columns_name=df_train.columns)
+    data_visualizator.pairplot(label='embauche')
+    data_visualizator.boxplot(column_name='salaire',label='embauche')
     
     # Add external data (gold financial data)
     df_train=DataScraper(df_train).add_scraped_data("date")
     # Feature Engineering on date
     df_train = DatePreprocessor(df_train).extract_date_information("date")
-    # Remove two first column which reffers to index, non useful to create model
-    df_train.drop(columns=['Unnamed: 0', 'index'], inplace=True)
     #Get 
     df_train = pd.get_dummies(df_train,prefix_sep="_")
 

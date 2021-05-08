@@ -250,7 +250,7 @@ class DatePreprocessor:
             return datetime.strptime(date, self.DATE_FORMAT).strftime('%A').lower()
         
         
-    def extract_date_information(self, column_name, date_format='%Y-%m-%d'):
+    def extract_date_information(self, columns_name, date_format='%Y-%m-%d'):
         '''
         Create new day, month, year and other feature column using date column
         
@@ -275,7 +275,7 @@ class DatePreprocessor:
         '''
         
         print("Feature Engineering on date...")     
-        if isinstance(column_name, str): columns_name = set(column_name)
+        if isinstance(columns_name, str): columns_name = set(columns_name)
         for column_name in columns_name:
             self.dataframe[column_name] = self.dataframe[column_name].apply(self.convert_date_format, date_format=date_format)
             self.dataframe[column_name + "_day"] = self.dataframe[column_name].apply(self._date_extractor_function, option="day")
@@ -289,7 +289,7 @@ class DatePreprocessor:
             self.dataframe[column_name + "_quarter_of_year"] = self.dataframe[column_name].apply(self._get_quarter_of_year)
             self.dataframe[column_name + "_leap_year"] = self.dataframe[column_name].apply(self._is_leap_year)
             self.dataframe[column_name + "_elapsed_day"] = self.dataframe[column_name].apply(self._get_elapsed_day)
-            self.dataframe.drop(name, axis=1, inplace=True)
+            self.dataframe.drop(column_name, axis=1, inplace=True)
             print("Feature Engineering on date - DONE")  
             
         return self.dataframe

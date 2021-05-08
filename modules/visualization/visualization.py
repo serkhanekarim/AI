@@ -57,6 +57,7 @@ class DataVisualizator:
         # Display Dataframe on PandasGUI
         if option == "pandasgui": show(self.dataframe)
         # Display Dataframe information on Console
+        #print(self.dataframe.head().style.bar(color='red'))
         print(self.dataframe.head())
         print(self.dataframe.info())
         
@@ -78,8 +79,11 @@ class DataVisualizator:
         '''
         
         print("Plotting Missing Values...")
-        plt.subplots(figsize=(width,length)) 
         
+        '''
+        The sparkline at right summarizes the general shape of the data completeness 
+        and points out the rows with the maximum and minimum nullity in the dataset.
+        '''
         msno.bar(self.dataframe)
         plt.title("Matrice des valeurs manquantes des données\n", fontsize=18)
         
@@ -94,23 +98,65 @@ class DataVisualizator:
         msno.heatmap(self.dataframe)
         plt.title("Diagramme à barres des valeurs manquantes des données\n", fontsize=18)
 
-        
-        '''
-        The sparkline at right summarizes the general shape of the data completeness 
-        and points out the rows with the maximum and minimum nullity in the dataset.
-        '''
         msno.dendrogram(self.dataframe)
+        
     
-    def correlation_matrix(self, length, width):
+    def violin_plot(self, columns_name, label):
+        '''
+        Display the violin plot for all features from the dataframe
+
+        Parameters
+        ----------
+        None.
+
+        Returns
+        -------
+        Display the violin plot for all all feature and save it
+
+        '''
+        
+        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        for column_name_continuous in set(columns_name):
+            if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
+                for column_name_categorical in set(columns_name):
+                    if self.dataframe[column_name_categorical].dtypes == "O" and column_name_categorical!= label and len(set(self.dataframe[column_name_categorical])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
+                        print("Plotting violin plot of " + column_name_categorical.upper() + " on " + column_name_continuous.upper() + "...")
+                        plt.figure()
+                        with sns.axes_style(style=None):
+                            sns.violinplot(x=column_name_categorical, y=column_name_continuous, hue=label, data=self.dataframe, split=True, palette=self.PKMN_TYPE_COLORS);
+                            plt.title("Diagramme en violon de " + column_name_categorical.upper() + " sur " + column_name_continuous.upper() + "\n", fontsize=18)
+
+    def box_plot(self, columns_name, label):
+        '''
+        Display the box plot for all features from the dataframe
+
+        Parameters
+        ----------
+        None.
+
+        Returns
+        -------
+        Display the box plot for all all feature and save it
+
+        '''
+        
+        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        for column_name_continuous in set(columns_name):
+            if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
+                for column_name_categorical in set(columns_name):
+                    if self.dataframe[column_name_categorical].dtypes == "O" and column_name_categorical != label and len(set(self.dataframe[column_name_categorical])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
+                        print("Plotting box plot of " + column_name_categorical.upper() + " on " + column_name_continuous.upper() + "...")
+                        plt.figure()
+                        sns.boxplot(x=column_name_categorical, y=column_name_continuous, hue=label, data=self.dataframe)
+                        plt.title("Boîte à moustaches de " + column_name_categorical.upper() + " sur " + column_name_continuous.upper() + "\n", fontsize=18)
+    
+    def correlation_matrix(self):
         '''
         Display the correlation matrix between all features from the dataframe
 
         Parameters
         ----------
-        length : int
-            length of the figure.
-        width : int
-            width of the figure.
+        None.
 
         Returns
         -------
@@ -118,9 +164,26 @@ class DataVisualizator:
 
         '''
         print("Plotting Correlation between all features...")
-        plt.subplots(figsize=(width,length))        
-        sns.heatmap(self.dataframe.corr(), annot=True, cmap='Reds')
+        sns.heatmap(self.dataframe.corr(), cmap='Reds', annot=True, linewidths=1)
         plt.title("Matrice de corrélation entre les différentes caractéristiques\n", fontsize=18, color='#c0392b')
+
+    def pair_plot(self, label, height=2):
+        '''
+        Plot pairwise relationships in a dataset.
+
+        Parameters
+        ----------
+        label : string
+            string containing the column names to highlight in the plotting
+
+        Returns
+        -------
+        Display plot pairwise relationships in a dataset and save them.
+
+        '''
+        print("Plotting pairwise relationships between all features...")
+        g = sns.pairplot(self.dataframe, hue=label, height=height, corner=False)
+        g.fig.suptitle("Graphique des relations entre les variables et " + label.upper() + "\n", fontsize=18)
 
     def histogram(self, columns_name):
         '''
@@ -133,18 +196,19 @@ class DataVisualizator:
 
         Returns
         -------
-        None.
+        Display the histogram and save them.
 
         '''
         if isinstance(columns_name,str): columns_name = set(columns_name)       
         for column_name in set(columns_name):
-            print("Ploting DataFrame histogram for " + column_name.upper() + "...")
-            plt.figure()
-            plt.ylabel('Frequency')
-            plt.xlabel(column_name)
-            plt.title("Histogramme de " + column_name.upper() + "\n", fontsize=18)
-            # Distribution Plot (a.k.a. Histogram)
-            sns.distplot(self.dataframe[column_name])
+            if self.dataframe[column_name].dtypes != "O":
+                print("Ploting DataFrame histogram for " + column_name.upper() + "...")
+                plt.figure()
+                # Distribution Plot (a.k.a. Histogram)
+                sns.distplot(self.dataframe[column_name])
+                plt.ylabel('Frequency')
+                plt.xlabel(column_name)
+                plt.title("Histogramme de " + column_name.upper() + "\n", fontsize=18)
 
     def bar_chart(self, columns_name):
         '''
@@ -167,7 +231,7 @@ class DataVisualizator:
                 print("Ploting DataFrame Bar Chart for " + column_name.upper() + "...")
                 plt.figure()
                 # Count Plot (a.k.a. Bar Plot)
-                sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS)                 
+                sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS)
                 # Rotate x-labels
                 plt.xticks(rotation=-45)
                 plt.title("Diagramme à barres de " + column_name.upper() + "\n", fontsize=18)
@@ -217,9 +281,8 @@ class DataVisualizator:
                 print("Ploting DataFrame Pie Chart for " + column_name.upper() + "...")
                 explode = (sizes == max(sizes)) * 0.01
                 labels = sizes.index
-                if autopct == "number" : autopct = self._autopct_format(sizes)
-                
+                if autopct == "number" : autopct = self._autopct_format(sizes)                
+                plt.figure()
                 plt.pie(sizes, explode=explode, labels=labels, autopct=autopct, shadow=True, startangle=90)
                 plt.legend(loc='best', bbox_to_anchor=(-0.1, 1),fancybox=True, shadow=True)
                 plt.title("Diagramme Circulaire de " + column_name.upper() + "\n", fontsize=18)
-                plt.show()
