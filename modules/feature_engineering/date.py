@@ -6,12 +6,15 @@ import numpy as np
 from datetime import datetime
 import holidays
 
+from tqdm import tqdm
+from modules.Global import variable
+
 class DatePreprocessor:
     '''
     Class used to make feature engineering on date data
     '''
     
-    DATE_FORMAT = '%Y-%m-%d'
+    DATE_FORMAT = variable.Var().DATE_FORMAT
     
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
@@ -80,7 +83,7 @@ class DatePreprocessor:
         date = str(date)
         if not date or date.lower() == "nan":
             return np.nan
-        return date in holidays.CountryHoliday(country_code)
+        return date in set(holidays.CountryHoliday(country_code))
     
     def _is_leap_year(self, date):
         '''
@@ -139,11 +142,11 @@ class DatePreprocessor:
         else:
             return season
         
-        if month in ('January', 'February', 'March'):
+        if month in {'January', 'February', 'March'}:
             season = 'winter'
-        elif month in ('April', 'May', 'June'):
+        elif month in {'April', 'May', 'June'}:
             season = 'spring'
-        elif month in ('July', 'August', 'September'):
+        elif month in {'July', 'August', 'September'}:
             season = 'summer'
         else:
             season = 'autumn'
@@ -275,8 +278,8 @@ class DatePreprocessor:
         '''
         
         print("Feature Engineering on date...")     
-        if isinstance(columns_name, str): columns_name = set(columns_name)
-        for column_name in columns_name:
+        if isinstance(columns_name, str): columns_name = [columns_name]
+        for column_name in tqdm(set(columns_name)):
             self.dataframe[column_name] = self.dataframe[column_name].apply(self.convert_date_format, date_format=date_format)
             self.dataframe[column_name + "_day"] = self.dataframe[column_name].apply(self._date_extractor_function, option="day")
             self.dataframe[column_name + "_month"] = self.dataframe[column_name].apply(self._date_extractor_function, option="month")
@@ -292,5 +295,4 @@ class DatePreprocessor:
             self.dataframe.drop(column_name, axis=1, inplace=True)
             print("Feature Engineering on date - DONE")  
             
-        return self.dataframe
-    
+        return self.dataframe   

@@ -4,86 +4,19 @@
 import argparse
 import os.path
 
-from datetime import datetime
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 from sklearn.cluster import KMeans
 
 from modules.feature_engineering.date import DatePreprocessor
+from modules.feature_engineering.encoder import DataEncoder
 from modules.scraping.scraper import DataScraper
 from modules.reader.reader import DataReader
 from modules.visualization.visualization import DataVisualizator
+from modules.modeling.machine_learning import Modeler
 
 
-
-def create_model(data_train,
-                 label,
-                 max_depth,
-                 eta,
-                 num_round,
-                 path_model,
-                 NaN_imputation_feature_scaling_PCA_boolean,
-                 directory_of_script):
-    '''
-    Creation of the model using XGBoost
-    '''
-    print("Training model using: XGBoost")
-    df_train, df_test = train_test_split(data_train, test_size=0.2)    
-    dtrain = xgb.DMatrix(df_train.drop(label,axis=1), label=df_train[label])
-    dtest = xgb.DMatrix(df_test.drop(label,axis=1), label=df_test[label])
-    evallist = [(dtest, 'eval'), (dtrain, 'train')]
-    evals_result = {}    
-    param = {'max_depth': max_depth, 'eta': eta, 'objective': 'reg:squarederror'}
-    param['nthread'] = 8
-    param['eval_metric'] = 'rmse'
-    
-    bst = xgb.train(param, 
-                    dtrain, 
-                    num_round, 
-                    evallist, 
-                    early_stopping_rounds=10, 
-                    evals_result=evals_result)
-    
-    now = datetime.now()
-    dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
-    param_string = 'max_depth_' + str(param['max_depth']) + "_eta_" + str(param['eta']) + "_num_round_" + str(num_round) + "_NaN_imputation_feature_scaling_PCA_usage_" + str(NaN_imputation_feature_scaling_PCA_boolean)
-    model_name = param_string + "_" + dt_string
-    bst.save_model(path_model + "_" + model_name)
-    print("Model is available here: " + path_model + "_" + model_name)
-    
-    '''
-    Get the XGBoost model results and information
-    '''       
-    print("Plotting validation curve")
-    x_axis = range(len(evals_result['train']['rmse']))    
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.plot(x_axis, evals_result['train']['rmse'], label='Train')
-    ax.plot(x_axis, evals_result['eval']['rmse'], label='Test')
-    ax.legend()
-    plt.ylabel('RMSE')
-    plt.xlabel('Number of Rounds')
-    plt.title('XGBoost RMSE')
-    plt.savefig(os.path.join(directory_of_script,"results","Validation Curve" + "_" + model_name + ".png"))
-    print("Learning Curve is available here: " + os.path.join(directory_of_script,"results","Validation Curve" + "_" + model_name + ".png"))       
-    
-    ypred = bst.predict(dtest)    
-    RMSE = mean_squared_error(df_test[label], ypred, squared=False)
-    print("RMSE: %.4f" % RMSE)
-            
-    print("Check importance of features\n")
-    fig, ax = plt.subplots(figsize=(100, 100))
-    ax = xgb.plot_importance(bst,ax=ax)
-    ax.figure.savefig(os.path.join(directory_of_script,"results","Feature Importance" + "_" + model_name + ".png"))
-    print("Features Importance is available here: " + os.path.join(directory_of_script,"results","Feature Importance" + "_" + model_name + ".png"))
-    print("Training DONE")
-    
-    
-    
     
 def main(args):
     
@@ -99,7 +32,7 @@ def main(args):
     
     FILENAME_TRAIN = "data_v1.0 (3) (1) (1) (1) (2).csv"    
     FEATURES_TO_NLP = ['Instrument(s) joué(s)','Niveau dans ces instruments','Styles musicaux','Villes','Vos disponibilités:','Groupe']
-    LABEL = "price"
+    LABEL = "embauche"
     
     path_train = os.path.join(data_directory,FILENAME_TRAIN)
     
@@ -111,24 +44,32 @@ def main(args):
     data_visualizator = DataVisualizator(df_train)
     # Print information on variables
     data_visualizator.data_inforamtion()    
+    
     # Remove two first column which reffers to index, non useful to create model
     df_train.drop(columns=['Unnamed: 0', 'index'], inplace=True)
-    data_visualizator = DataVisualizator(df_train)
     
-    data_visualizator.missing_value_plotting(length=100,width=100)
+    # Data Visualization
+    data_visualizator = DataVisualizator(df_train)    
+    data_visualizator.missing_value_plotting()
     data_visualizator.correlation_matrix()
     data_visualizator.pie_chart(columns_name=df_train.columns)
     data_visualizator.bar_chart(columns_name=df_train.columns)
     data_visualizator.histogram(columns_name=df_train.columns)
-    data_visualizator.pairplot(label='embauche')
-    data_visualizator.boxplot(column_name='salaire',label='embauche')
+    data_visualizator.pair_plot(label=LABEL)
+    data_visualizator.box_plot(columns_name=df_train.columns,label=LABEL)
+    data_visualizator.violin_plot(columns_name=df_train.columns,label=LABEL)
     
     # Add external data (gold financial data)
-    df_train=DataScraper(df_train).add_scraped_data("date")
+    df_train = DataScraper(df_train).add_scraped_data("date")
     # Feature Engineering on date
-    df_train = DatePreprocessor(df_train).extract_date_information("date")
-    #Get 
-    df_train = pd.get_dummies(df_train,prefix_sep="_")
+    df_train = DatePreprocessor(df_train).extract_date_information(columns_name="date")
+    # Convert categorical variable into dummy/indicator variables 
+    df_train = DataEncoder(df_train).dummy_variable()
+    
+    #/home/serkhane/repo/test-quantmetry/results
+    Modeler(df_train).create_XGB_model(label=LABEL,
+                                       model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
+                                       num_round=5)
 
         
     # Data Visualization

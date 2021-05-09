@@ -8,29 +8,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import missingno as msno
 from pandasgui import show
+from modules.Global import variable
 
 class DataVisualizator:
     '''
     Class used to make vizulisation of data
     '''
     
-    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = 20
-    PKMN_TYPE_COLORS = ['#78C850',  # Grass
-                        '#F08030',  # Fire
-                        '#6890F0',  # Water
-                        '#A8B820',  # Bug
-                        '#A8A878',  # Normal
-                        '#A040A0',  # Poison
-                        '#F8D030',  # Electric
-                        '#E0C068',  # Ground
-                        '#EE99AC',  # Fairy
-                        '#C03028',  # Fighting
-                        '#F85888',  # Psychic
-                        '#B8A038',  # Rock
-                        '#705898',  # Ghost
-                        '#98D8D8',  # Ice
-                        '#7038F8',  # Dragon
-                       ]
+    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = variable.Var().MAX_NUMBER_OF_CATEGORICAL_OCCURENCES
+    PKMN_TYPE_COLORS = variable.Var().PKMN_TYPE_COLORS
     
     def __init__(self, dataframe):
         self.dataframe = dataframe
@@ -61,16 +47,13 @@ class DataVisualizator:
         print(self.dataframe.head())
         print(self.dataframe.info())
         
-    def missing_value_plotting(self, length, width):
+    def missing_value_plotting(self):
         '''
         Display plot for the missing value of the dataframe
 
         Parameters
         ----------
-        length : int
-            length of the figure.
-        width : int
-            width of the figure.
+        None.
 
         Returns
         -------
@@ -107,7 +90,10 @@ class DataVisualizator:
 
         Parameters
         ----------
-        None.
+        columns_name : string or list of string
+            string containing the column names for the display of the violin plot.
+        label : string
+            string containing the column names to highlight in the plotting.
 
         Returns
         -------
@@ -115,7 +101,7 @@ class DataVisualizator:
 
         '''
         
-        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        if isinstance(columns_name,str): columns_name = [columns_name]       
         for column_name_continuous in set(columns_name):
             if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
                 for column_name_categorical in set(columns_name):
@@ -132,7 +118,10 @@ class DataVisualizator:
 
         Parameters
         ----------
-        None.
+        columns_name : string or list of string
+            string containing the column names for the display of the box plot.
+        label : string
+            string containing the column names to highlight in the plotting.
 
         Returns
         -------
@@ -140,7 +129,7 @@ class DataVisualizator:
 
         '''
         
-        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        if isinstance(columns_name,str): columns_name = [columns_name]       
         for column_name_continuous in set(columns_name):
             if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
                 for column_name_categorical in set(columns_name):
@@ -199,7 +188,7 @@ class DataVisualizator:
         Display the histogram and save them.
 
         '''
-        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        if isinstance(columns_name,str): columns_name = [columns_name]     
         for column_name in set(columns_name):
             if self.dataframe[column_name].dtypes != "O":
                 print("Ploting DataFrame histogram for " + column_name.upper() + "...")
@@ -225,7 +214,7 @@ class DataVisualizator:
 
         '''
         
-        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        if isinstance(columns_name,str): columns_name = [columns_name]      
         for column_name in set(columns_name):
             if len(set(self.dataframe[column_name])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
                 print("Ploting DataFrame Bar Chart for " + column_name.upper() + "...")
@@ -274,7 +263,7 @@ class DataVisualizator:
 
         '''
         
-        if isinstance(columns_name,str): columns_name = set(columns_name)       
+        if isinstance(columns_name,str): columns_name = [columns_name]       
         for column_name in set(columns_name):
             sizes = self.dataframe[column_name].value_counts(dropna=False)
             if len(set(self.dataframe[column_name])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:

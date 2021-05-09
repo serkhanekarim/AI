@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import yfinance as yf
-import pandas as pd
 from modules.feature_engineering.date import DatePreprocessor
+from modules.Global import variable
 
 class DataScraper:
     '''
     Class used to scrap data
     '''
     
-    DATE_FORMAT = '%Y-%m-%d'
+    DATE_FORMAT = variable.Var().DATE_FORMAT
     
     def __init__(self, dataframe):
         self.dataframe = dataframe

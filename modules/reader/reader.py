@@ -2,19 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
-import numpy as np
-from tqdm import tqdm
-import re
-
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from scipy import stats
-
-import seaborn as sns
-
-import matplotlib.pyplot as plt
-
 
 class DataReader:
     '''
