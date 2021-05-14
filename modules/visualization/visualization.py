@@ -2,12 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
+import numpy as np
+
+import xgboost as xgb
+
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
 
 from IPython.display import display, HTML
 import matplotlib.pyplot as plt
 import seaborn as sns
 import missingno as msno
 from pandasgui import show
+
 from modules.Global import variable
 
 class DataVisualizator:
@@ -67,9 +74,11 @@ class DataVisualizator:
         The sparkline at right summarizes the general shape of the data completeness 
         and points out the rows with the maximum and minimum nullity in the dataset.
         '''
+        plt.figure()
         msno.bar(self.dataframe)
         plt.title("Matrice des valeurs manquantes des données\n", fontsize=18)
         
+        plt.figure()
         msno.matrix(self.dataframe)
         plt.title("Diagramme à barres des valeurs manquantes des données\n", fontsize=18)
         
@@ -78,9 +87,11 @@ class DataVisualizator:
         A value near 0 means there is no dependence between the occurrence of missing values of two variables.
         A value near 1 means if one variable appears then the other variable is very likely to be present.
         '''
+        plt.figure()
         msno.heatmap(self.dataframe)
         plt.title("Diagramme à barres des valeurs manquantes des données\n", fontsize=18)
 
+        plt.figure()
         msno.dendrogram(self.dataframe)
         
     
@@ -139,6 +150,105 @@ class DataVisualizator:
                         sns.boxplot(x=column_name_categorical, y=column_name_continuous, hue=label, data=self.dataframe)
                         plt.title("Boîte à moustaches de " + column_name_categorical.upper() + " sur " + column_name_continuous.upper() + "\n", fontsize=18)
     
+    @staticmethod
+    def confusion_matrix(cf,
+                        group_names=None,
+                        categories='auto',
+                        count=True,
+                        percent=True,
+                        cbar=True,
+                        xyticks=True,
+                        xyplotlabels=True,
+                        sum_stats=True,
+                        figsize=None,
+                        cmap='Blues',
+                        title=None):
+        '''
+        This function will make a pretty plot of an sklearn Confusion Matrix cm using a Seaborn heatmap visualization.
+        Arguments
+        ---------
+        cf:            confusion matrix to be passed in
+        group_names:   List of strings that represent the labels row by row to be shown in each square.
+        categories:    List of strings containing the categories to be displayed on the x,y axis. Default is 'auto'
+        count:         If True, show the raw number in the confusion matrix. Default is True.
+        normalize:     If True, show the proportions for each category. Default is True.
+        cbar:          If True, show the color bar. The cbar values are based off the values in the confusion matrix.
+                       Default is True.
+        xyticks:       If True, show x and y ticks. Default is True.
+        xyplotlabels:  If True, show 'True Label' and 'Predicted Label' on the figure. Default is True.
+        sum_stats:     If True, display summary statistics below the figure. Default is True.
+        figsize:       Tuple representing the figure size. Default will be the matplotlib rcParams value.
+        cmap:          Colormap of the values displayed from matplotlib.pyplot.cm. Default is 'Blues'
+                       See http://matplotlib.org/examples/color/colormaps_reference.html
+                       
+        title:         Title for the heatmap. Default is None.
+        '''
+
+
+        # CODE TO GENERATE TEXT INSIDE EACH SQUARE
+        blanks = ['' for i in range(cf.size)]
+    
+        if group_names and len(group_names)==cf.size:
+            group_labels = ["{}\n".format(value) for value in group_names]
+        else:
+            group_labels = blanks
+    
+        if count:
+            group_counts = ["{0:0.0f}\n".format(value) for value in cf.flatten()]
+        else:
+            group_counts = blanks
+    
+        if percent:
+            group_percentages = ["{0:.2%}".format(value) for value in cf.flatten()/np.sum(cf)]
+        else:
+            group_percentages = blanks
+    
+        box_labels = [f"{v1}{v2}{v3}".strip() for v1, v2, v3 in zip(group_labels,group_counts,group_percentages)]
+        box_labels = np.asarray(box_labels).reshape(cf.shape[0],cf.shape[1])
+    
+    
+        # CODE TO GENERATE SUMMARY STATISTICS & TEXT FOR SUMMARY STATS
+        if sum_stats:
+            #Accuracy is sum of diagonal divided by total observations
+            accuracy  = np.trace(cf) / float(np.sum(cf))
+    
+            #if it is a binary confusion matrix, show some more stats
+            if len(cf)==2:
+                #Metrics for Binary Confusion Matrices
+                precision = cf[1,1] / sum(cf[:,1])
+                recall    = cf[1,1] / sum(cf[1,:])
+                f1_score  = 2*precision*recall / (precision + recall)
+                stats_text = "\n\nAccuracy={:0.3f}\nPrecision={:0.3f}\nRecall={:0.3f}\nF1 Score={:0.3f}".format(
+                    accuracy,precision,recall,f1_score)
+            else:
+                stats_text = "\n\nAccuracy={:0.3f}".format(accuracy)
+        else:
+            stats_text = ""
+    
+    
+        # SET FIGURE PARAMETERS ACCORDING TO OTHER ARGUMENTS
+        if figsize==None:
+            #Get default figure size if not set
+            figsize = plt.rcParams.get('figure.figsize')
+    
+        if xyticks==False:
+            #Do not show categories if xyticks is False
+            categories=False
+    
+    
+        # MAKE THE HEATMAP VISUALIZATION
+        plt.figure(figsize=figsize)
+        sns.heatmap(cf,annot=box_labels,fmt="",cmap=cmap,cbar=cbar,xticklabels=categories,yticklabels=categories)
+    
+        if xyplotlabels:
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label' + stats_text)
+        else:
+            plt.xlabel(stats_text)
+        
+        if title:
+            plt.title(title)
+    
     def correlation_matrix(self):
         '''
         Display the correlation matrix between all features from the dataframe
@@ -153,6 +263,7 @@ class DataVisualizator:
 
         '''
         print("Plotting Correlation between all features...")
+        plt.figure()
         sns.heatmap(self.dataframe.corr(), cmap='Reds', annot=True, linewidths=1)
         plt.title("Matrice de corrélation entre les différentes caractéristiques\n", fontsize=18, color='#c0392b')
 
@@ -171,6 +282,7 @@ class DataVisualizator:
 
         '''
         print("Plotting pairwise relationships between all features...")
+        plt.figure()
         g = sns.pairplot(self.dataframe, hue=label, height=height, corner=False)
         g.fig.suptitle("Graphique des relations entre les variables et " + label.upper() + "\n", fontsize=18)
 
@@ -199,7 +311,7 @@ class DataVisualizator:
                 plt.xlabel(column_name)
                 plt.title("Histogramme de " + column_name.upper() + "\n", fontsize=18)
 
-    def bar_chart(self, columns_name):
+    def bar_chart(self, columns_name, label=None):
         '''
         Display Bar Chart of column name from the DataFrame.
 
@@ -220,7 +332,10 @@ class DataVisualizator:
                 print("Ploting DataFrame Bar Chart for " + column_name.upper() + "...")
                 plt.figure()
                 # Count Plot (a.k.a. Bar Plot)
-                sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS)
+                if column_name == label:
+                    sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS)
+                else:
+                    sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS, hue=label)
                 # Rotate x-labels
                 plt.xticks(rotation=-45)
                 plt.title("Diagramme à barres de " + column_name.upper() + "\n", fontsize=18)
@@ -275,3 +390,137 @@ class DataVisualizator:
                 plt.pie(sizes, explode=explode, labels=labels, autopct=autopct, shadow=True, startangle=90)
                 plt.legend(loc='best', bbox_to_anchor=(-0.1, 1),fancybox=True, shadow=True)
                 plt.title("Diagramme Circulaire de " + column_name.upper() + "\n", fontsize=18)
+     
+    @staticmethod
+    def features_importance(model):
+        '''
+        Display the importance of features on label
+
+        Parameters
+        ----------
+        model : XGBoost model
+            Trained XGBoost model.
+
+        Returns
+        -------
+        Display the importance of features on label and save them.
+
+        '''
+        
+        print("Check importance of features on label\n")
+        plt.figure()
+        xgb.plot_importance(model)
+        
+    @staticmethod    
+    def curve(x, 
+              y, 
+              xlabel, 
+              ylabel, 
+              title, 
+              label=None,
+              xlim=None,
+              ylim=None,
+              legend_loc=None):
+        '''
+        Display the curve of x,y
+
+        Parameters
+        ----------
+        x : array
+            x coordinate.
+        y : array or array of array
+            y coordinate.
+        label : array, optional
+            Array of string ontaining label of curve. The default is None.
+        xlabel : string
+            name of the label of x
+        ylabel : string
+            name of the label of y
+        title : string
+            name of the plotting title
+
+        Returns
+        -------
+        Display the curve of x,y and save it.
+
+        '''
+        
+        bool_x_number = isinstance(x[0],int) or isinstance(x[0],float)
+        bool_y_number = isinstance(y[0],int) or isinstance(y[0],float)
+        
+        plt.figure()
+        if bool_x_number and bool_y_number:
+            plt.plot(x,y,label=label)
+        if bool_x_number and not bool_y_number:
+            for i in range(len(y)):
+                if label is not None:
+                    plt.plot(x,y[i],label=label[i])
+                else:
+                    plt.plot(x,y[i])
+        if not bool_x_number and bool_y_number:
+            for i in range(len(y)):
+                if label is not None:
+                    plt.plot(x[i],y,label=label[i])
+                else:
+                    plt.plot(x[i],y)       
+        if not bool_x_number and not bool_y_number:
+            for i in range(len(y)):
+                if label is not None:
+                    plt.plot(x[i],y[i],label=label[i])
+                else:
+                    plt.plot(x,y)            
+        plt.ylabel(ylabel)
+        plt.xlabel(xlabel)
+        plt.xlim(xlim)
+        plt.ylim(ylim)
+        plt.title(title)
+        plt.legend(loc=legend_loc)
+        
+    @staticmethod  
+    def roc_auc(y_test, y_score, n_classes=1):
+        '''
+        Display the ROC AUC curve
+
+        Parameters
+        ----------
+        y_test : array
+            Aray of real values
+        y_score : array
+            Aray of scored/predicted values
+        n_classes : int, optional
+            Number of predicted classes. The default is 1.
+
+        Returns
+        -------
+        Display ROC AUC curve and save it
+
+        '''
+        # Compute ROC curve and ROC area for each class
+        fpr = []
+        tpr = []
+        roc_auc = []
+        if n_classes > 1:
+            for i in range(n_classes):
+                fpr.append(roc_curve(y_test[:, i], y_score[:, i])[0])
+                tpr.append(roc_curve(y_test[:, i], y_score[:, i])[1])
+                roc_auc.append(auc(fpr[i], tpr[i]))
+        else:
+            fpr.append(roc_curve(y_test, y_score)[0])
+            tpr.append(roc_curve(y_test, y_score)[1])
+            roc_auc.append(auc(fpr[0], tpr[0]))
+
+        # Compute micro-average ROC curve and ROC area
+        fpr.append(roc_curve(y_test.ravel(), y_score.ravel())[0])
+        tpr.append(roc_curve(y_test.ravel(), y_score.ravel())[1])
+        roc_auc.append(auc(fpr[-1], tpr[-1]))
+        label = ['ROC curve (area = %0.2f)' % value for value in roc_auc]
+        
+        DataVisualizator.curve(x=fpr,
+                                y=tpr, 
+                                xlabel=[0, 1], 
+                                ylabel=[0, 1], 
+                                title="ROC", 
+                                label=label,
+                                xlim=[0.0, 1.0],
+                                ylim=[0.0, 1.05],
+                                legend_loc="lower right")

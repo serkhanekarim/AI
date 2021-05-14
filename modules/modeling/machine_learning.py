@@ -3,14 +3,19 @@
 
 from datetime import datetime
 
+import numpy as np
+
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import confusion_matrix
 import xgboost as xgb
 
-import matplotlib.pyplot as plt
-
-import os.path
 from modules.Global import variable
+
+from modules.visualization.visualization import DataVisualizator
+
+
 
 class Modeler:
     '''
@@ -63,7 +68,8 @@ class Modeler:
                      num_round,
                      max_depth=6,
                      eta=0.3,
-                     objective=None):
+                     objective=None,
+                     threshold_class=None):
         '''
         Create XGB model
 
@@ -92,7 +98,7 @@ class Modeler:
 
         Returns
         -------
-        Save model and related plot
+        Save model and related plot and display them
 
         '''
         
@@ -100,13 +106,20 @@ class Modeler:
         detected_objective = self._detect_objective(label)
         eval_metric = detected_objective[1]
         objective = objective or detected_objective[0]
-        df_train, df_test = train_test_split(self.dataframe, test_size=0.2)    
-        dtrain = xgb.DMatrix(df_train.drop(label,axis=1), label=df_train[label])
-        dtest = xgb.DMatrix(df_test.drop(label,axis=1), label=df_test[label])
+        df_train, df_test = train_test_split(self.dataframe, test_size=0.2)
+        df_train_label = df_train[label]
+        df_train = df_train.drop(label,axis=1)
+        df_test_label = df_test[label]
+        df_test = df_test.drop(label,axis=1)
+        dtrain = xgb.DMatrix(df_train, label=df_train_label)
+        dtest = xgb.DMatrix(df_test, label=df_test_label)
+        
         evallist = [(dtest, 'eval'), (dtrain, 'train')]
         evals_result = {}    
-        param = {'max_depth': max_depth, 'eta': eta, 'objective': objective}
-        param['nthread'] = 8
+        param = {'max_depth': max_depth, 
+                 'eta': eta, 
+                 'objective': objective, 
+                 'nthread' : -1}
         
         bst = xgb.train(param, 
                         dtrain, 
@@ -122,28 +135,77 @@ class Modeler:
         #bst.save_model(model_path + "_" + model_name)
         print("Model is available here: " + model_path + "_" + model_name)
         
+        
         '''
         Get the XGBoost model results and information
         '''       
-        print("Plotting validation curve")
-        x_axis = range(len(evals_result['train'][eval_metric]))    
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax.plot(x_axis, evals_result['train'][eval_metric], label='Train')
-        ax.plot(x_axis, evals_result['eval'][eval_metric], label='Test')
-        ax.legend()
-        plt.ylabel(eval_metric.upper())
-        plt.xlabel('Number of Rounds')
-        plt.title("XGBoost - " + eval_metric.upper())
-        #plt.savefig(os.path.join(self.SCRIPT_DIRECTORY,"results","Validation Curve" + "_" + model_name + ".png"))
-        print("Learning Curve is available here: " + os.path.join(self.SCRIPT_DIRECTORY,"results","Validation Curve" + "_" + model_name + ".png"))       
+        x_axis = range(len(evals_result['train'][eval_metric]))
+        y_axis = [evals_result['train'][eval_metric], 
+                  evals_result['eval'][eval_metric]]
         
-        ypred = bst.predict(dtest)    
-        RMSE = mean_squared_error(df_test[label], ypred, squared=False)
-        print("RMSE: %.4f" % RMSE)
-                
-        print("Check importance of features\n")
-        fig, ax = plt.subplots(figsize=(100, 100))
-        ax = xgb.plot_importance(bst,ax=ax)
-        #ax.figure.savefig(os.path.join(self.SCRIPT_DIRECTORY,"results","Feature Importance" + "_" + model_name + ".png"))
-        print("Features Importance is available here: " + os.path.join(self.SCRIPT_DIRECTORY,"results","Feature Importance" + "_" + model_name + ".png"))
+        DataVisualizator.curve(x=x_axis, 
+                               y=y_axis,
+                               xlabel='Number of Rounds',
+                               ylabel=eval_metric.upper(),
+                               title="XGBoost - " + eval_metric.upper(),
+                               label=["train","eval"])
+        
+        ypred = bst.predict(dtest)        
+        if eval_metric == "rmse":
+            RMSE = mean_squared_error(df_test[label], ypred, squared=False)
+            print("RMSE: %.4f" % RMSE)
+        if eval_metric == "logloss":
+            ypred_rounded = ypred.round()
+            if len(set(self.dataframe[label])) == 2:
+                ypred_rounded = np.where(ypred >= threshold_class,1,0)            
+            cf_matrix = confusion_matrix(df_test_label,ypred_rounded)
+            DataVisualizator.confusion_matrix(cf_matrix)
+            DataVisualizator.roc_auc(np.array(df_test_label), ypred)
+            
+        DataVisualizator.features_importance(bst)
+        
         print("Training DONE")
+        
+        
+    def hyperParameterTuningXGB(self, X_train, y_train, objective):
+        '''
+        Grid search best parameters to fit the model
+
+        Parameters
+        ----------
+        X_train : xgb.DMatrix
+            Array containing training data.
+        y_train : xgb.DMatrix
+            Array containing test data.
+
+        Returns
+        -------
+        dict
+            Best paramaters.
+
+        '''
+        
+        param_tuning = {
+            'learning_rate': [0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
+            'max_depth': [3, 4, 5, 6, 8, 10, 12, 15],
+            'min_child_weight': [1, 3, 5, 7],
+            'subsample': [0.5, 0.7, 1],
+            'colsample_bytree': [0.1, 0.3, 0.4, 0.5 , 0.7, 1],
+            'n_estimators' : [100, 200, 500],
+            'gamma' : [0.0, 0.1, 0.2 , 0.3, 0.4],
+            'objective': [objective]
+        }
+    
+        xgb_model = xgb.XGBRegressor()
+    
+        gsearch = GridSearchCV(estimator = xgb_model,
+                               param_grid = param_tuning,                        
+                               #scoring = 'neg_mean_absolute_error', #MAE
+                               #scoring = 'neg_mean_squared_error',  #MSE
+                               cv = 5,
+                               n_jobs = -1,
+                               verbose = 1)
+    
+        gsearch.fit(X_train,y_train)
+    
+        return gsearch.best_params_
