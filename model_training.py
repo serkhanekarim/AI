@@ -69,9 +69,10 @@ def main(args):
     #/home/serkhane/repo/test-quantmetry/results
     Modeler(df_train).create_XGB_model(label=LABEL,
                                        model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
-                                       num_round=15,
+                                       num_round=5000,
                                        threshold_class=1/2,
-                                       max_depth=6)
+                                       max_depth=3,
+                                       eta=0.005)
     
 if __name__ == "__main__":
     
