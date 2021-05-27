@@ -4,17 +4,24 @@
 import argparse
 import os.path
 
+from math import *
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split
 
-from modules.feature_engineering.date import DatePreprocessor
-from modules.feature_engineering.encoder import DataEncoder
+from modules.preprocessing.date import DatePreprocessor
+from modules.preprocessing.feature_encoder import DataEncoder
 from modules.scraping.scraper import DataScraper
 from modules.reader.reader import DataReader
 from modules.visualization.visualization import DataVisualizator
 from modules.modeling.machine_learning import Modeler
+from modules.preprocessing.missing_value import DataImputation
+from modules.preprocessing.feature_scaling import DataScaler
+from modules.preprocessing.feature_selection import DataSelector
+from modules.preprocessing.feature_generator import DataGenerator
+from modules.Global.method import DataMethod
 
 
     
@@ -38,42 +45,103 @@ def main(args):
     
 
     # Read data from the file
-    df_train = DataReader(path_train).read_data_file()
-    
-    # Data Visualization
-    data_visualizator = DataVisualizator(df_train)
+    data = DataReader(path_train).read_data_file()
+
     # Print information on variables
-    data_visualizator.data_inforamtion()    
+    DataVisualizator(data).data_inforamtion()    
     
     # Remove two first column which reffers to index, non useful to create model
-    df_train.drop(columns=['Unnamed: 0', 'index'], inplace=True)
+    data.drop(columns=['Unnamed: 0', 'index'], inplace=True)
     
-    # Data Visualization
-    data_visualizator = DataVisualizator(df_train)    
-    data_visualizator.missing_value_plotting()
-    data_visualizator.correlation_matrix()
-    data_visualizator.pie_chart(columns_name=df_train.columns)
-    data_visualizator.bar_chart(columns_name=df_train.columns, label=LABEL)
-    data_visualizator.histogram(columns_name=df_train.columns)
-    data_visualizator.pair_plot(label=LABEL)
-    data_visualizator.box_plot(columns_name=df_train.columns,label=LABEL)
-    data_visualizator.violin_plot(columns_name=df_train.columns,label=LABEL)
     
+    '''
+    Feature Engineering/Extraction/Vectorization
+    '''
     # Add external data (gold financial data)
-    df_train = DataScraper(df_train).add_scraped_data("date")
+    data = DataScraper(data).add_scraped_data("date")
     # Feature Engineering on date
-    df_train = DatePreprocessor(df_train).extract_date_information(columns_name="date")
+    data = DatePreprocessor(data).extract_date_information(columns_name="date")
     # Convert categorical variable into dummy/indicator variables 
-    df_train = DataEncoder(df_train).dummy_variable()
+    data = DataEncoder(data).dummy_variable()
+    
+    # Print missing value
+    DataVisualizator(data).missing_value_plotting()
+    
+    #Split data into train and test set to evaluate the model
+    df_train, df_test, df_train_label, df_test_label = train_test_split(data.drop(LABEL,axis=1), data[LABEL], test_size=0.2)
+    
+    # Missing data imputation using K-NN
+    imputer = DataImputation(df_train).imputer()
+    df_train = imputer[0]
+    # Missing data imputation on test data using training data imputer model
+    df_test = imputer[1].transform(df_test)
+    df_test = pd.DataFrame(df_test, columns = df_train.columns)
+    
+    # Feature Selection before applying scaling data
+    DataVisualizator(df_train).correlation_matrix() # Correlation Matrix
+    selector = DataSelector(df_train, df_train_label).features_selection() # Trees
+    DataVisualizator(df_train).features_importance(estimator=selector[0],
+                                                   estimator_type='tree',
+                                                   max_num_features=20)
+    
+    
+    
+    # Feature generation using most important features
+    number_of_generated_feature = 7
+    selector_train = DataSelector(df_train, df_train_label).features_selection(number_of_generated_feature)
+    generator_train = DataGenerator(df_train,selector_train[1]).polynomial_features(3)    
+    df_train = generator_train[0]
+    
+    # Feature generation on test data using training data generator model
+    selector_test = df_test[selector_train[1].columns]
+    generator_test = DataGenerator(df_test,selector_test).polynomial_features(3)
+    df_test = generator_test[0]
+    
+    # Correlation Matrix
+    DataVisualizator(df_train).correlation_matrix()
+    
+    # Pie Chart
+    DataVisualizator(df_train).pie_chart(columns_name=df_train.columns)
+    # Bar Chart
+    DataVisualizator(df_train).bar_chart(columns_name=df_train.columns, label=LABEL)
+    # Histogram
+    DataVisualizator(df_train).histogram(columns_name=df_train.columns)
+    # Pair plot, plotting feature vs label
+    DataVisualizator(df_train).pair_plot(label=LABEL)
+    # Box plot
+    DataVisualizator(df_train).box_plot(columns_name=df_train.columns,label=LABEL)
+    # Violin Plot
+    DataVisualizator(df_train).violin_plot(columns_name=df_train.columns,label=LABEL)
+    
+    
+    # Scaling data
+    scaler = DataScaler(df_train).scaler(method='yeo-johnson')
+    df_train = pd.DataFrame(scaler[0])
+    # Scaling data on test data using training data scaler model
+    df_test = pd.DataFrame(scaler[1].transform(df_test))
     
     #/home/serkhane/repo/test-quantmetry/results
-    Modeler(df_train).create_XGB_model(label=LABEL,
+    Modeler(df_train, LABEL).XGBoost_model(df_train=df_train,
+                                       df_train_label=df_train_label,
+                                       df_test=df_test,
+                                       df_test_label=df_test_label,
                                        model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
-                                       num_round=5000,
-                                       threshold_class=1/2,
-                                       max_depth=3,
-                                       eta=0.005)
+                                       num_round=250,
+                                       threshold_class=0.3,
+                                       max_depth=2,
+                                       eta=0.1)
     
+    Modeler(df_train, LABEL).Ensemble_model(df_train=df_train,
+                                           df_train_label=df_train_label,
+                                           df_test=df_test,
+                                           df_test_label=df_test_label,
+                                           model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
+                                           n_estimators=10000,
+                                           max_depth=None,
+                                           threshold_class=0.25,
+                                           method='RandomForest')
+
+
 if __name__ == "__main__":
     
     MODEL_NAME = "XGBoost_marketing.model"

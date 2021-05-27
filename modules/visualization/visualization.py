@@ -8,6 +8,7 @@ import xgboost as xgb
 
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
+from sklearn.model_selection import learning_curve
 
 from IPython.display import display, HTML
 import matplotlib.pyplot as plt
@@ -15,15 +16,16 @@ import seaborn as sns
 import missingno as msno
 from pandasgui import show
 
-from modules.Global import variable
+from modules.Global.variable import Var
 
 class DataVisualizator:
     '''
     Class used to make vizulisation of data
     '''
     
-    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = variable.Var().MAX_NUMBER_OF_CATEGORICAL_OCCURENCES
-    PKMN_TYPE_COLORS = variable.Var().PKMN_TYPE_COLORS
+    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = Var().MAX_NUMBER_OF_CATEGORICAL_OCCURENCES
+    MAX_NUMBER_OF_FEATURE_IMPORTANCE = Var().MAX_NUMBER_OF_FEATURE_IMPORTANCE
+    PKMN_TYPE_COLORS = Var().PKMN_TYPE_COLORS
     
     def __init__(self, dataframe):
         self.dataframe = dataframe
@@ -117,11 +119,11 @@ class DataVisualizator:
             if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
                 for column_name_categorical in set(columns_name):
                     if self.dataframe[column_name_categorical].dtypes == "O" and column_name_categorical!= label and len(set(self.dataframe[column_name_categorical])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
-                        print("Plotting violin plot of " + column_name_categorical.upper() + " on " + column_name_continuous.upper() + "...")
+                        print("Plotting violin plot of " + str(column_name_categorical).upper() + " on " + str(column_name_continuous).upper() + "...")
                         plt.figure()
                         with sns.axes_style(style=None):
                             sns.violinplot(x=column_name_categorical, y=column_name_continuous, hue=label, data=self.dataframe, split=True, palette=self.PKMN_TYPE_COLORS);
-                            plt.title("Diagramme en violon de " + column_name_categorical.upper() + " sur " + column_name_continuous.upper() + "\n", fontsize=18)
+                            plt.title("Diagramme en violon de " + str(column_name_categorical).upper() + " sur " + str(column_name_continuous).upper() + "\n", fontsize=18)
 
     def box_plot(self, columns_name, label):
         '''
@@ -145,10 +147,10 @@ class DataVisualizator:
             if self.dataframe[column_name_continuous].dtypes != "O" and column_name_continuous != label:
                 for column_name_categorical in set(columns_name):
                     if self.dataframe[column_name_categorical].dtypes == "O" and column_name_categorical != label and len(set(self.dataframe[column_name_categorical])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
-                        print("Plotting box plot of " + column_name_categorical.upper() + " on " + column_name_continuous.upper() + "...")
+                        print("Plotting box plot of " + str(column_name_categorical).upper() + " on " + str(column_name_continuous).upper() + "...")
                         plt.figure()
                         sns.boxplot(x=column_name_categorical, y=column_name_continuous, hue=label, data=self.dataframe)
-                        plt.title("Boîte à moustaches de " + column_name_categorical.upper() + " sur " + column_name_continuous.upper() + "\n", fontsize=18)
+                        plt.title("Boîte à moustaches de " + str(column_name_categorical).upper() + " sur " + str(column_name_continuous).upper() + "\n", fontsize=18)
     
     @staticmethod
     def confusion_matrix(cf,
@@ -255,17 +257,38 @@ class DataVisualizator:
 
         Parameters
         ----------
-        None.
+        None
 
         Returns
         -------
         Display correlation matrix between all feature and save it
 
         '''
-        print("Plotting Correlation between all features...")
-        plt.figure()
+        print("Plotting Correlation between all features and the label...")
+        plt.figure(figsize=(2*self.dataframe.shape[1],2*self.dataframe.shape[1]))
         sns.heatmap(self.dataframe.corr(), cmap='Reds', annot=True, linewidths=1)
         plt.title("Matrice de corrélation entre les différentes caractéristiques\n", fontsize=18, color='#c0392b')
+
+    # def correlation_label(self, label):
+    #     '''
+    #     Display the correlation matrix between all features from the dataframe and a label
+
+    #     Parameters
+    #     ----------
+    #     label : string
+    #         string containing the column names to highlight in the plotting
+
+    #     Returns
+    #     -------
+    #     Display correlation matrix between all feature and save it
+
+    #     '''
+    #     print("Plotting Correlation between all features...")
+    #     plt.figure()
+    #     corr = self.dataframe.corr()[label].unstack().sort_values().drop_duplicates().iloc
+    #     sns.heatmap(self.dataframe.corr(), cmap='Reds', annot=True, linewidths=1)
+    #     plt.title("Matrice de corrélation entre les différentes caractéristiques\n", fontsize=18, color='#c0392b')
+
 
     def pair_plot(self, label, height=2):
         '''
@@ -284,7 +307,7 @@ class DataVisualizator:
         print("Plotting pairwise relationships between all features...")
         plt.figure()
         g = sns.pairplot(self.dataframe, hue=label, height=height, corner=False)
-        g.fig.suptitle("Graphique des relations entre les variables et " + label.upper() + "\n", fontsize=18)
+        g.fig.suptitle("Graphique des relations entre les variables et " + str(label).upper() + "\n", fontsize=18)
 
     def histogram(self, columns_name):
         '''
@@ -303,13 +326,13 @@ class DataVisualizator:
         if isinstance(columns_name,str): columns_name = [columns_name]     
         for column_name in set(columns_name):
             if self.dataframe[column_name].dtypes != "O":
-                print("Ploting DataFrame histogram for " + column_name.upper() + "...")
+                print("Ploting DataFrame histogram for " + str(column_name).upper() + "...")
                 plt.figure()
                 # Distribution Plot (a.k.a. Histogram)
                 sns.distplot(self.dataframe[column_name])
                 plt.ylabel('Frequency')
                 plt.xlabel(column_name)
-                plt.title("Histogramme de " + column_name.upper() + "\n", fontsize=18)
+                plt.title("Histogramme de " + str(column_name).upper() + "\n", fontsize=18)
 
     def bar_chart(self, columns_name, label=None):
         '''
@@ -329,7 +352,7 @@ class DataVisualizator:
         if isinstance(columns_name,str): columns_name = [columns_name]      
         for column_name in set(columns_name):
             if len(set(self.dataframe[column_name])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
-                print("Ploting DataFrame Bar Chart for " + column_name.upper() + "...")
+                print("Ploting DataFrame Bar Chart for " + str(column_name).upper() + "...")
                 plt.figure()
                 # Count Plot (a.k.a. Bar Plot)
                 if column_name == label:
@@ -338,7 +361,7 @@ class DataVisualizator:
                     sns.countplot(x=column_name, data=self.dataframe, palette=self.PKMN_TYPE_COLORS, hue=label)
                 # Rotate x-labels
                 plt.xticks(rotation=-45)
-                plt.title("Diagramme à barres de " + column_name.upper() + "\n", fontsize=18)
+                plt.title("Diagramme à barres de " + str(column_name).upper() + "\n", fontsize=18)
                 
     def _autopct_format(self, values):
         '''
@@ -382,24 +405,25 @@ class DataVisualizator:
         for column_name in set(columns_name):
             sizes = self.dataframe[column_name].value_counts(dropna=False)
             if len(set(self.dataframe[column_name])) <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
-                print("Ploting DataFrame Pie Chart for " + column_name.upper() + "...")
+                print("Ploting DataFrame Pie Chart for " + str(column_name).upper() + "...")
                 explode = (sizes == max(sizes)) * 0.01
                 labels = sizes.index
                 if autopct == "number" : autopct = self._autopct_format(sizes)                
                 plt.figure()
                 plt.pie(sizes, explode=explode, labels=labels, autopct=autopct, shadow=True, startangle=90)
                 plt.legend(loc='best', bbox_to_anchor=(-0.1, 1),fancybox=True, shadow=True)
-                plt.title("Diagramme Circulaire de " + column_name.upper() + "\n", fontsize=18)
+                plt.title("Diagramme Circulaire de " + str(column_name).upper() + "\n", fontsize=18)
      
-    @staticmethod
-    def features_importance(model):
+    def features_importance(self, estimator, estimator_type, max_num_features=MAX_NUMBER_OF_FEATURE_IMPORTANCE):
         '''
-        Display the importance of features on label
+        Display the importance of features on label from a model based on tree
 
         Parameters
         ----------
-        model : XGBoost model
-            Trained XGBoost model.
+        estimator : estimator object
+            Estimator (XGBoost or RandomForest...).
+        estimator_type : string
+            String which indicate the type of the esrtimator to plot the importance of features
 
         Returns
         -------
@@ -409,7 +433,16 @@ class DataVisualizator:
         
         print("Check importance of features on label\n")
         plt.figure()
-        xgb.plot_importance(model)
+        if estimator_type == 'xgboost':
+            xgb.plot_importance(estimator,max_num_features=max_num_features)
+        else:
+            feat_importances = pd.Series(estimator.feature_importances_, index=self.dataframe.columns)
+            feat_importances.nlargest(max_num_features).sort_values(ascending=True).plot(kind='barh')
+            plt.ylabel('Features')
+            plt.xlabel('F score')
+            plt.title("Feature importance" + "\n", fontsize=18)
+
+            
         
     @staticmethod    
     def curve(x, 
@@ -524,3 +557,119 @@ class DataVisualizator:
                                 xlim=[0.0, 1.0],
                                 ylim=[0.0, 1.05],
                                 legend_loc="lower right")
+        
+    @staticmethod    
+    def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
+                            n_jobs=None, train_sizes=np.linspace(.1, 1.0, 5)):
+        """
+        Generate 3 plots: the test and training learning curve, the training
+        samples vs fit times curve, the fit times vs score curve.
+    
+        Parameters
+        ----------
+        estimator : estimator instance
+            An estimator instance implementing `fit` and `predict` methods which
+            will be cloned for each validation.
+    
+        title : str
+            Title for the chart.
+    
+        X : array-like of shape (n_samples, n_features)
+            Training vector, where ``n_samples`` is the number of samples and
+            ``n_features`` is the number of features.
+    
+        y : array-like of shape (n_samples) or (n_samples, n_features)
+            Target relative to ``X`` for classification or regression;
+            None for unsupervised learning.
+    
+        axes : array-like of shape (3,), default=None
+            Axes to use for plotting the curves.
+    
+        ylim : tuple of shape (2,), default=None
+            Defines minimum and maximum y-values plotted, e.g. (ymin, ymax).
+    
+        cv : int, cross-validation generator or an iterable, default=None
+            Determines the cross-validation splitting strategy.
+            Possible inputs for cv are:
+    
+              - None, to use the default 5-fold cross-validation,
+              - integer, to specify the number of folds.
+              - :term:`CV splitter`,
+              - An iterable yielding (train, test) splits as arrays of indices.
+    
+            For integer/None inputs, if ``y`` is binary or multiclass,
+            :class:`StratifiedKFold` used. If the estimator is not a classifier
+            or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
+    
+            Refer :ref:`User Guide <cross_validation>` for the various
+            cross-validators that can be used here.
+    
+        n_jobs : int or None, default=None
+            Number of jobs to run in parallel.
+            ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+            ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
+            for more details.
+    
+        train_sizes : array-like of shape (n_ticks,)
+            Relative or absolute numbers of training examples that will be used to
+            generate the learning curve. If the ``dtype`` is float, it is regarded
+            as a fraction of the maximum size of the training set (that is
+            determined by the selected validation method), i.e. it has to be within
+            (0, 1]. Otherwise it is interpreted as absolute sizes of the training
+            sets. Note that for classification the number of samples usually have
+            to be big enough to contain at least one sample from each class.
+            (default: np.linspace(0.1, 1.0, 5))
+        """
+        if axes is None:
+            _, axes = plt.subplots(1, 3, figsize=(20, 5))
+    
+        axes[0].set_title(title)
+        if ylim is not None:
+            axes[0].set_ylim(*ylim)
+        axes[0].set_xlabel("Training examples")
+        axes[0].set_ylabel("Score")
+    
+        train_sizes, train_scores, test_scores, fit_times, _ = \
+            learning_curve(estimator, X, y, cv=cv, n_jobs=n_jobs,
+                           train_sizes=train_sizes,
+                           return_times=True)
+        train_scores_mean = np.mean(train_scores, axis=1)
+        train_scores_std = np.std(train_scores, axis=1)
+        test_scores_mean = np.mean(test_scores, axis=1)
+        test_scores_std = np.std(test_scores, axis=1)
+        fit_times_mean = np.mean(fit_times, axis=1)
+        fit_times_std = np.std(fit_times, axis=1)
+    
+        # Plot learning curve
+        axes[0].grid()
+        axes[0].fill_between(train_sizes, train_scores_mean - train_scores_std,
+                             train_scores_mean + train_scores_std, alpha=0.1,
+                             color="r")
+        axes[0].fill_between(train_sizes, test_scores_mean - test_scores_std,
+                             test_scores_mean + test_scores_std, alpha=0.1,
+                             color="g")
+        axes[0].plot(train_sizes, train_scores_mean, 'o-', color="r",
+                     label="Training score")
+        axes[0].plot(train_sizes, test_scores_mean, 'o-', color="g",
+                     label="Cross-validation score")
+        axes[0].legend(loc="best")
+    
+        # Plot n_samples vs fit_times
+        axes[1].grid()
+        axes[1].plot(train_sizes, fit_times_mean, 'o-')
+        axes[1].fill_between(train_sizes, fit_times_mean - fit_times_std,
+                             fit_times_mean + fit_times_std, alpha=0.1)
+        axes[1].set_xlabel("Training examples")
+        axes[1].set_ylabel("fit_times")
+        axes[1].set_title("Scalability of the model")
+    
+        # Plot fit_time vs score
+        axes[2].grid()
+        axes[2].plot(fit_times_mean, test_scores_mean, 'o-')
+        axes[2].fill_between(fit_times_mean, test_scores_mean - test_scores_std,
+                             test_scores_mean + test_scores_std, alpha=0.1)
+        axes[2].set_xlabel("fit_times")
+        axes[2].set_ylabel("Score")
+        axes[2].set_title("Performance of the model")
+    
+        return plt        

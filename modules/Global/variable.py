@@ -11,6 +11,11 @@ class Var:
     SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
     DATE_FORMAT = '%Y-%m-%d'
     MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = 20
+    MAX_NUMBER_OF_FEATURE_IMPORTANCE = 20
+    LABEL_OBJECTIVE_REGRESSION = ['reg:squarederror','reg:logistic']
+    LABEL_OBJECTIVE_CLASSIFICATION = ['multi:softprob','binary:logistic']
+    METRIC_REGRESSION = ['rmse']
+    METRIC_CLASSIFICATION = ['logloss']
     PKMN_TYPE_COLORS = ['#78C850',  # Grass
                         '#F08030',  # Fire
                         '#6890F0',  # Water

@@ -6,12 +6,17 @@ from datetime import datetime
 import numpy as np
 
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import confusion_matrix
 import xgboost as xgb
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.tree import DecisionTreeClassifier
 
-from modules.Global import variable
+from modules.Global.variable import Var
 
 from modules.visualization.visualization import DataVisualizator
 
@@ -22,20 +27,25 @@ class Modeler:
     Class used to create Machine Learning with data
     '''
     
-    SCRIPT_DIRECTORY = variable.Var().SCRIPT_DIRECTORY
-    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = variable.Var().MAX_NUMBER_OF_CATEGORICAL_OCCURENCES
+    SCRIPT_DIRECTORY = Var().SCRIPT_DIRECTORY
+    MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = Var().MAX_NUMBER_OF_CATEGORICAL_OCCURENCES
+    LABEL_OBJECTIVE_REGRESSION = Var().LABEL_OBJECTIVE_REGRESSION
+    LABEL_OBJECTIVE_CLASSIFICATION = Var().LABEL_OBJECTIVE_CLASSIFICATION
+    METRIC_REGRESSION = Var().METRIC_REGRESSION
+    METRIC_CLASSIFICATION = Var().METRIC_CLASSIFICATION 
     
-    def __init__(self, dataframe):
+    def __init__(self, dataframe, label):
         self.dataframe = dataframe
+        self.label = label
         
-    def _detect_objective(self, label):
+    def _detect_objective(self, data_label):
         '''
         Detect which objective to choose for XGBoost model regarding values in label
 
         Parameters
         ----------
-        label : string
-            Name of the column used as label on data
+        data_label : dataframe
+            
 
         Returns
         -------
@@ -44,39 +54,157 @@ class Modeler:
 
         '''
         
-        length_unique_value = len(set(self.dataframe[label]))
-        minimum = min(self.dataframe[label])
-        maximum = max(self.dataframe[label])
+        length_unique_value = len(set(data_label))
+        minimum = min(data_label)
+        maximum = max(data_label)
         
         if 3 <= length_unique_value <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
-            print('multi:softprob')
-            return ('multi:softprob''logloss')
+            # Multi classification
+            print(self.LABEL_OBJECTIVE_CLASSIFICATION[0])
+            return (self.LABEL_OBJECTIVE_CLASSIFICATION[0],self.METRIC_CLASSIFICATION[0])
         if length_unique_value <= 2:
-            print('binary:logistic')
-            return ('binary:logistic','logloss')
+            # Binary classification
+            print(self.LABEL_OBJECTIVE_CLASSIFICATION[1])
+            return (self.LABEL_OBJECTIVE_CLASSIFICATION[1],self.METRIC_CLASSIFICATION[0])
         if 3 <= length_unique_value and 0 <= minimum and maximum <= 1:
-            print('reg:logistic')
-            return ('reg:logistic','rmse')
+            # Logistic regression
+            print(self.LABEL_OBJECTIVE_REGRESSION[1])
+            return (self.LABEL_OBJECTIVE_REGRESSION[1],self.METRIC_REGRESSION[0])
         if self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES < length_unique_value:
-            print('reg:squarederror')
-            return ('reg:squarederror','rmse')
-            
+            # Regression
+            print(self.LABEL_OBJECTIVE_REGRESSION[0])
+            return (self.LABEL_OBJECTIVE_REGRESSION[0],self.METRIC_REGRESSION[0])
     
-    def create_XGB_model(self,
-                     label,
-                     model_path,
-                     num_round,
-                     max_depth=6,
-                     eta=0.3,
-                     objective=None,
-                     threshold_class=None):
+
+    def Ensemble_model(self,
+                        df_train,
+                        df_train_label,
+                        df_test,
+                        df_test_label,
+                        model_path,
+                        n_estimators=100,
+                        max_depth=6,
+                        objective=None,
+                        threshold_class=None,
+                        method='RandomForest'):
         '''
-        Create XGB model
+        Create Random Forest model
 
         Parameters
         ----------
-        label : string
-            string containing of the data to train the model.
+        df_train : dataframe
+            dataframe containing training data
+        df_train_label : dataframe
+            dataframe containing ttraining label data
+        df_test : dataframe
+            dataframe containing test data
+        df_test_label : dataframe
+            dataframe containing test label data
+        path_model : string
+            string containing the path of the model which will be saved.
+        n_estimators int, default=100
+            The number of trees in the forest.
+        max_depth : int, optional
+            Maximum depth of a tree. Increasing this value will make the model 
+            more complex and more likely to overfit. 0 is only accepted in 
+            lossguided growing policy when tree_method is set as hist or gpu_hist 
+            and it indicates no limit on depth. Beware that XGBoost aggressively 
+            consumes memory when training a deep tree.
+            range: [0,∞] (0 is only accepted in lossguided growing policy when 
+                          tree_method is set as hist or gpu_hist). The default is 6.
+
+        Returns
+        -------
+        Save model and related plot and display them
+
+        '''
+        
+        print("Training model using: Random Forest")
+        detected_objective = self._detect_objective(df_train_label)
+        eval_metric = detected_objective[1]
+        objective = objective or detected_objective[0]
+        X = df_train.append(df_test,ignore_index=True).to_numpy()
+        y = df_train_label.append(df_test_label,ignore_index=True).to_numpy()
+        X_train = df_train.to_numpy()
+        # X_test = df_test.to_numpy()
+        y_train = df_train_label.to_numpy()
+        # y_test = df_test_label.to_numpy()
+        if method == 'RandomForest':
+            param = {'n_estimators': n_estimators,
+                     'max_depth': max_depth, 
+                     'n_jobs' : -1,
+                     'verbose' : 1}
+            if objective in set(self.LABEL_OBJECTIVE_REGRESSION):
+                estimator = RandomForestRegressor()
+            if objective in set(self.LABEL_OBJECTIVE_CLASSIFICATION):
+                estimator = RandomForestClassifier()
+        estimator.set_params(**param)
+        estimator.fit(X_train, y_train)
+        #scores = cross_val_score(estimator, X, y, cv=5)
+        
+        now = datetime.now()
+        dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
+        param_string = "_".join([key +"_" + str(param[key]) for key in param.keys()])
+        model_name = param_string + "_" + dt_string
+        #bst.save_model(model_path + "_" + model_name)
+        print("Model is available here: " + model_path + "_" + model_name)
+        
+        
+        '''
+        Get the RandomForest model results and information
+        '''
+        
+        # Cross validation with 100 iterations to get smoother mean test and train
+        # score curves, each time with 20% data randomly selected as a validation set.
+        
+        # DataVisualizator.plot_learning_curve(estimator,
+        #                     title="Learning Curves: " + method,
+        #                     X=X,
+        #                     y=y,
+        #                     cv=ShuffleSplit(n_splits=10, test_size=0.2, random_state=0),
+        #                     n_jobs=-1)
+               
+        if eval_metric == self.METRIC_REGRESSION[0]:
+            ypred = estimator.predict(df_test)
+            RMSE = mean_squared_error(df_test_label, ypred, squared=False)
+            print(eval_metric.upper() + ": %.4f" % RMSE)
+        if eval_metric == self.METRIC_CLASSIFICATION[0]:
+            ypred = estimator.predict_proba(df_test)[:,1]
+            ypred_rounded = ypred.round()
+            if len(set(df_train_label)) == 2:
+                ypred_rounded = np.where(ypred >= threshold_class,1,0)            
+            cf_matrix = confusion_matrix(df_test_label,ypred_rounded)
+            DataVisualizator.confusion_matrix(cf_matrix)
+            DataVisualizator.roc_auc(np.array(df_test_label), ypred)
+            
+        DataVisualizator(self.dataframe).features_importance(estimator=estimator, estimator_type='scikit-learn')
+        
+        print("Training DONE")        
+    
+    def XGBoost_model(self,
+                         df_train,
+                         df_train_label,
+                         df_test,
+                         df_test_label,
+                         model_path,
+                         num_round,
+                         max_depth=6,
+                         eta=0.3,
+                         objective=None,
+                         threshold_class=None):
+        '''
+        Create XGBoost model
+
+        Parameters
+        ----------
+        df_train : dataframe
+            dataframe containing training data
+        df_train_label : dataframe
+            dataframe containing ttraining label data
+        df_test : dataframe
+            dataframe containing test data
+        df_test_label : dataframe
+            dataframe containing test label data
         path_model : string
             string containing the path of the model which will be saved.
         num_round : int
@@ -103,14 +231,9 @@ class Modeler:
         '''
         
         print("Training model using: XGBoost")
-        detected_objective = self._detect_objective(label)
+        detected_objective = self._detect_objective(df_train_label)
         eval_metric = detected_objective[1]
         objective = objective or detected_objective[0]
-        df_train, df_test = train_test_split(self.dataframe, test_size=0.2)
-        df_train_label = df_train[label]
-        df_train = df_train.drop(label,axis=1)
-        df_test_label = df_test[label]
-        df_test = df_test.drop(label,axis=1)
         dtrain = xgb.DMatrix(df_train, label=df_train_label)
         dtest = xgb.DMatrix(df_test, label=df_test_label)
         
@@ -130,7 +253,7 @@ class Modeler:
         
         now = datetime.now()
         dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
-        param_string = 'max_depth_' + str(param['max_depth']) + "_eta_" + str(param['eta']) + "_num_round_" + str(num_round)
+        param_string = "_".join([key +"_" + str(param[key]) for key in param.keys()])
         model_name = param_string + "_" + dt_string
         #bst.save_model(model_path + "_" + model_name)
         print("Model is available here: " + model_path + "_" + model_name)
@@ -151,18 +274,18 @@ class Modeler:
                                label=["train","eval"])
         
         ypred = bst.predict(dtest)        
-        if eval_metric == "rmse":
-            RMSE = mean_squared_error(df_test[label], ypred, squared=False)
-            print("RMSE: %.4f" % RMSE)
-        if eval_metric == "logloss":
+        if eval_metric == self.METRIC_REGRESSION[0]:
+            RMSE = mean_squared_error(df_test_label, ypred, squared=False)
+            print(eval_metric.upper() + ": %.4f" % RMSE)
+        if eval_metric == self.METRIC_CLASSIFICATION[0]:
             ypred_rounded = ypred.round()
-            if len(set(self.dataframe[label])) == 2:
+            if len(set(df_train_label)) == 2:
                 ypred_rounded = np.where(ypred >= threshold_class,1,0)            
             cf_matrix = confusion_matrix(df_test_label,ypred_rounded)
             DataVisualizator.confusion_matrix(cf_matrix)
             DataVisualizator.roc_auc(np.array(df_test_label), ypred)
             
-        DataVisualizator.features_importance(bst)
+        DataVisualizator(self.dataframe).features_importance(estimator=bst, estimator_type='xgboost')
         
         print("Training DONE")
         
