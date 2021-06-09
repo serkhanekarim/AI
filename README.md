@@ -20,6 +20,8 @@ or :
 ./model_training_train.py -h
 for more help
 
+Close the windows plots to let the script continue
+
 Results are here: marketing-analysis/results/predictions.csv
 
 
