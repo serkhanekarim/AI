@@ -96,6 +96,74 @@ class DataVisualizator:
         plt.figure()
         msno.dendrogram(self.dataframe)
         
+    def linear_regression(self, columns_name, label):
+        '''
+        Display Regression models for all features from the dataframe
+
+        Parameters
+        ----------
+        columns_name : string or list of string
+            containing the features column names for the display of the regression.
+        label : string
+            string containing the column name of the output.
+
+        Returns
+        -------
+        Display regression models for all all feature and save it
+
+        '''
+        
+        if isinstance(columns_name,str): columns_name = [columns_name]       
+        for column_name in set(columns_name):
+            plt.figure()
+            sns.regplot(x=column_name, y=label, data=self.dataframe);
+            plt.title("Regression model " + str(label).upper() + " sur " + str(column_name).upper() + "\n", fontsize=18)
+
+
+    def polynomial_regression(self, columns_name, label, model):
+        '''
+        Display Regression models for all features from the dataframe
+
+        Parameters
+        ----------
+        columns_name : string or list of string
+            containing the features column names for the display of the regression.
+        label : string
+            string containing the column name of the output.
+        model : class
+            A convenience class, used to encapsulate “natural” operations on polynomials 
+            so that said operations may take on their customary form in code.
+
+        Returns
+        -------
+        Display regression models for all all feature and save it
+
+        '''
+        
+        if isinstance(columns_name,str): columns_name = [columns_name]       
+        for column_name in set(columns_name):
+            plt.scatter(column_name, label)
+            mini_x = min(self.dataframe[column_name])
+            maxi_x = max(self.dataframe[column_name])
+            mini_y = min(self.dataframe[label])
+            maxi_y = max(self.dataframe[label])
+            line = np.linspace(mini_x, maxi_x, 100)        
+            DataVisualizator.curve(x=line, 
+                              y=model(line), 
+                              xlabel=column_name, 
+                              ylabel=label, 
+                              title="Regression model " + str(label).upper() + " sur " + str(column_name).upper() + "\n", 
+                              label=None,
+                              xlim=None,
+                              ylim=[mini_y, maxi_y],
+                              legend_loc=None)
+            plt.scatter(self.dataframe[column_name], self.dataframe[label])
+            # plt.scatter(self.dataframe[column_name], self.dataframe[label])
+            # plt.plot(line, model(line))
+            # plt.title("Regression model " + str(label).upper() + " sur " + str(column_name).upper() + "\n", fontsize=18)
+
+
+        
     
     def violin_plot(self, columns_name, label):
         '''

@@ -15,6 +15,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from scipy.optimize import curve_fit
+from scipy.interpolate import lagrange
 
 from modules.Global.variable import Var
 
@@ -61,7 +65,7 @@ class Modeler:
         if 3 <= length_unique_value <= self.MAX_NUMBER_OF_CATEGORICAL_OCCURENCES:
             # Multi classification
             print(self.LABEL_OBJECTIVE_CLASSIFICATION[0])
-            return (self.LABEL_OBJECTIVE_CLASSIFICATION[0],self.METRIC_CLASSIFICATION[0])
+            return (self.LABEL_OBJECTIVE_CLASSIFICATION[0],self.METRIC_CLASSIFICATION[1])
         if length_unique_value <= 2:
             # Binary classification
             print(self.LABEL_OBJECTIVE_CLASSIFICATION[1])
@@ -74,7 +78,32 @@ class Modeler:
             # Regression
             print(self.LABEL_OBJECTIVE_REGRESSION[0])
             return (self.LABEL_OBJECTIVE_REGRESSION[0],self.METRIC_REGRESSION[0])
-    
+        
+    def linear_regressor(self, x):
+        '''
+        Create linear regression
+
+        Parameters
+        ----------
+        x : string
+            column name of x
+        y : string
+            column name of y
+
+        Returns
+        -------
+        str, plot
+            Display the linear regression function
+
+        '''
+        X = self.dataframe[x].to_numpy().reshape(-1, 1)
+        y = self.dataframe[self.label].to_numpy()
+        reg = LinearRegression().fit(X, y)
+        reg.score(X, y)
+        print(reg.coef_)
+        a = reg.coef_[0]
+        b = reg.coef_[1]
+        print("Linear regression: y = " + str(a) + "*X+" + str(b))
 
     def Ensemble_model(self,
                         df_train,
@@ -123,8 +152,8 @@ class Modeler:
         detected_objective = self._detect_objective(df_train_label)
         eval_metric = detected_objective[1]
         objective = objective or detected_objective[0]
-        X = df_train.append(df_test,ignore_index=True).to_numpy()
-        y = df_train_label.append(df_test_label,ignore_index=True).to_numpy()
+        # X = df_train.append(df_test,ignore_index=True).to_numpy()
+        # y = df_train_label.append(df_test_label,ignore_index=True).to_numpy()
         X_train = df_train.to_numpy()
         # X_test = df_test.to_numpy()
         y_train = df_train_label.to_numpy()
@@ -186,12 +215,13 @@ class Modeler:
                          df_train_label,
                          df_test,
                          df_test_label,
-                         model_path,
                          num_round,
                          max_depth=6,
                          eta=0.3,
+                         num_class=None,
                          objective=None,
-                         threshold_class=None):
+                         threshold_class=None,
+                         model_path=None):
         '''
         Create XGBoost model
 
@@ -242,7 +272,8 @@ class Modeler:
         param = {'max_depth': max_depth, 
                  'eta': eta, 
                  'objective': objective, 
-                 'nthread' : -1}
+                 'nthread' : -1,
+                 'num_class' : num_class}
         
         bst = xgb.train(param, 
                         dtrain, 
@@ -256,12 +287,12 @@ class Modeler:
         param_string = "_".join([key +"_" + str(param[key]) for key in param.keys()])
         model_name = param_string + "_" + dt_string
         #bst.save_model(model_path + "_" + model_name)
-        print("Model is available here: " + model_path + "_" + model_name)
+        #print("Model is available here: " + model_path + "_" + model_name)
         
         
         '''
         Get the XGBoost model results and information
-        '''       
+        '''
         x_axis = range(len(evals_result['train'][eval_metric]))
         y_axis = [evals_result['train'][eval_metric], 
                   evals_result['eval'][eval_metric]]
@@ -286,8 +317,8 @@ class Modeler:
             DataVisualizator.roc_auc(np.array(df_test_label), ypred)
             
         DataVisualizator(self.dataframe).features_importance(estimator=bst, estimator_type='xgboost')
-        
         print("Training DONE")
+        return bst
         
         
     def hyperParameterTuningXGB(self, X_train, y_train, objective):

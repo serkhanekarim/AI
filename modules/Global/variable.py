@@ -15,7 +15,7 @@ class Var:
     LABEL_OBJECTIVE_REGRESSION = ['reg:squarederror','reg:logistic']
     LABEL_OBJECTIVE_CLASSIFICATION = ['multi:softprob','binary:logistic']
     METRIC_REGRESSION = ['rmse']
-    METRIC_CLASSIFICATION = ['logloss']
+    METRIC_CLASSIFICATION = ['logloss','mlogloss']
     PKMN_TYPE_COLORS = ['#78C850',  # Grass
                         '#F08030',  # Fire
                         '#6890F0',  # Water
