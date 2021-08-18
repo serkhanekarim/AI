@@ -16,6 +16,7 @@ from tensorflow.keras import models
 from IPython import display
 
 from modules.modeling.speech_recognition import basic_CNN
+from modules.preprocessing.audio import AudioPreprocessor
 
 
 # Set seed for experiment reproducibility
@@ -57,6 +58,16 @@ def main(args):
     seconde comme "bas", "aller", "gauche", "non", "droit", "stop", "haut " et oui".
     '''
     
+    
+    '''
+    Vous allez rédiger un script pour télécharger une partie de l' ensemble de données 
+    Speech Commands . L'ensemble de données original se compose de plus de 105 000 fichiers 
+    audio WAV de personnes disant trente mots différents. Ces données ont été collectées par 
+    Google et publiées sous licence CC BY.
+    Vous utiliserez une partie de l'ensemble de données pour gagner du temps lors du 
+    chargement des données. Extrayez le mini_speech_commands.zip et chargez-le à l'aide de 
+    l'API tf.data .
+    '''
     data_directory = args.data_directory
     size_data_directory = os.path.getsize(data_directory)
     if size_data_directory <= 4096:
@@ -67,18 +78,44 @@ def main(args):
             cache_subdir='.',
             cache_dir=data_directory)
     
+    '''
+    Vérifiez les statistiques de base sur l'ensemble de données.
+    '''
     commands_directory = os.path.join(data_directory,'mini_speech_commands')
-    
     commands = np.array(tf.io.gfile.listdir(str(commands_directory)))
     commands = commands[commands != 'README.md']
     print('Commands:', commands)
     
+    '''
+    Extrayez les fichiers audio dans une liste et mélangez-la.
+    '''
     filenames = tf.io.gfile.glob(str(commands_directory) + '/*/*')
     filenames = tf.random.shuffle(filenames)
     num_samples = len(filenames)
     print('Number of total examples:', num_samples)
     [print(path,len(os.listdir(os.path.join(commands_directory,path)))) for path in os.listdir(commands_directory) if path != 'README.md']
     print('Example file tensor:', filenames[0])
+
+    '''
+    Divisez les fichiers en ensembles d'entraînement, de validation et de 
+    test en utilisant un ratio de 80:10:10, respectivement.
+    '''
+    train_files = filenames[:6400]
+    val_files = filenames[6400: 6400 + 800]
+    test_files = filenames[-800:]  
+    print('Training set size', len(train_files))
+    print('Validation set size', len(val_files))
+    print('Test set size', len(test_files))
+    
+    '''
+    Vous allez maintenant appliquer process_path pour créer votre ensemble 
+    d'apprentissage afin d'extraire les paires d'étiquettes audio et vérifier 
+    les résultats. Vous construirez les ensembles de validation et de test en utilisant 
+    une procédure similaire plus tard.
+    '''
+    AUTOTUNE = tf.data.AUTOTUNE
+    files_ds = tf.data.Dataset.from_tensor_slices(train_files)
+    waveform_ds = files_ds.map(get_waveform_and_label, num_parallel_calls=AUTOTUNE)
 
 
 
