@@ -740,4 +740,40 @@ class DataVisualizator:
         axes[2].set_ylabel("Score")
         axes[2].set_title("Performance of the model")
     
-        return plt        
+        return plt   
+
+    @staticmethod
+    def plot_audio_wave(rows, cols, data_set):
+        '''
+        Display multiple audio wave plot in a table or rows x cols
+        
+        Parameters
+        ----------
+        rows : int
+            number of rows to display
+        cols : int
+            number of columns to display
+        data_set : tf.data.Dataset.from_tensor_slices
+            Creates a Dataset whose elements are slices of the given tensors.
+            The given tensors are sliced along their first dimension. This operation 
+            preserves the structure of the input tensors, removing the first dimension 
+            of each tensor and using it as the dataset dimension. All input tensors must 
+            have the same size in their first dimensions.
+        
+        Returns
+        -------
+        Display multiple audio wave plot in a table or rows x cols
+        
+        '''
+        n = rows*cols
+        fig, axes = plt.subplots(rows, cols, figsize=(10, 12))
+        for i, (audio, label) in enumerate(data_set.take(n)):
+          r = i // cols
+          c = i % cols
+          ax = axes[r][c]
+          ax.plot(audio.numpy())
+          ax.set_yticks(np.arange(-1.2, 1.2, 0.2))
+          label = label.numpy().decode('utf-8')
+          ax.set_title(label)
+        
+        plt.show()

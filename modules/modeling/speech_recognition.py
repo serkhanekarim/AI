@@ -24,6 +24,8 @@
 
 # from modules.visualization.visualization import DataVisualizator
 
+import tensorflow as tf
+
 
 class basic_CNN:
     '''

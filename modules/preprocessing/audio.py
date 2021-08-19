@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import numpy as np
+# import numpy as np
 
-from datetime import datetime
-import holidays
+# from datetime import datetime
+# import holidays
 
-from tqdm import tqdm
-from modules.Global import variable
+# from tqdm import tqdm
+# from modules.Global import variable
+
+import os
+import tensorflow as tf
 
 class AudioPreprocessor:
     '''
@@ -16,8 +19,8 @@ class AudioPreprocessor:
     
     #DATE_FORMAT = variable.Var().DATE_FORMAT
     
-    def __init__(self, path_audio):
-        self.path_audio = path_audio
+    # def __init__(self, path_audio):
+    #     self.path_audio = path_audio
         
     def _decode_audio(self, audio_binary):
         '''
@@ -49,18 +52,18 @@ class AudioPreprocessor:
         audio, _ = tf.audio.decode_wav(audio_binary)
         return tf.squeeze(audio, axis=-1)
     
-    def _get_label(self):
+    def _get_label(self, path_audio):
         '''
         L'étiquette de chaque fichier WAV est son répertoire parent.
         '''
-        parts = tf.strings.split(self.path_audio, os.path.sep)
+        parts = tf.strings.split(path_audio, os.path.sep)
       
         # Note: You'll use indexing here instead of tuple unpacking to enable this 
         # to work in a TensorFlow graph.
         return parts[-2]
 
 
-    def get_waveform_and_label(self, file_path):
+    def get_waveform_and_label(self, path_audio):
         '''
         Method used to convert a date into date_format
         
@@ -77,9 +80,9 @@ class AudioPreprocessor:
             Converted date
         
         '''
-        label = get_label(self.path_audio)
-        audio_binary = tf.io.read_file(self.path_audio)
-        waveform = decode_audio(audio_binary)
+        label = self._get_label(path_audio)
+        audio_binary = tf.io.read_file(path_audio)
+        waveform = self._decode_audio(audio_binary)
         return waveform, label
         
     # def convert_date_format(self, date, date_format):

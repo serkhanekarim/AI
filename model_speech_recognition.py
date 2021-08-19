@@ -17,6 +17,7 @@ from IPython import display
 
 from modules.modeling.speech_recognition import basic_CNN
 from modules.preprocessing.audio import AudioPreprocessor
+from modules.visualization.visualization import DataVisualizator
 
 
 # Set seed for experiment reproducibility
@@ -115,9 +116,14 @@ def main(args):
     '''
     AUTOTUNE = tf.data.AUTOTUNE
     files_ds = tf.data.Dataset.from_tensor_slices(train_files)
-    waveform_ds = files_ds.map(get_waveform_and_label, num_parallel_calls=AUTOTUNE)
+    waveform_ds = files_ds.map(AudioPreprocessor().get_waveform_and_label, num_parallel_calls=AUTOTUNE)
 
-
+    '''
+    Examinons quelques formes d'onde audio avec leurs étiquettes correspondantes.
+    '''
+    DataVisualizator.plot_audio_wave(rows=3, 
+                                     cols=3, 
+                                     data_set=waveform_ds)
 
     # #data_directory = "/home/serkhane/repo/test-quantmetry/data/"
     # directory_of_script = os.path.dirname(os.path.realpath(__file__))
