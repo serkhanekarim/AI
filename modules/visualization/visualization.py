@@ -777,3 +777,100 @@ class DataVisualizator:
           ax.set_title(label)
         
         plt.show()
+        
+    @staticmethod
+    def plot_spectrogram(spectrogram, ax):
+        '''
+        Plot spectogram
+
+        Parameters
+        ----------
+        spectrogram : Tensorflow tensor
+            Contains the the spectogram tensor
+        ax : axe
+            Axe of the plot
+
+        Returns
+        -------
+        Display spectrogram from waveform
+
+        '''
+        # Convert to frequencies to log scale and transpose so that the time is
+        # represented in the x-axis (columns).
+        log_spec = np.log(spectrogram.T)
+        height = log_spec.shape[0]
+        width = log_spec.shape[1]
+        X = np.linspace(0, np.size(spectrogram), num=width, dtype=int)
+        Y = range(height)
+        ax.pcolormesh(X, Y, log_spec)
+
+        
+     
+    @staticmethod    
+    def plot_waveform_spectrogram(waveform, spectrogram):
+        '''
+        Plot waveform and spectrogram
+
+        Parameters
+        ----------
+        waveform : Tensorflow tensor
+            Contains the wave form of an audio
+        spectrogram : Tensorflow tensor
+            Le tf.signal.stft ( tf.signal.stft ) divise le signal en fenêtres temporelles et 
+            exécute une transformée de Fourier sur chaque fenêtre, préservant certaines 
+            informations temporelles et renvoyant un tenseur 2D sur lequel vous pouvez exécuter 
+            des convolutions standard.
+
+        Returns
+        -------
+        Display spectrogram and waveform
+
+        '''
+        # Convert to frequencies to log scale and transpose so that the time is
+        # represented in the x-axis (columns).
+        fig, axes = plt.subplots(2, figsize=(12, 8))
+        timescale = np.arange(waveform.shape[0])
+        axes[0].plot(timescale, waveform.numpy())
+        axes[0].set_title('Waveform')
+        axes[0].set_xlim([0, 16000])
+
+        DataVisualizator.plot_spectrogram(spectrogram.numpy(), axes[1])
+    
+        axes[1].set_title('Spectrogram')
+        plt.show()
+
+    @staticmethod
+    def plot_audio_spectrogram_table(rows, cols, data_set, labels):
+        '''
+        Display multiple audio spectrogram plot in a table or rows x cols
+        
+        Parameters
+        ----------
+        rows : int
+            number of rows to display
+        cols : int
+            number of columns to display
+        data_set : tf.data.Dataset.from_tensor_slices
+            Creates a Dataset whose elements are slices of the given tensors.
+            The given tensors are sliced along their first dimension. This operation 
+            preserves the structure of the input tensors, removing the first dimension 
+            of each tensor and using it as the dataset dimension. All input tensors must 
+            have the same size in their first dimensions.
+        
+        Returns
+        -------
+        Display multiple audio wave plot in a table or rows x cols
+        
+        '''
+        n = rows*cols
+        fig, axes = plt.subplots(rows, cols, figsize=(10, 10))
+        for i, (spectrogram, label_id) in enumerate(data_set.take(n)):
+          r = i // cols
+          c = i % cols
+          ax = axes[r][c]
+          DataVisualizator.plot_spectrogram(np.squeeze(spectrogram.numpy()), ax)
+          ax.set_title(labels[label_id.numpy()])
+          ax.axis('off')
+        
+        plt.show()
+

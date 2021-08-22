@@ -124,7 +124,41 @@ def main(args):
     DataVisualizator.plot_audio_wave(rows=3, 
                                      cols=3, 
                                      data_set=waveform_ds)
+    
+    '''
+    Spectrogramme
+    
+    Vous allez convertir la forme d'onde en un spectrogramme, qui montre les changements de 
+    fréquence au fil du temps et peut être représenté sous la forme d'une image 2D. 
+    Cela peut être fait en appliquant la transformée de Fourier à court terme (STFT) pour 
+    convertir l'audio dans le domaine temps-fréquence.
+    '''
+    for waveform, label in waveform_ds.take(1):    
+        label = label.numpy().decode('utf-8')
+        spectrogram = AudioPreprocessor().get_spectrogram(waveform)
+    
+    print('Label:', label)
+    print('Waveform shape:', waveform.shape)
+    print('Spectrogram shape:', spectrogram.shape)
+    print('Audio playback')
+    display.display(display.Audio(waveform, rate=16000))
+    
+    DataVisualizator.plot_waveform_spectrogram(waveform, spectrogram)
+    
+    '''
+    Transformez maintenant l'ensemble de données de forme d'onde pour avoir des 
+    images de spectrogramme et leurs étiquettes correspondantes en tant qu'ID entiers.
+    '''
+    spectrogram_ds = waveform_ds.map(lambda x,y: 
+    AudioPreprocessor().get_spectrogram_and_label_id(x, y, commands), num_parallel_calls=AUTOTUNE)
 
+    '''
+    Examinez les "images" du spectrogramme pour différents échantillons de l'ensemble de données.
+    '''
+    DataVisualizator.plot_audio_spectrogram_table(rows=3, 
+                                                    cols=3, 
+                                                    data_set=spectrogram_ds,
+                                                    labels=commands)
     # #data_directory = "/home/serkhane/repo/test-quantmetry/data/"
     # directory_of_script = os.path.dirname(os.path.realpath(__file__))
     # data_directory = args.data_directory
