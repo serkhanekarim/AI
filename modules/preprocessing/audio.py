@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# import numpy as np
-
-# from datetime import datetime
-# import holidays
-
-# from tqdm import tqdm
-# from modules.Global import variable
-
 import os
 import tensorflow as tf
 
@@ -16,11 +8,6 @@ class AudioPreprocessor:
     '''
     Class used to make audio preprocessing
     '''
-    
-    #DATE_FORMAT = variable.Var().DATE_FORMAT
-    
-    # def __init__(self, path_audio):
-    #     self.path_audio = path_audio
         
     def _decode_audio(self, audio_binary):
         '''
@@ -145,7 +132,7 @@ class AudioPreprocessor:
       
         return spectrogram
     
-    def get_spectrogram_and_label_id(self, audio, label, commands):
+    def get_spectrogram_and_label_id(self, audio, label, labels):
         '''
         Transformez maintenant l'ensemble de données de forme d'onde pour avoir des 
         images de spectrogramme et leurs étiquettes correspondantes en tant qu'ID entiers.
@@ -156,6 +143,8 @@ class AudioPreprocessor:
             Contains the wave form of an audio.
         label : string
             Word said in the audio.
+        labels : list
+            list of all labels
 
         Returns
         -------
@@ -167,283 +156,28 @@ class AudioPreprocessor:
         '''
         spectrogram = self.get_spectrogram(audio)
         spectrogram = tf.expand_dims(spectrogram, -1)
-        label_id = tf.argmax(label == commands)
+        label_id = tf.argmax(label == labels)
         return spectrogram, label_id
         
-    # def convert_date_format(self, date, date_format):
-    #     '''
-    #     Method used to convert a date into date_format
+    def preprocess_dataset(self, files, labels):
+        '''
+        Preocess audio data using above method
 
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date
-    #     date_format : string
-    #         Format of a date
+        Parameters
+        ----------
+        files : list
+            list of files
 
-    #     Returns
-    #     -------
-    #     string
-    #         Converted date
+        Returns
+        -------
+        spectrogram : Tensor
+            Spectrogram of the audio.
+        label_id : int
+            Index of the audio label
 
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     return str(datetime.strptime(date, date_format).strftime(self.DATE_FORMAT))
-        
-        
-    # def _is_weekend(self, date):
-    #     '''
-    #     Method used to get if a date is weekend or not
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     bool : False or True for the weekend
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan        
-    #     return datetime.strptime(date, self.DATE_FORMAT).weekday() >= 5
-        
-    # def _is_bank_holiday(self, date, country_code="FR"):
-    #     '''
-    #     Method used to get if a date is a bank holiday or not
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-    #     country_code : string, optional
-    #         Code of the country to use for the bank holiday. The default is 'FR'.
-
-    #     Returns
-    #     -------
-    #     bool : False or True for the bank holiday
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     return date in set(holidays.CountryHoliday(country_code))
-    
-    # def _is_leap_year(self, date):
-    #     '''
-    #     Method used to get if a year is leap year or not
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     bool : False or True for the leap year
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-        
-    #     year = int(date.split('-')[0])
-        
-    #     if (year % 4) == 0:
-    #         if (year % 100) == 0:
-    #             if (year % 400) == 0:
-    #                 return True
-    #             else:
-    #                 return False
-    #         else:
-    #              return True
-    #     else:
-    #         return False
-    
-        
-    # def _get_season(self, date):
-    #     '''
-    #     Method used to get season from date
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     string : string containing season of a date
-
-    #     '''
-        
-    #     date = str(date)
-    #     season = np.nan
-        
-    #     if bool(date) and date.lower() != "nan":
-    #         month = datetime.strptime(date, self.DATE_FORMAT).strftime('%B').lower()
-    #         day = int(date.split('-')[2])
-    #     else:
-    #         return season
-        
-    #     if month in {'January', 'February', 'March'}:
-    #         season = 'winter'
-    #     elif month in {'April', 'May', 'June'}:
-    #         season = 'spring'
-    #     elif month in {'July', 'August', 'September'}:
-    #         season = 'summer'
-    #     else:
-    #         season = 'autumn'
-        
-    #     if (month == 'march') and (day > 19):
-    #         season = 'spring'
-    #     elif (month == 'june') and (day > 20):
-    #         season = 'summer'
-    #     elif (month == 'september') and (day > 21):
-    #         season = 'autumn'
-    #     elif (month == 'december') and (day > 20):
-    #         season = 'winter'
-        
-    #     return season
-    
-    # def _get_week_of_year(self, date):
-    #     '''
-    #     Method used to get quarter of year
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     int : int containing the week of the year
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     return datetime.strptime(date, self.DATE_FORMAT).isocalendar()[1]
-    
-    # def _get_quarter_of_year(self, date):
-    #     '''
-    #     Method used to get week or year
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     int : int containing the week of the year
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     return (datetime.strptime(date, self.DATE_FORMAT).month-1)//3
-    
-    # def _get_elapsed_day(self, date):
-    #     '''
-    #     Method used to get time elapsed from date to today
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-
-    #     Returns
-    #     -------
-    #     int : int containing the number of day elapsed during the day and today
-
-    #     '''
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     return (datetime.now()-datetime.strptime(date, self.DATE_FORMAT)).days
-        
-    # def _date_extractor_function(self, date, option):
-    #     '''
-    #     Method used to exctrat day, month and year from a date
-
-    #     Parameters
-    #     ----------
-    #     date : string
-    #         date in string
-    #     option : string
-    #         day, month or year
-
-    #     Returns
-    #     -------
-    #     int : int containing day or month or year
-
-    #     '''
-        
-    #     date = str(date)
-    #     if not date or date.lower() == "nan":
-    #         return np.nan
-    #     if option.lower() == "day":
-    #         return int(date.split('-')[2])
-    #     if option.lower() == "month":
-    #         return datetime.strptime(date, self.DATE_FORMAT).strftime('%B').lower()
-    #     if option.lower() == "year":
-    #         return int(date.split('-')[0])
-    #     if option.lower() == "weekday":
-    #         if not date or date.lower() == "nan":
-    #             return np.nan
-    #         return datetime.strptime(date, self.DATE_FORMAT).strftime('%A').lower()
-        
-        
-    # def extract_date_information(self, columns_name, date_format='%Y-%m-%d'):
-    #     '''
-    #     Create new day, month, year and other feature column using date column
-        
-    #     Parameters
-    #     ----------
-    #     column_name : string or list of string
-    #         Column name of the column containing data data
-    #     date_format : string, optional
-    #         Format of the date. The default is '%Y-%m-%d'.
-                
-    #     Returns
-    #     -------
-    #     DataFrame : Pandas DataFrame with new features (years, months, days, bank holiday...)
-                            
-    #     Examples
-    #     --------
-    #         0       2014-01-01       2014   1   1
-    #         1       2013-01-01       2013   1   1
-    #         2       2000-01-01 ----> 2000   1   1
-    #         3       2005-01-01       2005   1   1
-    #         4       2015-01-01       2015   1   1
-    #     '''
-        
-    #     print("Feature Engineering on date...")     
-    #     if isinstance(columns_name, str): columns_name = [columns_name]
-    #     for column_name in tqdm(set(columns_name)):
-    #         self.dataframe[column_name] = self.dataframe[column_name].apply(self.convert_date_format, date_format=date_format)
-    #         self.dataframe[column_name + "_day"] = self.dataframe[column_name].apply(self._date_extractor_function, option="day")
-    #         self.dataframe[column_name + "_month"] = self.dataframe[column_name].apply(self._date_extractor_function, option="month")
-    #         self.dataframe[column_name + "_year"] = self.dataframe[column_name].apply(self._date_extractor_function, option="year")
-    #         self.dataframe[column_name + "_weekday"] = self.dataframe[column_name].apply(self._date_extractor_function, option="weekday")
-    #         self.dataframe[column_name + "_season"] = self.dataframe[column_name].apply(self._get_season)
-    #         self.dataframe[column_name + "_bank_holiday"] = self.dataframe[column_name].apply(self._is_bank_holiday)
-    #         self.dataframe[column_name + "_weekend"] = self.dataframe[column_name].apply(self._is_weekend)
-    #         self.dataframe[column_name + "_week_of_year"] = self.dataframe[column_name].apply(self._get_week_of_year)
-    #         self.dataframe[column_name + "_quarter_of_year"] = self.dataframe[column_name].apply(self._get_quarter_of_year)
-    #         self.dataframe[column_name + "_leap_year"] = self.dataframe[column_name].apply(self._is_leap_year)
-    #         self.dataframe[column_name + "_elapsed_day"] = self.dataframe[column_name].apply(self._get_elapsed_day)
-    #         self.dataframe.drop(column_name, axis=1, inplace=True)
-    #         print("Feature Engineering on date - DONE")  
-            
-    #     return self.dataframe   
+        '''
+        files_ds = tf.data.Dataset.from_tensor_slices(files)
+        output_ds = files_ds.map(self.get_waveform_and_label, num_parallel_calls=tf.data.AUTOTUNE)
+        output_ds = output_ds.map(lambda x,y:
+            self.get_spectrogram_and_label_id(x,y,labels),  num_parallel_calls=tf.data.AUTOTUNE)
+        return output_ds

@@ -318,6 +318,30 @@ class DataVisualizator:
         
         if title:
             plt.title(title)
+            
+    def confusion_matrix_tensor(cf,group_names):
+        '''
+        Display Confusion matrix from tensorflow
+
+        Parameters
+        ----------
+        cf : Tensor
+            confusion matrix to be passed in.
+        group_names : list
+            List of strings that represent the labels row by row to be shown in each square.
+
+        Returns
+        -------
+        Display confusion matrix
+
+        '''
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(cf, xticklabels=group_names, yticklabels=group_names, 
+                    annot=True, fmt='g')
+        plt.xlabel('Prediction')
+        plt.ylabel('Label')
+        plt.show()
+            
     
     def correlation_matrix(self):
         '''

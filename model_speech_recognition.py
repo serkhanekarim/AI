@@ -15,7 +15,7 @@ from tensorflow.keras import layers
 from tensorflow.keras import models
 from IPython import display
 
-from modules.modeling.speech_recognition import basic_CNN
+from modules.modeling.speech_recognition import Models
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.visualization.visualization import DataVisualizator
 
@@ -24,29 +24,6 @@ from modules.visualization.visualization import DataVisualizator
 seed = 42
 tf.random.set_seed(seed)
 np.random.seed(seed)
-
-
-# import argparse
-# import os.path
-
-# from math import *
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# from sklearn.cluster import KMeans
-# from sklearn.model_selection import train_test_split
-
-# from modules.preprocessing.date import DatePreprocessor
-# from modules.preprocessing.feature_encoder import DataEncoder
-# from modules.scraping.scraper import DataScraper
-# from modules.reader.reader import DataReader
-# from modules.visualization.visualization import DataVisualizator
-# from modules.modeling.machine_learning import Modeler
-# from modules.preprocessing.missing_value import DataImputation
-# from modules.preprocessing.feature_scaling import DataScaler
-# from modules.preprocessing.feature_selection import DataSelector
-# from modules.preprocessing.feature_generator import DataGenerator
-# from modules.Global.method import DataMethod
 
     
 def main(args):
@@ -159,119 +136,91 @@ def main(args):
                                                     cols=3, 
                                                     data_set=spectrogram_ds,
                                                     labels=commands)
-    # #data_directory = "/home/serkhane/repo/test-quantmetry/data/"
-    # directory_of_script = os.path.dirname(os.path.realpath(__file__))
-    # data_directory = args.data_directory
-    # path_model = args.path_model
-    # mode = args.mode
-    # NaN_imputation_feature_scaling_PCA_usage = args.NaN_imputation_feature_scaling_PCA_usage
-    # max_depth = args.max_depth
-    # eta = args.eta
-    # num_round = args.num_round   
     
-    # FILENAME_TRAIN = "data_v1.0 (3) (1) (1) (1) (2).csv"    
-    # FEATURES_TO_NLP = ['Instrument(s) joué(s)','Niveau dans ces instruments','Styles musicaux','Villes','Vos disponibilités:','Groupe']
-    # LABEL = "embauche"
     
-    # path_train = os.path.join(data_directory,FILENAME_TRAIN)
+    '''
+    Construire et entraîner le modèle
     
+    Vous pouvez maintenant créer et entraîner votre modèle. Mais avant cela, vous devrez 
+    répéter le prétraitement de l'ensemble d'apprentissage sur les ensembles de validation et de test.
+    '''
+    train_ds = spectrogram_ds
+    val_ds = AudioPreprocessor().preprocess_dataset(val_files, commands)
+    test_ds = AudioPreprocessor().preprocess_dataset(test_files, commands)
+    
+    batch_size = 64
+    train_ds = train_ds.batch(batch_size)
+    val_ds = val_ds.batch(batch_size)
 
-    # # Read data from the file
-    # data = DataReader(path_train).read_data_file()
+    '''
+    Ajoutez des opérations cache() et prefetch() ensemble de données pour réduire la 
+    latence de lecture lors de l'entraînement du modèle.
+    '''
+    train_ds = train_ds.cache().prefetch(AUTOTUNE)
+    val_ds = val_ds.cache().prefetch(AUTOTUNE)
+    
+    '''
+    Get shape of the spectrogram data and number of laber (commands)
+    '''
+    for spectrogram, _ in spectrogram_ds.take(1):
+      input_shape = spectrogram.shape
+    print('Input shape:', input_shape)
+    num_labels = len(commands)
+    
+    
+    '''
+    Create and compile the model
+    '''
+    model = Models().basic_CNN(spectrogram_ds, input_shape, num_labels)
+    model.compile(optimizer=tf.keras.optimizers.Adam(),
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'],
+                  )
+    
+    history = model.fit(train_ds,
+                        validation_data=val_ds,
+                        epochs=100,
+                        callbacks=tf.keras.callbacks.EarlyStopping(verbose=1, patience=2),
+                        )
+    '''
+    Vérifions les courbes de perte d'entraînement et de validation pour voir comment 
+    votre modèle s'est amélioré pendant l'entraînement.
+    '''
+    metrics = history.history
+    plt.plot(history.epoch, metrics['loss'], metrics['val_loss'])
+    plt.legend(['loss', 'val_loss'])
+    plt.show()
+    
+    '''
+    Évaluer les performances de l'ensemble de test
+    Exécutons le modèle sur l'ensemble de test et vérifions les performances.
+    '''
+    test_audio = []
+    test_labels = []
+    
+    for audio, label in test_ds:
+      test_audio.append(audio.numpy())
+      test_labels.append(label.numpy())
+    
+    test_audio = np.array(test_audio)
+    test_labels = np.array(test_labels)
+    
+    y_pred = np.argmax(model.predict(test_audio), axis=1)
+    y_true = test_labels
+    
+    test_acc = sum(y_pred == y_true) / len(y_true)
+    print(f'Test set accuracy: {test_acc:.0%}')
+    
+    '''
+    Afficher une matrice de confusion
+    Une matrice de confusion est utile pour voir à quel point le modèle s'est 
+    bien comporté sur chacune des commandes de l'ensemble de test.
+    '''
+    confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
+    DataVisualizator.confusion_matrix_tensor(cf=confusion_mtx,
+                                             group_names=commands)
 
-    # # Print information on variables
-    # DataVisualizator(data).data_inforamtion()    
-    
-    # # Remove two first column which reffers to index, non useful to create model
-    # data.drop(columns=['Unnamed: 0', 'index'], inplace=True)
-    
-    
-    # '''
-    # Feature Engineering/Extraction/Vectorization
-    # '''
-    # # Add external data (gold financial data)
-    # data = DataScraper(data).add_scraped_data("date")
-    # # Feature Engineering on date
-    # data = DatePreprocessor(data).extract_date_information(columns_name="date")
-    # # Convert categorical variable into dummy/indicator variables 
-    # data = DataEncoder(data).dummy_variable()
-    
-    # # Print missing value
-    # DataVisualizator(data).missing_value_plotting()
-    
-    # #Split data into train and test set to evaluate the model
-    # df_train, df_test, df_train_label, df_test_label = train_test_split(data.drop(LABEL,axis=1), data[LABEL], test_size=0.2)
-    
-    # # Missing data imputation using K-NN
-    # imputer = DataImputation(df_train).imputer()
-    # df_train = imputer[0]
-    # # Missing data imputation on test data using training data imputer model
-    # df_test = imputer[1].transform(df_test)
-    # df_test = pd.DataFrame(df_test, columns = df_train.columns)
-    
-    # # Feature Selection before applying scaling data
-    # DataVisualizator(df_train).correlation_matrix() # Correlation Matrix
-    # selector = DataSelector(df_train, df_train_label).features_selection() # Trees
-    # DataVisualizator(df_train).features_importance(estimator=selector[0],
-    #                                                estimator_type='tree',
-    #                                                max_num_features=20)
-    
-    
-    
-    # # Feature generation using most important features
-    # number_of_generated_feature = 7
-    # selector_train = DataSelector(df_train, df_train_label).features_selection(number_of_generated_feature)
-    # generator_train = DataGenerator(df_train,selector_train[1]).polynomial_features(3)    
-    # df_train = generator_train[0]
-    
-    # # Feature generation on test data using training data generator model
-    # selector_test = df_test[selector_train[1].columns]
-    # generator_test = DataGenerator(df_test,selector_test).polynomial_features(3)
-    # df_test = generator_test[0]
-    
-    # # Correlation Matrix
-    # DataVisualizator(df_train).correlation_matrix()
-    
-    # # Pie Chart
-    # DataVisualizator(df_train).pie_chart(columns_name=df_train.columns)
-    # # Bar Chart
-    # DataVisualizator(df_train).bar_chart(columns_name=df_train.columns, label=LABEL)
-    # # Histogram
-    # DataVisualizator(df_train).histogram(columns_name=df_train.columns)
-    # # Pair plot, plotting feature vs label
-    # DataVisualizator(df_train).pair_plot(label=LABEL)
-    # # Box plot
-    # DataVisualizator(df_train).box_plot(columns_name=df_train.columns,label=LABEL)
-    # # Violin Plot
-    # DataVisualizator(df_train).violin_plot(columns_name=df_train.columns,label=LABEL)
-    
-    
-    # # Scaling data
-    # scaler = DataScaler(df_train).scaler(method='yeo-johnson')
-    # df_train = pd.DataFrame(scaler[0])
-    # # Scaling data on test data using training data scaler model
-    # df_test = pd.DataFrame(scaler[1].transform(df_test))
-    
-    # #/home/serkhane/repo/test-quantmetry/results
-    # Modeler(df_train, LABEL).XGBoost_model(df_train=df_train,
-    #                                    df_train_label=df_train_label,
-    #                                    df_test=df_test,
-    #                                    df_test_label=df_test_label,
-    #                                    model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
-    #                                    num_round=250,
-    #                                    threshold_class=0.3,
-    #                                    max_depth=2,
-    #                                    eta=0.1)
-    
-    # Modeler(df_train, LABEL).Ensemble_model(df_train=df_train,
-    #                                        df_train_label=df_train_label,
-    #                                        df_test=df_test,
-    #                                        df_test_label=df_test_label,
-    #                                        model_path="/home/serkhane/repo/test-quantmetry/results/test.model",
-    #                                        n_estimators=10000,
-    #                                        max_depth=None,
-    #                                        threshold_class=0.25,
-    #                                        method='RandomForest')
+
 
 
 if __name__ == "__main__":
