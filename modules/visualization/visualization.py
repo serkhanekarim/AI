@@ -897,4 +897,56 @@ class DataVisualizator:
           ax.axis('off')
         
         plt.show()
+        
+    @staticmethod
+    def display_image(image):
+        '''
+        Display image
+        
+        Parameters
+        ----------
+        image : tensor
+            matrix of the image
+        
+        Returns
+        -------
+        Display image with pixel range
+        
+        '''
+        plt.figure()
+        plt.imshow(image)
+        plt.colorbar()
+        plt.grid(False)
+        plt.show()
+
+    @staticmethod
+    def display_image_table(data_set, num_image, labels, index_labels):
+        '''
+        Display table of image
+        
+        Parameters
+        ----------
+        data_set : tensor
+            matrix of the image
+        num_image : int
+            number of image to display in the table
+        labels : list
+            list of different labels
+        index_labels : list
+            list of all labels index
+        
+        Returns
+        -------
+        Display image with pixel range
+        
+        '''
+        plt.figure(figsize=(10,10))
+        for i in range(num_image):
+            plt.subplot(5,5,i+1)
+            plt.xticks([])
+            plt.yticks([])
+            plt.grid(False)
+            plt.imshow(data_set[i], cmap=plt.cm.binary)
+            plt.xlabel(labels[index_labels[i]])
+        plt.show()
 
