@@ -15,7 +15,7 @@ from tensorflow.keras import layers
 from tensorflow.keras import models
 from IPython import display
 
-from modules.modeling.speech_recognition import Models
+from modules.modeling.speech_recognition import SpeechModels
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.visualization.visualization import DataVisualizator
 
@@ -171,7 +171,7 @@ def main(args):
     '''
     Create and compile the model
     '''
-    model = Models().basic_CNN(spectrogram_ds, input_shape, num_labels)
+    model = SpeechModels().basic_CNN(spectrogram_ds, input_shape, num_labels)
     model.compile(optimizer=tf.keras.optimizers.Adam(),
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'],

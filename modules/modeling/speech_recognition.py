@@ -8,7 +8,7 @@ from tensorflow.keras import layers
 from tensorflow.keras import models
 
 
-class Models:
+class SpeechModels:
     '''
     Class containing model used for speech recognition
     '''

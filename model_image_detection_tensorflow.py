@@ -11,7 +11,8 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.modeling.image_detection import Models
+from modules.modeling.image_detection import ImageModels
+from modules.modeling.speech_recognition import SpeechModels
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.visualization.visualization import DataVisualizator
 
@@ -107,8 +108,14 @@ def main(args):
                                          labels=class_names, 
                                          index_labels=train_labels)
     
-    model = Models().basic_NN(input_shape=train_images[0].shape,
-                            num_labels=len(class_names))
+    train_images = tf.expand_dims(train_images, -1)
+    test_images = tf.expand_dims(test_images, -1)
+    print(tf.convert_to_tensor(train_images))
+    print(tf.convert_to_tensor(train_images).shape)
+    model = ImageModels().basic_CNN(input_shape=train_images[0].shape,
+                                    num_labels=len(class_names))
+    #model = ImageModels().basic_NN(input_shape=train_images[0].shape,
+    #                        num_labels=len(class_names))
     
     '''
     Compiler le modèle
@@ -143,14 +150,13 @@ def main(args):
     Pour commencer l'entraînement, appelez la méthode model.fit , ainsi appelée parce 
     qu'elle « ajuste » le modèle aux données d'entraînement :
     '''
-    history = model.fit(train_images, train_labels, epochs=20)
+    history = model.fit(train_images, train_labels, epochs=5)
     
     '''
     Vérifions les courbes de perte d'entraînement et de validation pour voir comment 
     votre modèle s'est amélioré pendant l'entraînement.
     '''
     metrics = history.history
-    print(metrics)
     plt.plot(history.epoch, metrics['loss'], metrics['accuracy'])
     plt.legend(['loss', 'accuracy'])
     plt.show()
@@ -161,6 +167,17 @@ def main(args):
     '''
     test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
     print('\nTest accuracy:', test_acc)
+    
+    '''
+    Afficher une matrice de confusion
+    Une matrice de confusion est utile pour voir à quel point le modèle s'est 
+    bien comporté sur chacune des commandes de l'ensemble de test.
+    '''
+    y_pred = np.argmax(model.predict(test_images), axis=1)
+    y_true = test_labels
+    confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
+    DataVisualizator.confusion_matrix_tensor(cf=confusion_mtx,
+                                             group_names=class_names)
 
 
 
