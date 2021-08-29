@@ -52,7 +52,8 @@ class DataReader:
         switcher = {
             "csv": "sv",
             "tsv": "sv",
-            "xlsx": "excel"
+            "xlsx": "excel",
+            "txt": "text"
         }
         
         return switcher.get(file_extension)
@@ -63,8 +64,7 @@ class DataReader:
         
         Parameters
         ----------
-        path_file : string
-            Path of data file
+        None
                 
         Returns
         -------
@@ -80,8 +80,7 @@ class DataReader:
         
         Parameters
         ----------
-        path_file : string
-            Path of data file
+        None
                 
         Returns
         -------
@@ -97,7 +96,9 @@ class DataReader:
         
         Parameters
         ----------
-        file_extension : string
+        filetype : string
+            File extension of a data file
+        separator : string
             File extension of a data file
                 
         Returns
@@ -109,6 +110,9 @@ class DataReader:
             return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator)
         if filetype == "excel":
             return pd.read_excel(io=self.path_file)
+        if filetype == "text":
+            with open(self.path_file) as FileObj:
+                return FileObj.read().splitlines()
             
     def read_data_file(self):        
         '''
@@ -116,10 +120,7 @@ class DataReader:
         
         Parameters
         ----------
-        path : string
-            Path of data file
-        feature : string
-            separator used in the file data (',' or '\t' or any else string)
+        None
                 
         Returns
         -------

@@ -102,7 +102,7 @@ def main(args):
     Pour vérifier que les données sont au format correct et que vous êtes prêt à 
     créer et à entraîner le réseau, affichons les 25 premières images de l' ensemble d'entraînement et 
     affichons le nom de la classe sous chaque image.
-    '''
+    '''    
     DataVisualizator.display_image_table(data_set=train_images, 
                                          num_image=25, 
                                          labels=class_names, 
