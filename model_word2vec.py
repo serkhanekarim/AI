@@ -17,9 +17,11 @@ from tensorflow.keras import layers
 
 from modules.reader.reader import DataReader
 from modules.preprocessing.nlp import NLPPreprocessor
+from modules.modeling.word_embedding import Word2Vec
 
 
 SEED = 42
+NUM_NS = 4
 AUTOTUNE = tf.data.AUTOTUNE
 
     
@@ -84,6 +86,68 @@ def main(args):
     each sentence in the dataset to produce positive and negative examples. 
     '''
     sequences = list(text_vector_ds.as_numpy_iterator())
+    
+    '''
+    Generate training examples from sequences
+    sequences is now a list of int encoded sentences. 
+    Just call the generate_training_data() function defined earlier to generate training 
+    examples for the Word2Vec model. To recap, the function iterates over each word from 
+    each sequence to collect positive and negative context words. Length of target, 
+    contexts and labels should be same, representing the total number of training examples.
+    '''
+    targets, contexts, labels = NLPPreprocessor().generate_training_data(sequences=sequences,
+                                                                         window_size=2,
+                                                                         num_ns=NUM_NS,
+                                                                         vocab_size=vocab_size,
+                                                                         seed=SEED)
+
+    targets = np.array(targets)
+    contexts = np.array(contexts)[:,:,0]
+    labels = np.array(labels)
+
+    print('\n')
+    print(f"targets.shape: {targets.shape}")
+    print(f"contexts.shape: {contexts.shape}")
+    print(f"labels.shape: {labels.shape}")
+    
+    '''
+    Configure the dataset for performance
+    To perform efficient batching for the potentially large number of training examples, 
+    use the tf.data.Dataset API. After this step, you would have a tf.data.Dataset object 
+    of (target_word, context_word), (label) elements to train your Word2Vec model!
+    '''
+    BATCH_SIZE = 1024
+    BUFFER_SIZE = 10000
+    dataset = tf.data.Dataset.from_tensor_slices(((targets, contexts), labels))
+    dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE, drop_remainder=True)
+    print(dataset)
+
+    '''
+    Add cache() and prefetch() to improve performance.
+    '''
+    dataset = dataset.cache().prefetch(buffer_size=AUTOTUNE)
+    print(dataset)
+
+    '''
+    It's time to build your model! Instantiate your Word2Vec class with an 
+    embedding dimension of 128 (you could experiment with different values). 
+    Compile the model with the tf.keras.optimizers.Adam optimizer. 
+    '''
+    embedding_dim = 128
+    word2vec = Word2Vec(vocab_size, embedding_dim, NUM_NS)
+    word2vec.compile(optimizer='adam',
+                     loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+                     metrics=['accuracy'])
+
+    '''
+    Also define a callback to log training statistics for tensorboard.
+    '''
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="logs")
+    
+    '''
+    Train the model with dataset prepared above for some number of epochs.
+    '''
+    word2vec.fit(dataset, epochs=20, callbacks=[tensorboard_callback])
 
 
 if __name__ == "__main__":

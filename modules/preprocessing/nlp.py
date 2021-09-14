@@ -4,6 +4,7 @@
 import tensorflow as tf
 import re
 import string
+import tqdm
 
 class NLPPreprocessor:
     '''
@@ -79,7 +80,7 @@ class NLPPreprocessor:
         print("Vectorized review", self.vectorize_text(vectorize_layer, first_review, first_label))
         
     
-    def generate_training_data(sequences, window_size, num_ns, vocab_size, seed):
+    def generate_training_data(self, sequences, window_size, num_ns, vocab_size, seed):
         '''
         Generates skip-gram pairs with negative sampling for a list of sequences
         (int-encoded sentences) based on window size, number of negative samples
@@ -139,7 +140,7 @@ class NLPPreprocessor:
                 num_sampled=num_ns,  # number of negative context words to sample
                 unique=True,  # all the negative samples should be unique
                 range_max=vocab_size,  # pick index of the samples from [0, vocab_size]
-                seed=SEED,  # seed for reproducibility
+                seed=seed,  # seed for reproducibility
                 name="negative_sampling"  # name of this operation
                 )
 

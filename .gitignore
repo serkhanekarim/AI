@@ -1,2 +1,4 @@
 #Ignore DATA folder which contain big data
 DATA/
+logs/
+results/
