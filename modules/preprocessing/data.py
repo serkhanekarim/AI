@@ -65,10 +65,6 @@ class DataPreprocessor:
         list_number_element = list_unique_user[1]
         list_option_element = list_unique_user[2]
         
-        print(len(list_user))
-        print(len(list_number_element))
-        print(len(list_option_element))
-        
         if option is None:
             biggest_user = list_user[list_number_element.index(max(list_number_element))]
         else:

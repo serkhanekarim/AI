@@ -5,6 +5,7 @@ import os
 import argparse
 from scipy.io.wavfile import write
 import torch
+import pandas as pd
 
 from modules.preprocessing.data import DataPreprocessor
 from modules.reader.reader import DataReader
@@ -25,21 +26,34 @@ def main(args):
     Our implementation uses Dropout instead of Zoneout to regularize the LSTM layers.
     '''
     
-    path_file_audio_info = args.path_file_audio_info
+    LIST_AUDIO_FILES = ["test.tsv", "train.tsv", "validated.tsv"]
+
+    directory_file_audio_info = args.directory_file_audio_info
     data_directory = args.data_directory
-    data_info = DataReader(path_file_audio_info).read_data_file()
-    #print(data_info)
-    #print(DataPreprocessor(data_info)._find_unique_user(user_column='client_id', 
-    #                                                    element_column='sentence'))
     
+    '''
+    Aggregation of test, train and validation data file 
+    '''
+    list_path_audio_files = [os.path.join(directory_file_audio_info,file) for file in LIST_AUDIO_FILES]
+    data_info = pd.DataFrame()
+    for path_file_audio_info in list_path_audio_files:
+        data_read = DataReader(path_file_audio_info).read_data_file()
+        data_info = data_info.append(data_read, ignore_index = True)
+    
+    '''
+    Conversion of Mozilla Common Voice audio data information into LSJ format for tacotron2 training
+    '''
     data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column="client_id", 
                                                                         path_column="path", 
                                                                         element_column="sentence",
                                                                         data_directory=data_directory,
                                                                         option_column="gender",
-                                                                        option="male")
+                                                                        option="female")
     
-    print(data_info_lsj.shape)
+    '''
+    Train, test, validation splitting
+    '''
+    
     
     
     
@@ -59,7 +73,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False,  default=directory_of_data, nargs='?')
-    parser.add_argument("-path_file_audio_info", help="Path of the file containing information of user voice", required=True,  default=directory_of_data, nargs='?')
+    parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
     args = parser.parse_args()
     
     main(args)    
