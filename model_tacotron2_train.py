@@ -26,10 +26,20 @@ def main(args):
     '''
     
     path_file_audio_info = args.path_file_audio_info
+    data_directory = args.data_directory
     data_info = DataReader(path_file_audio_info).read_data_file()
-    print(data_info)
-    print(DataPreprocessor(data_info)._find_unique_user(user_column='client_id', 
-                                                        element_column='sentence'))
+    #print(data_info)
+    #print(DataPreprocessor(data_info)._find_unique_user(user_column='client_id', 
+    #                                                    element_column='sentence'))
+    
+    data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column="client_id", 
+                                                                        path_column="path", 
+                                                                        element_column="sentence",
+                                                                        data_directory=data_directory,
+                                                                        option_column="gender",
+                                                                        option="male")
+    
+    print(data_info_lsj.shape)
     
     
     
