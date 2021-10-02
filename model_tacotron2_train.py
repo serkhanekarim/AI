@@ -6,9 +6,11 @@ import argparse
 from scipy.io.wavfile import write
 import torch
 import pandas as pd
+import csv
 
 from modules.preprocessing.data import DataPreprocessor
 from modules.reader.reader import DataReader
+from modules.writer.writer import DataWriter
 
 from sklearn.model_selection import train_test_split
 
@@ -74,16 +76,16 @@ def main(args):
     filename_train = "mcv_audio_text_train_filelist_" + language + "_" + gender + ".txt"
     filename_valid = "mcv_audio_text_valid_filelist_" + language + "_" + gender + ".txt"
     filename_test = "mcv_audio_text_test_filelist_" + language + "_" + gender + ".txt"
+    
+    path_train = os.path.join(directory_tacotron_filelist,filename_train)
+    path_valid = os.path.join(directory_tacotron_filelist,filename_valid)
+    path_test = os.path.join(directory_tacotron_filelist,filename_test)
+    
+    DataWriter(X_train, path_train).write_data_file()
+    DataWriter(X_valid, path_valid).write_data_file()
+    DataWriter(X_test, path_test).write_data_file()
 
-    X_train.to_csv(path_or_buf=os.path.join(directory_tacotron_filelist,filename_train),index=False,header=False)
-    X_valid.to_csv(path_or_buf=os.path.join(directory_tacotron_filelist,filename_valid),index=False,header=False)
-    X_test.to_csv(path_or_buf=os.path.join(directory_tacotron_filelist,filename_test),index=False,header=False)
-    
-    
-    
-    
-    
-    
+
 
 if __name__ == "__main__":
     

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pandas as pd
+import csv
+import xlsxwriter
 
 from modules.Global.variable import Var
 
-class DataReader:
+class DataWriter:
     '''
-    Class used to read file data using pandas module
+    Class used to write file
     '''    
-    def __init__(self, path_file, filetype=None, separator=None):
+    def __init__(self, data, path_file, filetype=None, separator=None, index=False, header=False):
+        self.data = data
         self.path_file = path_file
         self.filetype = filetype
         self.separator = separator
+        self.index = index
+        self.header = header
         
     def _extension_to_separator(self, file_extension):
         '''
@@ -84,7 +88,7 @@ class DataReader:
         
         return self._extension_to_filetype(self.path_file.split(".")[-1])
     
-    def _extension_filetype_to_reader(self, filetype, separator):
+    def _extension_filetype_to_writer(self, filetype, separator):
         '''
         Read data file from a related data file extension and type
         
@@ -101,14 +105,35 @@ class DataReader:
         
         '''
         if filetype == "sv":
-            return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator)
+            return self.data.to_csv(filepath_or_buf=self.path_file,index=self.index,header=self.header,quoting=csv.QUOTE_NONE,escapechar='\\')
         if filetype == "excel":
-            return pd.read_excel(io=self.path_file)
+            '''
+            https://www.geeksforgeeks.org/python-create-and-write-on-excel-file-using-xlsxwriter-module/
+            
+            # Workbook() takes one, non-optional, argument
+            # which is the filename that we want to create.
+            workbook = xlsxwriter.Workbook('hello.xlsx')
+             
+            # The workbook object is then used to add new
+            # worksheet via the add_worksheet() method.
+            worksheet = workbook.add_worksheet()
+             
+            # Use the worksheet object to write
+            # data via the write() method.
+            worksheet.write('A1', 'Hello..')
+            worksheet.write('B1', 'Geeks')
+            worksheet.write('C1', 'For')
+            worksheet.write('D1', 'Geeks')
+             
+            # Finally, close the Excel file
+            # via the close() method.
+            workbook.close()
+            '''
         if filetype in ["text", "python"]:
             with open(self.path_file) as FileObj:
-                return FileObj.readlines()
+                return FileObj.writelines([element + "\n" for element in self.data])
             
-    def read_data_file(self):        
+    def write_data_file(self):        
         '''
         Return dataframe from data file data
         
@@ -127,4 +152,4 @@ class DataReader:
         self.separator = self.separator or self._separator_finder() 
         print("Reading files - DONE") 
         
-        return self._extension_filetype_to_reader(filetype=self.filetype,separator=self.separator)
+        return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator)

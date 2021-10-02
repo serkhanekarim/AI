@@ -32,3 +32,15 @@ class Var:
                         '#98D8D8',  # Ice
                         '#7038F8',  # Dragon
                        ]
+    SWITCHER_EXTENSION_SEPARATOR = {
+        "csv": ",",
+        "tsv": "\t"
+    }
+    
+    SWITCHER_EXTENSION_FILETYPE = {
+        "csv": "sv",
+        "tsv": "sv",
+        "xlsx": "excel",
+        "txt": "text",
+        "py": "python"
+    }
