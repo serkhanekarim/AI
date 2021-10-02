@@ -53,7 +53,8 @@ class DataReader:
             "csv": "sv",
             "tsv": "sv",
             "xlsx": "excel",
-            "txt": "text"
+            "txt": "text",
+            "py": "python"
         }
         
         return switcher.get(file_extension)
@@ -110,9 +111,9 @@ class DataReader:
             return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator)
         if filetype == "excel":
             return pd.read_excel(io=self.path_file)
-        if filetype == "text":
+        if filetype in ["text", "python"]:
             with open(self.path_file) as FileObj:
-                return FileObj.read().splitlines()
+                return FileObj.readlines()
             
     def read_data_file(self):        
         '''

@@ -3,6 +3,7 @@
 
 import os
 import pandas as pd
+from tqdm import tqdm
 
 class DataPreprocessor:
     '''
@@ -36,7 +37,8 @@ class DataPreprocessor:
         list_user = list(unique_users)
         list_number_element = []
         list_option_element = []
-        for user in list_user:
+        print("List creation of number of element and option from user")
+        for user in tqdm(list_user):
             list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
             if option_column is not None:
                 #Sometimes gender contain male and/or female and/or NaN
@@ -80,7 +82,8 @@ class DataPreprocessor:
                                    user_column, 
                                    path_column, 
                                    element_column,
-                                   data_directory):
+                                   data_directory,
+                                   format_conversion=".wav"):
         '''
         Get information from an user
 
@@ -96,6 +99,8 @@ class DataPreprocessor:
             Name of the column containing element like sentences...
         data_directory : string
             directory containg audio data
+        format_conversion : string
+            format used by tacotron2 training (always .wav)
 
         Returns
         -------
@@ -105,10 +110,7 @@ class DataPreprocessor:
         '''
         
         table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
-        table[path_column] = table[path_column].apply(lambda x : os.path.join(data_directory,x))
-        table = pd.DataFrame({path_column : list(table[path_column]), element_column : list(table[element_column])},
-                             columns=[path_column,element_column])
-        return table[path_column].astype(str) + "|" + table[element_column].astype(str)
+        return table.apply(lambda x : os.path.join(data_directory,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
     
     def convert_data_mcv_to_lsj(self,
                                 user_column, 
@@ -116,7 +118,8 @@ class DataPreprocessor:
                                 element_column,
                                 data_directory,
                                 option_column=None,
-                                option=None):
+                                option=None,
+                                format_conversion=".wav"):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
         into LJ Speech Dataset audio information format
@@ -135,6 +138,8 @@ class DataPreprocessor:
             Name of an additional column to consider to find user
         option : string
             option use to specify parameter on optional list from list_unique_user to find max user
+        format_conversion : string
+            format used by tacotron2 training (always .wav)
             
         Returns
         -------
