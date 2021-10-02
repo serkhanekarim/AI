@@ -130,7 +130,7 @@ class DataWriter:
             workbook.close()
             '''
         if filetype in ["text", "python"]:
-            with open(self.path_file) as FileObj:
+            with open(self.path_file,'w') as FileObj:
                 return FileObj.writelines([element + "\n" for element in self.data])
             
     def write_data_file(self):        
@@ -147,9 +147,9 @@ class DataWriter:
         
         '''
         
-        print("Reading files...")        
+        print("Writing files...")        
         self.filetype = self.filetype or self._filetype_finder()
         self.separator = self.separator or self._separator_finder() 
-        print("Reading files - DONE") 
+        print("Writing files - DONE") 
         
         return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator)

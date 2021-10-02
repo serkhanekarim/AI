@@ -105,7 +105,7 @@ class DataReader:
         if filetype == "excel":
             return pd.read_excel(io=self.path_file)
         if filetype in ["text", "python"]:
-            with open(self.path_file) as FileObj:
+            with open(self.path_file,'r') as FileObj:
                 return FileObj.readlines()
             
     def read_data_file(self):        
