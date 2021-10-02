@@ -37,6 +37,8 @@ def main(args):
     language = args.language
     gender = args.gender
     directory_tacotron_filelist = args.directory_tacotron_filelist
+    path_hparam_file = args.path_hparam_file
+    batch_size = args.batch_size
     
     '''
     Aggregation of test, train and validation data file 
@@ -84,6 +86,10 @@ def main(args):
     DataWriter(X_train, path_train).write_data_file()
     DataWriter(X_valid, path_valid).write_data_file()
     DataWriter(X_test, path_test).write_data_file()
+    
+    '''
+    Update hparams with filelist and batch size
+    '''
 
 
 
@@ -103,6 +109,8 @@ if __name__ == "__main__":
     parser.add_argument("-gender", help="Gender to use for training the TTS", required=True, nargs='?')
     parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
     parser.add_argument("-directory_tacotron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron training", required=True, nargs='?')
+    parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=True, nargs='?')
+    parser.add_argument("-batch_size", help="Number of batch size", required=True, nargs='?')
     
     
     
