@@ -153,3 +153,36 @@ class DataWriter:
         print("Writing files - DONE") 
         
         return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator)
+    
+    def write_edit_data(self, key, value):
+        '''
+        Function that edit some parameter file
+
+        Parameters
+        ----------
+        key : string
+            key to find in the paramater file to change its value.
+        value : string
+            value used to replace the old value of a paramater wanted to be edited.
+
+        Returns
+        -------
+        list or pandas
+            data edited.
+
+        '''
+        
+        for i,element in enumerate(self.data):
+            if key in element:
+                self.data[i] = key + value
+        return self.write_data_file()
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        

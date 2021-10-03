@@ -79,17 +79,22 @@ def main(args):
     filename_valid = "mcv_audio_text_valid_filelist_" + language + "_" + gender + ".txt"
     filename_test = "mcv_audio_text_test_filelist_" + language + "_" + gender + ".txt"
     
-    path_train = os.path.join(directory_tacotron_filelist,filename_train)
-    path_valid = os.path.join(directory_tacotron_filelist,filename_valid)
-    path_test = os.path.join(directory_tacotron_filelist,filename_test)
+    path_train_filelist = os.path.join(directory_tacotron_filelist,filename_train)
+    path_valid_filelist = os.path.join(directory_tacotron_filelist,filename_valid)
+    path_test_filelist = os.path.join(directory_tacotron_filelist,filename_test)
     
-    DataWriter(X_train, path_train).write_data_file()
-    DataWriter(X_valid, path_valid).write_data_file()
-    DataWriter(X_test, path_test).write_data_file()
+    DataWriter(X_train, path_train_filelist).write_data_file()
+    DataWriter(X_valid, path_valid_filelist).write_data_file()
+    DataWriter(X_test, path_test_filelist).write_data_file()
     
     '''
     Update hparams with filelist and batch size
     '''
+    data_haparams = DataReader(path_hparam_file).read_data_file()
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = '"' + path_train_filelist + '"')
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = '"' + path_valid_filelist + '"')
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = '"' + path_train_filelist + '"')
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = '"' + path_train_filelist + '"')
 
 
 
