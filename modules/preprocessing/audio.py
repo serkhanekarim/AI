@@ -206,7 +206,8 @@ class AudioPreprocessor:
 
         '''
         
-        os.system('sox ' + path_input + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + path_output)
+        command = 'sox ' + path_input + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + path_output
+        os.system(command)
         
         
         

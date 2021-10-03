@@ -79,6 +79,7 @@ def main(args):
     '''
     if converter.lower() == 'true':
         print("Audio conversion...")
+        os.makedirs(dir_audio_data_files_converted,exist_ok=True)
         audio_extension_raw = os.path.splitext(data_info[PATH_COLUMN][0])[-1]
         for element in tqdm(set(data_info_lsj)):
             base = os.path.basename(element.split('|')[0])
@@ -143,7 +144,7 @@ def main(args):
     unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
     unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
     
-    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "',\n")
+    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
     
 
 
