@@ -31,6 +31,10 @@ def main(args):
     '''
     
     LIST_AUDIO_FILES = ["test.tsv", "train.tsv", "validated.tsv"]
+    USER_COLUMN = "client_id"
+    PATH_COLUMN = "path"
+    ELEMENT_COLUMN = "sentence"
+    OPTION_COLUMN = 'gender'
 
     directory_file_audio_info = args.directory_file_audio_info
     data_directory = args.data_directory
@@ -38,6 +42,7 @@ def main(args):
     gender = args.gender
     directory_tacotron_filelist = args.directory_tacotron_filelist
     path_hparam_file = args.path_hparam_file
+    path_symbols_file = args.path_symbols_file
     batch_size = args.batch_size
     
     '''
@@ -52,11 +57,11 @@ def main(args):
     '''
     Conversion of Mozilla Common Voice audio data information into LSJ format for tacotron2 training
     '''
-    data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column="client_id", 
-                                                                        path_column="path", 
-                                                                        element_column="sentence",
+    data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
+                                                                        path_column=PATH_COLUMN, 
+                                                                        element_column=ELEMENT_COLUMN,
                                                                         data_directory=data_directory,
-                                                                        option_column='gender',
+                                                                        option_column=OPTION_COLUMN,
                                                                         option=gender)
     
     
@@ -91,11 +96,28 @@ def main(args):
     Update hparams with filelist and batch size
     '''
     data_haparams = DataReader(path_hparam_file).read_data_file()
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = '"' + path_train_filelist + '"')
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = '"' + path_valid_filelist + '"')
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = '"' + path_train_filelist + '"')
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = '"' + path_train_filelist + '"')
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = "'" + path_train_filelist + "',")
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = "'" + path_valid_filelist + "',")
+    if language == 'en':
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='text_cleaners=', value = "['english_cleaners'],")
+    else:
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='text_cleaners=', value = "['basic_cleaners'],")
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='batch_size=', value = batch_size + "," )
 
+    '''
+    Update symbols
+    '''
+    data_symbols = DataReader(path_symbols_file).read_data_file()
+    pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
+    punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
+    special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
+    letters = DataReader(path_symbols_file).read_data_value(key="_letters = ")[1:-1]
+    
+    unique_char = set("".join(data_info[ELEMENT_COLUMN]))
+    unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
+    
+    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "',")
+    
 
 
 if __name__ == "__main__":
@@ -115,6 +137,7 @@ if __name__ == "__main__":
     parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
     parser.add_argument("-directory_tacotron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron training", required=True, nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=True, nargs='?')
+    parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=True, nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=True, nargs='?')
     
     

@@ -128,3 +128,26 @@ class DataReader:
         print("Reading files - DONE") 
         
         return self._extension_filetype_to_reader(filetype=self.filetype,separator=self.separator)
+    
+    def read_data_value(self, key):
+        '''
+        Return value of a key from a parameter or any other kind of file
+
+        Parameters
+        ----------
+        key : string
+            key to find its value from a file
+
+        Returns
+        -------
+        string
+            value of the key
+
+        '''
+        
+        for i,element in enumerate(self.read_data_file()):
+            if key in element:
+                return self.read_data_file().split(key)[-1]
+        
+        
+        

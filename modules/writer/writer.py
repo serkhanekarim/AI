@@ -175,7 +175,8 @@ class DataWriter:
         for i,element in enumerate(self.data):
             if key in element:
                 self.data[i] = key + value
-        return self.write_data_file()
+        self.write_data_file()
+        return self.data
                 
         
         
