@@ -93,6 +93,7 @@ def main(args):
     
     '''
     Train, test, validation splitting
+    '''
     
     # In the first step we will split the data in training and remaining dataset
     X_train, X_rem = train_test_split(data_info_lsj,train_size=0.8)
@@ -101,7 +102,6 @@ def main(args):
     # we have to define valid_size=0.5 (that is 50% of remaining data)
     test_size = 0.5
     X_valid, X_test = train_test_split(X_rem, test_size=0.5)
-    '''
     
     '''
     Write Training, Test, and validation file
@@ -112,13 +112,12 @@ def main(args):
     
     path_train_filelist = os.path.join(directory_tacotron_filelist,filename_train)
     path_valid_filelist = os.path.join(directory_tacotron_filelist,filename_valid)
-    path_test_filelist = os.path.join(directory_tacotron_filelist,filename_test)
+    path_test_filelist = os.path.join(directory_tacotron_filelist,filename_test)    
     
-    '''
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
     DataWriter(X_test, path_test_filelist).write_data_file()
-    '''
+    
     
     '''
     Update hparams with filelist and batch size
