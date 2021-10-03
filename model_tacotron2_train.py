@@ -8,6 +8,7 @@ import torch
 import pandas as pd
 import csv
 
+from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.data import DataPreprocessor
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
@@ -44,6 +45,11 @@ def main(args):
     path_hparam_file = args.path_hparam_file
     path_symbols_file = args.path_symbols_file
     batch_size = args.batch_size
+    file_lister = args.file_lister
+    converter = args.converter     
+    
+    dir_audio_data_files = os.path.join(data_directory,language,'clips')
+    dir_audio_data_files_converted = os.path.join(data_directory,language,'clips_converted')
     
     '''
     Aggregation of test, train and validation data file 
@@ -60,12 +66,21 @@ def main(args):
     data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
                                                                         path_column=PATH_COLUMN, 
                                                                         element_column=ELEMENT_COLUMN,
-                                                                        data_directory=data_directory,
+                                                                        data_directory=dir_audio_data_files_converted,
                                                                         option_column=OPTION_COLUMN,
                                                                         option=gender)
     
+    '''
+    Convert audio data for tacotron2 model
+    '''
+    print("Audio conversion...")
+    (AudioPreprocessor().convert_audio(path_input=os.path_join(dir_audio_data_files,os.path.basename(element.split('|')[0])), 
+                                      path_output=element.split('|')[0], 
+                                      sample_rate=22050, 
+                                      channel=1, 
+                                      bits=16) for element in tqdm(set(data_info_lsj)))
+        
     
-    print(data_info_lsj[500])
     '''
     Train, test, validation splitting
     '''
@@ -131,17 +146,16 @@ if __name__ == "__main__":
     os.makedirs(directory_of_data,exist_ok=True)
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False,  default=directory_of_data, nargs='?')
+    parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
     parser.add_argument("-language", help="Language to use for training the TTS", required=True, nargs='?')
     parser.add_argument("-gender", help="Gender to use for training the TTS", required=True, nargs='?')
     parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
     parser.add_argument("-directory_tacotron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron training", required=True, nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=True, nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=True, nargs='?')
+    parser.add_argument("-file_lister", help="Boolean to create or not the file lister", default="True", nargs='?')
+    parser.add_argument("-converter", help="Boolean to convert or not audio file", default="True", nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=True, nargs='?')
-    
-    
-    
     
     args = parser.parse_args()
     

@@ -181,3 +181,35 @@ class AudioPreprocessor:
         output_ds = output_ds.map(lambda x,y:
             self.get_spectrogram_and_label_id(x,y,labels),  num_parallel_calls=tf.data.AUTOTUNE)
         return output_ds
+    
+    def convert_audio(self, path_input, path_output, sample_rate, channel, bits):
+        '''
+        Convert audio file
+
+        Parameters
+        ----------
+        path_input : string
+            audio input path
+        path_output : string
+            audio output path
+        sample_rate : int
+            sample rate to convert
+        channel : int
+            number of channel
+        bits : int
+            number of bits
+
+        Returns
+        -------
+        None.
+            Convert audio
+
+        '''
+        
+        os.system('sox ' + path_input + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + path_output)
+        
+        
+        
+        
+        
+        
