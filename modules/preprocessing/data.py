@@ -13,7 +13,7 @@ class DataPreprocessor:
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
         
-    def _find_unique_user(self, user_column, element_column, option_column=None):
+    def _find_unique_user(self, user_column, element_column, option_column):
         '''
         Method used to find unique user
 
@@ -45,7 +45,7 @@ class DataPreprocessor:
                 list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
         return (list_user, list_number_element, list_option_element)
     
-    def _find_max_user(self, list_unique_user, option=None):
+    def _find_max_user(self, list_unique_user, option):
         '''
         Find the user who have the biggest amount of elements
 
@@ -83,7 +83,7 @@ class DataPreprocessor:
                                    path_column, 
                                    element_column,
                                    data_directory,
-                                   format_conversion=".wav"):
+                                   format_conversion):
         '''
         Get information from an user
 
@@ -155,5 +155,6 @@ class DataPreprocessor:
                                                user_column, 
                                                path_column, 
                                                element_column,
-                                               data_directory)
+                                               data_directory,
+                                               format_conversion)
     

@@ -15,6 +15,8 @@ from modules.writer.writer import DataWriter
 
 from sklearn.model_selection import train_test_split
 
+from tqdm import tqdm
+
     
 def main(args):
     '''
@@ -63,27 +65,34 @@ def main(args):
     '''
     Conversion of Mozilla Common Voice audio data information into LSJ format for tacotron2 training
     '''
-    data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
-                                                                        path_column=PATH_COLUMN, 
-                                                                        element_column=ELEMENT_COLUMN,
-                                                                        data_directory=dir_audio_data_files_converted,
-                                                                        option_column=OPTION_COLUMN,
-                                                                        option=gender)
+    if file_lister.lower() == 'true':
+        print("Find the max user...")
+        data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
+                                                                            path_column=PATH_COLUMN, 
+                                                                            element_column=ELEMENT_COLUMN,
+                                                                            data_directory=dir_audio_data_files_converted,
+                                                                            option_column=OPTION_COLUMN,
+                                                                            option=gender)
     
     '''
     Convert audio data for tacotron2 model
     '''
-    print("Audio conversion...")
-    (AudioPreprocessor().convert_audio(path_input=os.path_join(dir_audio_data_files,os.path.basename(element.split('|')[0])), 
-                                      path_output=element.split('|')[0], 
-                                      sample_rate=22050, 
-                                      channel=1, 
-                                      bits=16) for element in tqdm(set(data_info_lsj)))
+    if converter.lower() == 'true':
+        print("Audio conversion...")
+        audio_extension_raw = os.path.splitext(data_info[PATH_COLUMN][0])[-1]
+        for element in tqdm(set(data_info_lsj)):
+            base = os.path.basename(element.split('|')[0])
+            filename = os.path.splitext(base)[0]
+            AudioPreprocessor().convert_audio(path_input=os.path.join(dir_audio_data_files,filename + audio_extension_raw), 
+                                              path_output=element.split('|')[0], 
+                                              sample_rate=22050, 
+                                              channel=1, 
+                                              bits=16)
         
     
     '''
     Train, test, validation splitting
-    '''
+    
     # In the first step we will split the data in training and remaining dataset
     X_train, X_rem = train_test_split(data_info_lsj,train_size=0.8)
 
@@ -91,6 +100,7 @@ def main(args):
     # we have to define valid_size=0.5 (that is 50% of remaining data)
     test_size = 0.5
     X_valid, X_test = train_test_split(X_rem, test_size=0.5)
+    '''
     
     '''
     Write Training, Test, and validation file
@@ -103,21 +113,23 @@ def main(args):
     path_valid_filelist = os.path.join(directory_tacotron_filelist,filename_valid)
     path_test_filelist = os.path.join(directory_tacotron_filelist,filename_test)
     
+    '''
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
     DataWriter(X_test, path_test_filelist).write_data_file()
+    '''
     
     '''
     Update hparams with filelist and batch size
     '''
     data_haparams = DataReader(path_hparam_file).read_data_file()
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='training_files=', value = "'" + path_train_filelist + "',")
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='validation_files=', value = "'" + path_valid_filelist + "',")
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        training_files=', value = "'" + path_train_filelist + "',\n")
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        validation_files=', value = "'" + path_valid_filelist + "',\n")
     if language == 'en':
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='text_cleaners=', value = "['english_cleaners'],")
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
     else:
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='text_cleaners=', value = "['basic_cleaners'],")
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='batch_size=', value = batch_size + "," )
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
+    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
 
     '''
     Update symbols
@@ -126,12 +138,12 @@ def main(args):
     pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
     punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
     special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
-    letters = DataReader(path_symbols_file).read_data_value(key="_letters = ")[1:-1]
     
     unique_char = set("".join(data_info[ELEMENT_COLUMN]))
     unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
+    unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
     
-    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "',")
+    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "',\n")
     
 
 

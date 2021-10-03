@@ -88,7 +88,7 @@ class DataWriter:
         
         return self._extension_to_filetype(self.path_file.split(".")[-1])
     
-    def _extension_filetype_to_writer(self, filetype, separator):
+    def _extension_filetype_to_writer(self, filetype, separator, newline):
         '''
         Read data file from a related data file extension and type
         
@@ -98,6 +98,8 @@ class DataWriter:
             File extension of a data file
         separator : string
             File extension of a data file
+        newline : boolean
+            indicate to add new line for each element of data or not (means that \n are already present in data)
                 
         Returns
         -------
@@ -131,15 +133,19 @@ class DataWriter:
             '''
         if filetype in ["text", "python"]:
             with open(self.path_file,'w') as FileObj:
-                return FileObj.writelines([element + "\n" for element in self.data])
-            
-    def write_data_file(self):        
+                if newline:
+                    return FileObj.writelines([element + "\n" for element in self.data])
+                else:
+                    return FileObj.writelines([element for element in self.data])
+                
+    def write_data_file(self, newline=True):        
         '''
         Return dataframe from data file data
         
         Parameters
         ----------
-        None
+        newline : boolean
+            indicate to add new line for each element of data or not (means that \n are already present in data)
                 
         Returns
         -------
@@ -152,9 +158,9 @@ class DataWriter:
         self.separator = self.separator or self._separator_finder() 
         print("Writing files - DONE") 
         
-        return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator)
+        return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator,newline=newline)
     
-    def write_edit_data(self, key, value):
+    def write_edit_data(self, key, value, newline=False):
         '''
         Function that edit some parameter file
 
@@ -164,6 +170,8 @@ class DataWriter:
             key to find in the paramater file to change its value.
         value : string
             value used to replace the old value of a paramater wanted to be edited.
+        newline : boolean
+            indicate to add new line for each element of data or not (means that \n are already present in data)
 
         Returns
         -------
@@ -175,7 +183,7 @@ class DataWriter:
         for i,element in enumerate(self.data):
             if key in element:
                 self.data[i] = key + value
-        self.write_data_file()
+        self.write_data_file(newline=newline)
         return self.data
                 
         

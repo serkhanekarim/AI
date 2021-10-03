@@ -147,7 +147,7 @@ class DataReader:
         
         for i,element in enumerate(self.read_data_file()):
             if key in element:
-                return self.read_data_file().split(key)[-1]
+                return element.split(key)[-1]
         
         
         
