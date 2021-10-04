@@ -16,7 +16,6 @@ from modules.writer.writer import DataWriter
 from sklearn.model_selection import train_test_split
 
 from tqdm import tqdm
-
     
 def main(args):
     '''
@@ -33,6 +32,7 @@ def main(args):
     Our implementation uses Dropout instead of Zoneout to regularize the LSTM layers.
     '''
     
+    SEED = 42
     LIST_AUDIO_FILES = ["test.tsv", "train.tsv", "validated.tsv"]
     USER_COLUMN = "client_id"
     PATH_COLUMN = "path"
@@ -96,12 +96,12 @@ def main(args):
     '''
     
     # In the first step we will split the data in training and remaining dataset
-    X_train, X_rem = train_test_split(data_info_lsj,train_size=0.8)
+    X_train, X_rem = train_test_split(data_info_lsj,train_size=0.8, random_state=SEED)
 
     # Now since we want the valid and test size to be equal (10% each of overall data). 
     # we have to define valid_size=0.5 (that is 50% of remaining data)
     test_size = 0.5
-    X_valid, X_test = train_test_split(X_rem, test_size=0.5)
+    X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
     
     '''
     Write Training, Test, and validation file
@@ -117,8 +117,8 @@ def main(args):
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
     DataWriter(X_test, path_test_filelist).write_data_file()
-    
-    
+
+
     '''
     Update hparams with filelist and batch size
     '''
@@ -149,6 +149,14 @@ def main(args):
 
 if __name__ == "__main__":
     
+# 	'''
+#     ./model_tacotron2_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
+#     -gender 'female' -directory_tacotron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
+#     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
+#     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
+#     -batch_size 8
+# 	'''
+
     PROJECT_NAME = "Tacotron2_train"
     
     directory_of_script = os.path.dirname(os.path.realpath(__file__))
