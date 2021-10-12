@@ -107,7 +107,7 @@ class DataWriter:
         
         '''
         if filetype == "sv":
-            return self.data.to_csv(path_or_buf=self.path_file,index=self.index,header=self.header,quoting=csv.QUOTE_NONE)
+            return self.data.to_csv(path_or_buf=self.path_file,sep=separator,index=self.index,header=self.header,quoting=csv.QUOTE_NONE)
         if filetype == "excel":
             '''
             https://www.geeksforgeeks.org/python-create-and-write-on-excel-file-using-xlsxwriter-module/

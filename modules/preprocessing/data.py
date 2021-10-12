@@ -167,8 +167,12 @@ class DataPreprocessor:
         
         list_unique_user = self._find_unique_user(user_column, element_column, option_column, path_column, data_directory, format_conversion)
         #(list_user, list_number_element, list_option_element, list_element_length)
-        data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2],path_column:list_unique_user[3]},
-                                 columns=[user_column, element_column, option_column, path_column])
+        # Waiting for a fast audio length computation
+        # data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2],path_column:list_unique_user[3]},
+        #                          columns=[user_column, element_column, option_column, path_column])
+        
+        data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2]},
+                                  columns=[user_column, element_column, option_column])
         
         user = self._find_max_user(list_unique_user, option)
         

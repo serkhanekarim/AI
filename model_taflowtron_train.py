@@ -91,7 +91,7 @@ def main(args):
         print("Audio conversion...")
         os.makedirs(dir_audio_data_files_converted,exist_ok=True)
         audio_extension_raw = os.path.splitext(data_info[PATH_COLUMN][0])[-1]
-        for element in tqdm(set(data_info_lsj)):
+        for element in tqdm(list(data_info_lsj)):
             base = os.path.basename(element.split('|')[0])
             filename = os.path.splitext(base)[0]
             AudioPreprocessor().convert_audio(path_input=os.path.join(dir_audio_data_files,filename + audio_extension_raw), 
@@ -116,9 +116,9 @@ def main(args):
     '''
     Write Training, Test, and validation file
     '''
-    filename_train = "mcv_audio_text_train_filelist_" + language + "_" + gender + ".txt"
-    filename_valid = "mcv_audio_text_valid_filelist_" + language + "_" + gender + ".txt"
-    filename_test = "mcv_audio_text_test_filelist_" + language + "_" + gender + ".txt"
+    filename_train = "mcv_audio_text_train_filelist_" + language + "_" + str(gender) + ".txt"
+    filename_valid = "mcv_audio_text_valid_filelist_" + language + "_" + str(gender) + ".txt"
+    filename_test = "mcv_audio_text_test_filelist_" + language + "_" + str(gender) + ".txt"
     
     path_train_filelist = os.path.join(directory_tacotron_filelist,filename_train)
     path_valid_filelist = os.path.join(directory_tacotron_filelist,filename_valid)
@@ -129,45 +129,49 @@ def main(args):
     DataWriter(X_test, path_test_filelist).write_data_file()
 
 
-    '''
-    Update hparams with filelist and batch size
-    '''
-    data_haparams = DataReader(path_hparam_file).read_data_file()
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        training_files=', value = "'" + path_train_filelist + "',\n")
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        validation_files=', value = "'" + path_valid_filelist + "',\n")
-    if language == 'en':
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
-    else:
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
-    data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
+    if path_hparam_file is not None:
+        '''
+        Update hparams with filelist and batch size
+        '''
+        data_haparams = DataReader(path_hparam_file).read_data_file()
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        training_files=', value = "'" + path_train_filelist + "',\n")
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        validation_files=', value = "'" + path_valid_filelist + "',\n")
+        if language == 'en':
+            data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
+        else:
+            data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
+        
+        if batch_size is not None:
+            data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
 
-    '''
-    Update symbols
-    '''
-    data_symbols = DataReader(path_symbols_file).read_data_file()
-    pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
-    punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
-    special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
-    
-    unique_char = set("".join(data_info[ELEMENT_COLUMN]))
-    unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
-    unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
-    
-    DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
+    if path_symbols_file is not None:
+        '''
+        Update symbols
+        '''
+        data_symbols = DataReader(path_symbols_file).read_data_file()
+        pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
+        punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
+        special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
+        
+        unique_char = set("".join(data_info[ELEMENT_COLUMN]))
+        unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
+        unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
+        
+        DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
     
 
 
 if __name__ == "__main__":
     
 # 	'''
-#     ./model_tacotron2_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
+#     ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
 #     -gender 'female' -directory_tacotron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
 #     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
 #     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
 #     -batch_size 8 -user_informations 'True'
 # 	'''
 
-    PROJECT_NAME = "Tacotron2_train"
+    PROJECT_NAME = "taflowtron_train"
     
     directory_of_script = os.path.dirname(os.path.realpath(__file__))
     directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
@@ -178,14 +182,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
     parser.add_argument("-language", help="Language to use for training the TTS", required=True, nargs='?')
-    parser.add_argument("-gender", help="Gender to use for training the TTS", required=True, nargs='?')
+    parser.add_argument("-gender", help="Gender to use for training the TTS", nargs='?')
     parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
     parser.add_argument("-directory_tacotron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron training", required=True, nargs='?')
-    parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=True, nargs='?')
-    parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=True, nargs='?')
+    parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
+    parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')
     parser.add_argument("-file_lister", help="Boolean to create or not the file lister", default="True", nargs='?')
     parser.add_argument("-converter", help="Boolean to convert or not audio file", default="True", nargs='?')
-    parser.add_argument("-batch_size", help="Number of batch size", required=True, nargs='?')
+    parser.add_argument("-batch_size", help="Number of batch size", nargs='?')
     parser.add_argument("-user_informations", help="Boolean to get a summary of audio user information", default="False", nargs='?')
     
     args = parser.parse_args()
