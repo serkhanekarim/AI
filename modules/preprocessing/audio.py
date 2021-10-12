@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import subprocess
 import tensorflow as tf
 
 class AudioPreprocessor:
@@ -208,6 +209,27 @@ class AudioPreprocessor:
         
         command = 'sox ' + path_input + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + path_output
         os.system(command)
+        
+    def get_audio_length(self, path_audio):
+        '''
+        Get the audio duration/length in seconds
+
+        Parameters
+        ----------
+        path_audio : string
+            path of the audio file
+
+        Returns
+        -------
+        duration : float
+            audio duration in seconds
+        
+
+        '''
+        
+        #Get audio length
+        proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
+        return float(proc)
         
         
         

@@ -58,6 +58,10 @@ def main(args):
     audio_numpy = audio[0].data.cpu().numpy()
     rate = 22050
 
+    print(len(audio_numpy))
+    print(audio_numpy)
+    
+    
     '''
     You can write it to a file and listen to it
     '''
@@ -82,11 +86,6 @@ if __name__ == "__main__":
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False,  default=directory_of_data, nargs='?')
     parser.add_argument("-audio_filename", help="Filename of the audio", required=False,  default=AUDIO_FILENAME_DEFAULT, nargs='?')
     parser.add_argument("-sentence", help="Sentence to generate", required=False,  default=SENTENCE_DEFAULT, nargs='?')
-    # parser.add_argument("-path_model", help="Path of an existing model to use for prediction", required=False, default=os.path.join(directory_of_model,MODEL_NAME), nargs='?')
-    # parser.add_argument("-NaN_imputation_feature_scaling_PCA_usage", help="Apply or not NaN imputation, Feature Scaling and PCA", required=False, choices=["False","True"], default="False", nargs='?')
-    # parser.add_argument("-max_depth", help="Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 is only accepted in lossguided growing policy when tree_method is set as hist or gpu_hist and it indicates no limit on depth. Beware that XGBoost aggressively consumes memory when training a deep tree. range: [0,∞] (0 is only accepted in lossguided growing policy when tree_method is set as hist or gpu_hist)", required=False, default=6, type=int, nargs='?')
-    # parser.add_argument("-eta", help="Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative. range: [0,1]", required=False, default=0.3, type=float, nargs='?')
-    # parser.add_argument("-num_round", help="The number of rounds for boosting", required=False, default=100, type=int, nargs='?')
     args = parser.parse_args()
     
     main(args)    

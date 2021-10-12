@@ -5,6 +5,9 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
+from modules.preprocessing.audio import AudioPreprocessor
+import librosa
+
 class DataPreprocessor:
     '''
     Class used to make data preprocessor
@@ -13,7 +16,7 @@ class DataPreprocessor:
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
         
-    def _find_unique_user(self, user_column, element_column, option_column):
+    def _find_unique_user(self, user_column, element_column, option_column, path_column, data_directory, format_conversion):
         '''
         Method used to find unique user
 
@@ -25,6 +28,12 @@ class DataPreprocessor:
             Name of the column containg the element of the user
         option_column : string
             Name of an additional column to consider to find user
+        path_column : string
+            Name of the column containing file path
+        data_directory : string
+            directory containg audio data
+        format_conversion : string
+            format used by tacotron2 training (always .wav)
 
         Returns
         -------
@@ -37,13 +46,18 @@ class DataPreprocessor:
         list_user = list(unique_users)
         list_number_element = []
         list_option_element = []
+        list_element_length = []
         print("List creation of number of element and option from user")
         for user in tqdm(list_user):
             list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
+            #Find a way to make faster audio length computation usinf data info and soxi -D directly in console...
+            #list_element_length.append(self.dataframe[self.dataframe[user_column]==user][path_column].apply(lambda path_audio : librosa.get_duration(filename=os.path.join(data_directory,path_audio))).sum())            
+            #print(max(list_element_length))
             if option_column is not None:
                 #Sometimes gender contain male and/or female and/or NaN
                 list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
-        return (list_user, list_number_element, list_option_element)
+                
+        return (list_user, list_number_element, list_option_element, list_element_length)
     
     def _find_max_user(self, list_unique_user, option):
         '''
@@ -82,7 +96,7 @@ class DataPreprocessor:
                                    user_column, 
                                    path_column, 
                                    element_column,
-                                   data_directory,
+                                   data_directory_converted,
                                    format_conversion):
         '''
         Get information from an user
@@ -97,8 +111,8 @@ class DataPreprocessor:
             Name of the column containing file path
         element_column : string
             Name of the column containing element like sentences...
-        data_directory : string
-            directory containg audio data
+        data_directory_converted : string
+            directory containing converted audio data
         format_conversion : string
             format used by tacotron2 training (always .wav)
 
@@ -110,13 +124,14 @@ class DataPreprocessor:
         '''
         
         table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
-        return table.apply(lambda x : os.path.join(data_directory,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
+        return table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
     
     def convert_data_mcv_to_lsj(self,
                                 user_column, 
                                 path_column, 
                                 element_column,
                                 data_directory,
+                                data_directory_converted,
                                 option_column=None,
                                 option=None,
                                 format_conversion=".wav"):
@@ -133,7 +148,9 @@ class DataPreprocessor:
         element_column : string
             Name of the column containg the element of the user
         data_directory : string
-            directory containg audio data
+            directory containing audio data
+        data_directory_converted : string
+            directory containing converted audio data
         option_column : string
             Name of an additional column to consider to find user
         option : string
@@ -148,13 +165,17 @@ class DataPreprocessor:
 
         '''
         
-        list_unique_user = self._find_unique_user(user_column, element_column, option_column)
+        list_unique_user = self._find_unique_user(user_column, element_column, option_column, path_column, data_directory, format_conversion)
+        #(list_user, list_number_element, list_option_element, list_element_length)
+        data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2],path_column:list_unique_user[3]},
+                                 columns=[user_column, element_column, option_column, path_column])
+        
         user = self._find_max_user(list_unique_user, option)
         
-        return self._get_information_from_user(user, 
+        return (self._get_information_from_user(user, 
                                                user_column, 
                                                path_column, 
                                                element_column,
-                                               data_directory,
-                                               format_conversion)
+                                               data_directory_converted,
+                                               format_conversion),data_info)
     

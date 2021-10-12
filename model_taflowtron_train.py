@@ -48,7 +48,8 @@ def main(args):
     path_symbols_file = args.path_symbols_file
     batch_size = args.batch_size
     file_lister = args.file_lister
-    converter = args.converter     
+    converter = args.converter
+    user_informations = args.user_informations
     
     dir_audio_data_files = os.path.join(data_directory,language,'clips')
     dir_audio_data_files_converted = os.path.join(data_directory,language,'clips_converted')
@@ -65,15 +66,24 @@ def main(args):
     '''
     Conversion of Mozilla Common Voice audio data information into LSJ format for tacotron2 training
     '''
-    if file_lister.lower() == 'true':
+    if file_lister.lower() == 'true' or user_informations.lower() == 'true':
         print("Find the max user...")
-        data_info_lsj = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
+        data_information = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
                                                                             path_column=PATH_COLUMN, 
                                                                             element_column=ELEMENT_COLUMN,
-                                                                            data_directory=dir_audio_data_files_converted,
+                                                                            data_directory=dir_audio_data_files,
+                                                                            data_directory_converted=dir_audio_data_files_converted,
                                                                             option_column=OPTION_COLUMN,
                                                                             option=gender)
-    
+        
+        data_info_lsj = data_information[0]
+        
+        if user_informations.lower() == "true":
+            data_info_user = data_information[1]
+            filename_user_information = "mcv_user_voice_informations_" + language + ".tsv"
+            DataWriter(data_info_user, os.path.join(directory_of_results,filename_user_information)).write_data_file()
+        
+         
     '''
     Convert audio data for tacotron2 model
     '''
@@ -154,7 +164,7 @@ if __name__ == "__main__":
 #     -gender 'female' -directory_tacotron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
 #     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
 #     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
-#     -batch_size 8
+#     -batch_size 8 -user_informations 'True'
 # 	'''
 
     PROJECT_NAME = "Tacotron2_train"
@@ -176,6 +186,7 @@ if __name__ == "__main__":
     parser.add_argument("-file_lister", help="Boolean to create or not the file lister", default="True", nargs='?')
     parser.add_argument("-converter", help="Boolean to convert or not audio file", default="True", nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=True, nargs='?')
+    parser.add_argument("-user_informations", help="Boolean to get a summary of audio user information", default="False", nargs='?')
     
     args = parser.parse_args()
     
