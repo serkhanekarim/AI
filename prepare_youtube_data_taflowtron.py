@@ -10,6 +10,7 @@ import csv
 
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.data import DataPreprocessor
+from modules.scraping.media import MediaScraper
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
 
@@ -19,9 +20,9 @@ from tqdm import tqdm
     
 def main(args):
     '''
-    Training Tacotron2 with Mozilla common voice data 
+    Prepare youtube data for Tacotron2 and Flowtron
     
-    Model Description
+    ________________________________________________________________________________________________________________
     The Tacotron 2 and WaveGlow model form a text-to-speech system that 
     enables user to synthesise a natural sounding speech from raw 
     transcripts without any additional prosody information. 
@@ -30,6 +31,21 @@ def main(args):
     is a flow-based model that consumes the mel spectrograms to generate speech.
     This implementation of Tacotron 2 model differs from the model described in the paper. 
     Our implementation uses Dropout instead of Zoneout to regularize the LSTM layers.
+    
+    ________________________________________________________________________________________________________________ 
+    Flowtron: an Autoregressive Flow-based Network for Text-to-Mel-spectrogram Synthesis
+    Rafael Valle, Kevin Shih, Ryan Prenger and Bryan Catanzaro
+
+    In our recent paper we propose Flowtron: an autoregressive flow-based generative network for text-to-speech 
+    synthesis with control over speech variation and style transfer. Flowtron borrows insights from Autoregressive 
+    Flows and revamps Tacotron in order to provide high-quality and expressive mel-spectrogram synthesis. 
+    Flowtron is optimized by maximizing the likelihood of the training data, which makes training simple and stable. 
+    Flowtron learns an invertible mapping of data to a latent space that can be manipulated to control many aspects 
+    of speech synthesis (pitch, tone, speech rate, cadence, accent).
+
+    Our mean opinion scores (MOS) show that Flowtron matches state-of-the-art TTS models in terms of speech quality. 
+    In addition, we provide results on control of speech variation, interpolation between samples and style transfer 
+    between speakers seen and unseen during training.
     '''
     
     SEED = 42
