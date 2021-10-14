@@ -5,6 +5,8 @@ import os
 import subprocess
 import tensorflow as tf
 
+from pydub import AudioSegment
+
 class AudioPreprocessor:
     '''
     Class used to make audio preprocessing
@@ -231,8 +233,33 @@ class AudioPreprocessor:
         proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
         return float(proc)
         
+    def trim_audio_wav(self, path_input, path_output, t1, t2, format_audio='wav'):
+        '''
+        Trim an audio
+
+        Parameters
+        ----------
+        path_input : string
+            path of the audio to trim
+        path_output : string
+            name of the trimmed audio
+        t1 : float
+            time beginnning to trim
+        t2 : float
+            end time to trim
+        format_audio : string
+            format of the trimed audio
+
+        Returns
+        -------
+        None.
+            Create the trimmed audio into the path_output
+
+        '''
         
-        
+        newAudio = AudioSegment.from_wav(path_input)
+        newAudio = newAudio[t1:t2]
+        newAudio.export(path_output, format=format_audio) #Exports to a wav file in the current path.
         
         
         

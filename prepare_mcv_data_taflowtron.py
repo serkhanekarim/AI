@@ -58,7 +58,7 @@ def main(args):
     data_directory = args.data_directory
     language = args.language
     gender = args.gender
-    directory_tacotron_filelist = args.directory_tacotron_filelist
+    directory_taflowtron_filelist = args.directory_taflowtron_filelist
     path_hparam_file = args.path_hparam_file
     path_symbols_file = args.path_symbols_file
     batch_size = args.batch_size
@@ -79,7 +79,7 @@ def main(args):
         data_info = data_info.append(data_read, ignore_index = True)
     
     '''
-    Conversion of Mozilla Common Voice audio data information into LSJ format for tacotron2 training
+    Conversion of Mozilla Common Voice audio data information into LSJ format for taflowtron training
     '''
     if file_lister.lower() == 'true' or user_informations.lower() == 'true':
         print("Find the max user...")
@@ -100,7 +100,7 @@ def main(args):
         
          
     '''
-    Convert audio data for tacotron2 model
+    Convert audio data for taflowtron model
     '''
     if converter.lower() == 'true':
         print("Audio conversion...")
@@ -135,9 +135,9 @@ def main(args):
     filename_valid = "mcv_audio_text_valid_filelist_" + language + "_" + str(gender) + ".txt"
     filename_test = "mcv_audio_text_test_filelist_" + language + "_" + str(gender) + ".txt"
     
-    path_train_filelist = os.path.join(directory_tacotron_filelist,filename_train)
-    path_valid_filelist = os.path.join(directory_tacotron_filelist,filename_valid)
-    path_test_filelist = os.path.join(directory_tacotron_filelist,filename_test)    
+    path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
+    path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
+    path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)    
     
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
@@ -180,13 +180,13 @@ if __name__ == "__main__":
     
 # 	'''
 #     ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
-#     -gender 'female' -directory_tacotron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
+#     -gender 'female' -directory_taflowtron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
 #     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
 #     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
 #     -batch_size 8 -user_informations 'True'
 # 	'''
 
-    PROJECT_NAME = "taflowtron_train"
+    PROJECT_NAME = "mcv_data_taflowtron"
     
     directory_of_script = os.path.dirname(os.path.realpath(__file__))
     directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     parser.add_argument("-language", help="Language to use for training the TTS", required=True, nargs='?')
     parser.add_argument("-gender", help="Gender to use for training the TTS", nargs='?')
     parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
-    parser.add_argument("-directory_tacotron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron training", required=True, nargs='?')
+    parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Tacotron or Flowtron training", required=True, nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')
     parser.add_argument("-file_lister", help="Boolean to create or not the file lister", default="True", nargs='?')

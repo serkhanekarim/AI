@@ -10,6 +10,7 @@ class Var:
     
     SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
     DATE_FORMAT = '%Y-%m-%d'
+    TIME_FORMAT = "%H:%M:%S.%f"
     MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = 20
     MAX_NUMBER_OF_FEATURE_IMPORTANCE = 20
     LABEL_OBJECTIVE_REGRESSION = ['reg:squarederror','reg:logistic']
@@ -43,4 +44,10 @@ class Var:
         "xlsx": "excel",
         "txt": "text",
         "py": "python"
+    }
+
+    SWITCHER_SECOND_TIME_CONVERSION = {
+        "millisecond": 1000,
+        "microsecond": 100000,
+        "nanosecond": 1000000000
     }

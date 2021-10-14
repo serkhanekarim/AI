@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from modules.preprocessing.date import DatePreprocessor
-from modules.Global import variable
+import os
+import subprocess
+import re
 
 #from pytube import YouTube
 #from youtube_transcript_api import YouTubeTranscriptApi
@@ -17,44 +18,37 @@ class MediaScraper:
     # def __init__(self, dataframe):
     #     self.dataframe = dataframe
     
-    def youtube_data(self, url):
+    def get_audio_youtube_data(self, url, audio_format, subtitle_language, directory_output):
         '''
-        Download youtube video
+        Download audio youtube video with subtitle
 
         Parameters
         ----------
         url : string
             Link of the youtube video
-        date_format : string, optional
-            Format of the date in the data frame. The default is '%Y-%m-%d'.
-        product : string, optional
-            Product code to get the stock data. The default is "GLD".
+        audio_format : string
+            format of the audio
+        subtitle_language : string
+            language of the subtitle
+        directory_output : string
+            path of the output of the audio and the subtitle
 
         Returns
         -------
-        DataFrame
-            Updated dataframe with stock data.
+        tuple
+            Download audio and subtitle
+            Return the path of the audio and the subtitle
 
         '''
         
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-                }],
-            'logger': MyLogger(),
-            'progress_hooks': [my_hook],
-            }
-         
-        date_preprocessor = DatePreprocessor()
-        df_date = self.dataframe[column_name].apply(lambda date : str(date_preprocessor.convert_date_format(date,date_preprocessor.DATE_FORMAT)))
+        command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + directory_output + "/%(title)s-%(id)s.%(ext)s"
         
-        print("Concatenation of stock data...")
-        stock_data = yf.Ticker(product).history(period="max")
-        index = df_date.apply(lambda date : stock_data.index.get_loc(date,method='nearest'))
-        self.dataframe = self.dataframe.join(stock_data.iloc[index].set_index(self.dataframe.index))
-        print("Concatenation of stock data - DONE")
+        proc = subprocess.check_output(command, text=True, shell=True)
+        filename_subtitle = re.findall(r'Writing video subtitles to: (.*\.(srt|ass|vtt|lrc))',proc)[0][0]
+        filename_audio = re.findall(r'(.*)\.(srt|ass|vtt|lrc)',filename_subtitle)[0][0] + "." + audio_format
         
-        return self.dataframe
+        path_subtitle = os.path.join(directory_output,filename_subtitle)
+        path_audio = os.path.join(directory_output,audio)
+        
+        return (path_subtitle, path_audio)
+    

@@ -4,6 +4,9 @@
 
 ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'ar' -gender 'male' -directory_tacotron_filelist '/home/serkhane/Repositories/flowtron/filelists' -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'True' -file_lister 'True' -user_informations 'True'
 
+youtube-dl https://www.youtube.com/watch?v=XIGWjzqKTp0 --write-sub --sub-lang en --extract-audio --audio-format wav --audio-quality 0
+
+
 --write-sub
   Subtitle Options:
     --write-sub                          Write subtitle file
