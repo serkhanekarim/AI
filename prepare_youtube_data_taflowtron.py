@@ -73,6 +73,8 @@ def main(args):
     data_vtt = DataPreprocessor().get_info_from_vtt(data_subtitle)
     
     print(data_vtt)
+    print(len(data_vtt[0]))
+    print(len(data_vtt[1]))
 
 
 

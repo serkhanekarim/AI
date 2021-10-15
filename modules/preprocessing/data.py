@@ -200,7 +200,10 @@ class DataPreprocessor:
 
         '''
         
-        return [index for index,element in enumerate(data) if element[0]=='[']
+        index_to_remove = [index for index,element in enumerate(data) if len(element) > 0 if element[0]=='[']
+        index_to_remove += [index for index,element in enumerate(data) if len(element) == 0]
+        
+        return index_to_remove
         
     
     def get_info_from_vtt(self, data):
@@ -228,17 +231,22 @@ class DataPreprocessor:
             compt = 1
             subtitle = ''
             if re.search(r'\d\d\:\d\d\:\d\d\.\d\d\d --> \d\d\:\d\d\:\d\d\.\d\d\d', element):
-                match = re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element)
                 list_time.append(re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element))
                 while data[index + compt] != '\n':
                     subtitle += data[index + compt].replace('\n',' ')
                     compt += 1
+                subtitle = re.sub(r'\[.*\]|^\s+|\s+$','',subtitle)
+                subtitle = re.sub(r'\s{2,]',' ',subtitle)
                 list_subtitle.append(subtitle)
             index += 1
             
-        index_to_remove = self._useless_data(data)
+        index_to_remove = self._useless_data(list_subtitle)
         list_time = [element for index,element in enumerate(list_time) if index not in index_to_remove]
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
+        
+        '''
+        Improvement merge separetaed time from vtt
+        '''
         
         return [list_time, list_subtitle]
         
