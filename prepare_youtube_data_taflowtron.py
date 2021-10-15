@@ -70,8 +70,9 @@ def main(args):
     Parse subtitles to get trim and text infotmation
     '''
     data_subtitle = DataReader(path_subtitle).read_data_file()
+    data_vtt = DataPreprocessor().get_info_from_vtt(data_subtitle)
     
-    print(data_subtitle)
+    print(data_vtt)
 
 
 

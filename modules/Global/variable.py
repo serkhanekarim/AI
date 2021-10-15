@@ -43,6 +43,7 @@ class Var:
         "tsv": "sv",
         "xlsx": "excel",
         "txt": "text",
+        "vtt": "text",
         "py": "python"
     }
 

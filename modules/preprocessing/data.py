@@ -4,6 +4,7 @@
 import os
 import pandas as pd
 from tqdm import tqdm
+import re
 
 from modules.preprocessing.audio import AudioPreprocessor
 import librosa
@@ -183,3 +184,63 @@ class DataPreprocessor:
                                                data_directory_converted,
                                                format_conversion),data_info)
     
+    def _useless_data(self, data):
+        '''
+        Find data index to keep for training taflowtron by removing useless data
+
+        Parameters
+        ----------
+        data : list
+            list of data containing string
+
+        Returns
+        -------
+        list
+            list of index to remove from data
+
+        '''
+        
+        return [index for index,element in enumerate(data) if element[0]=='[']
+        
+    
+    def get_info_from_vtt(self, data):
+        '''
+        Get time of subtitile and subtitle
+
+        Parameters
+        ----------
+        data : list
+            list of vtt data
+
+        Returns
+        -------
+        list
+            list of list containing start and end time of the subtitle and the subtitle [(xxxx,xxxx),xxxx]
+
+        '''
+        
+        list_time = []
+        list_subtitle = []
+        
+        index = 0
+        while index < len(data):
+            element = data[index]
+            compt = 1
+            subtitle = ''
+            if re.search(r'\d\d\:\d\d\:\d\d\.\d\d\d --> \d\d\:\d\d\:\d\d\.\d\d\d', element):
+                match = re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element)
+                list_time.append(re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element))
+                while data[index + compt] != '\n':
+                    subtitle += data[index + compt].replace('\n',' ')
+                    compt += 1
+                list_subtitle.append(subtitle)
+            index += 1
+            
+        index_to_remove = self._useless_data(data)
+        list_time = [element for index,element in enumerate(list_time) if index not in index_to_remove]
+        list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
+        
+        return [list_time, list_subtitle]
+        
+        
+        

@@ -41,14 +41,14 @@ class MediaScraper:
 
         '''
         
-        command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + directory_output + "/%(title)s-%(id)s.%(ext)s"
+        command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + "'" + directory_output + "/%(title)s-%(id)s.%(ext)s" + "'"
         
         proc = subprocess.check_output(command, text=True, shell=True)
         filename_subtitle = re.findall(r'Writing video subtitles to: (.*\.(srt|ass|vtt|lrc))',proc)[0][0]
         filename_audio = re.findall(r'(.*)\.(srt|ass|vtt|lrc)',filename_subtitle)[0][0] + "." + audio_format
         
         path_subtitle = os.path.join(directory_output,filename_subtitle)
-        path_audio = os.path.join(directory_output,audio)
+        path_audio = os.path.join(directory_output,filename_audio)
         
         return (path_subtitle, path_audio)
     
