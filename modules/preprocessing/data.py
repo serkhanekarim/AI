@@ -204,6 +204,38 @@ class DataPreprocessor:
         index_to_remove += [index for index,element in enumerate(data) if len(element) == 0]
         
         return index_to_remove
+    
+    def _concatenate_subtitle(self, list_time, list_subtitle):
+        '''
+        Concatenate subtitle to get long sentences and not cut sentences
+
+        Parameters
+        ----------
+        list_time : list
+            list of data containing time
+        list_subtitle : list
+            list of data containing string
+
+        Returns
+        -------
+        None.
+
+        '''
+        new_list_time = []
+        new_list_subtitle = []
+        
+        index = 0
+        while index < len(list_subtitle)-1:
+            compt = 0
+            subtitle = list_subtitle[index]
+            end_time = list_time[index][0][1]
+            while list_time[index+compt][0][1] == list_time[index+compt+1][0][0] and list_subtitle[index+compt][-1] != ".":
+                subtitle += list_subtitle[index+compt+1]
+                end_time = list_time[index+compt+1][0][1]
+                compt += 1
+            new_list_time.append((list_time[index][0][0],list_time[index+compt][0][1]))
+            new_list_subtitle.append(subtitle)
+            index += compt + 1
         
     
     def get_info_from_vtt(self, data):
@@ -247,6 +279,8 @@ class DataPreprocessor:
         '''
         Improvement merge separetaed time from vtt
         '''
+        
+        
         
         return [list_time, list_subtitle]
         
