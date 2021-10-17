@@ -230,12 +230,14 @@ class DataPreprocessor:
             subtitle = list_subtitle[index]
             end_time = list_time[index][0][1]
             while list_time[index+compt][0][1] == list_time[index+compt+1][0][0] and list_subtitle[index+compt][-1] != ".":
-                subtitle += list_subtitle[index+compt+1]
+                subtitle += " " + list_subtitle[index+compt+1]
                 end_time = list_time[index+compt+1][0][1]
                 compt += 1
             new_list_time.append((list_time[index][0][0],list_time[index+compt][0][1]))
             new_list_subtitle.append(subtitle)
             index += compt + 1
+            
+        return new_list_time, new_list_subtitle
         
     
     def get_info_from_vtt(self, data):
@@ -279,10 +281,9 @@ class DataPreprocessor:
         '''
         Improvement merge separetaed time from vtt
         '''
+        list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle)
         
-        
-        
-        return [list_time, list_subtitle]
+        return list_time, list_subtitle
         
         
         

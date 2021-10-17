@@ -233,7 +233,7 @@ class AudioPreprocessor:
         proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
         return float(proc)
         
-    def trim_audio_wav(self, path_input, path_output, t1, t2, format_audio='wav'):
+    def trim_audio(self, path_input, path_output, list_time):
         '''
         Trim an audio
 
@@ -243,12 +243,8 @@ class AudioPreprocessor:
             path of the audio to trim
         path_output : string
             name of the trimmed audio
-        t1 : float
-            time beginnning to trim
-        t2 : float
-            end time to trim
-        format_audio : string
-            format of the trimed audio
+        list_time : list
+            list of list containing start and end time
 
         Returns
         -------
@@ -256,10 +252,13 @@ class AudioPreprocessor:
             Create the trimmed audio into the path_output
 
         '''
-        
+        path_without_extension = os.path.splitext(path_output)[0]
+        format_audio = os.path.splitext(path_output)[1]
         newAudio = AudioSegment.from_wav(path_input)
-        newAudio = newAudio[t1:t2]
-        newAudio.export(path_output, format=format_audio) #Exports to a wav file in the current path.
+        for index,time in enumerate(list_time):
+            newAudio = newAudio[time[0]:time[1]]
+            new_path = path_without_extension + "_part_" + str(index) + "." + format_audio
+            newAudio.export(path_without_extension, format=format_audio) #Exports to a wav file in the current path.
         
         
         

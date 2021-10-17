@@ -51,7 +51,7 @@ def main(args):
     
     
     SEED = 42
-    AUDIO_FORMAT = 'wav'
+    AUDIO_FORMAT = 'wav' #Required qudio formqt for taflowtron
        
     url = args.url
     language = args.language
@@ -67,14 +67,28 @@ def main(args):
                                                                       directory_output=data_directory)
     
     '''
-    Parse subtitles to get trim and text infotmation
+    Parse subtitles to get trim and text information
     '''
     data_subtitle = DataReader(path_subtitle).read_data_file()
-    data_vtt = DataPreprocessor().get_info_from_vtt(data_subtitle)
+    list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data_subtitle)
     
-    print(data_vtt)
-    print(len(data_vtt[0]))
-    print(len(data_vtt[1]))
+    '''
+    Trim audio regarding vtt information
+    '''
+    base = os.path.basename(path_audio)
+    filename = os.path.splitext(base)[0]
+    
+    dir_audio_data_files = os.path.join(data_directory,language,filename,'clips')
+    dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
+    os.makedirs(dir_audio_data_files,exist_ok=True)
+    os.makedirs(dir_audio_data_files_converted,exist_ok=True)
+    
+    path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
+    
+    AudioPreprocessor.trim_audio(path_input=path_audio, 
+                                 path_output=path_audio_output, 
+                                 list_time=list_time)
+    
 
 
 
