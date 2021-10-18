@@ -71,6 +71,7 @@ def main(args):
     '''
     data_subtitle = DataReader(path_subtitle).read_data_file()
     list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data_subtitle)
+    list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
     
     '''
     Trim audio regarding vtt information
@@ -85,7 +86,7 @@ def main(args):
     
     path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
     
-    AudioPreprocessor.trim_audio(path_input=path_audio, 
+    AudioPreprocessor().trim_audio(path_input=path_audio, 
                                  path_output=path_audio_output, 
                                  list_time=list_time)
     

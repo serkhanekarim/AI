@@ -6,6 +6,8 @@ import subprocess
 import tensorflow as tf
 
 from pydub import AudioSegment
+# import noisereduce as nr
+# import wavfile
 
 class AudioPreprocessor:
     '''
@@ -253,12 +255,16 @@ class AudioPreprocessor:
 
         '''
         path_without_extension = os.path.splitext(path_output)[0]
-        format_audio = os.path.splitext(path_output)[1]
-        newAudio = AudioSegment.from_wav(path_input)
+        format_audio = os.path.splitext(path_output)[1].split('.')[-1]
+        Audio = AudioSegment.from_wav(path_input)
         for index,time in enumerate(list_time):
-            newAudio = newAudio[time[0]:time[1]]
+            print(str(time[1]) + "/" + str(list_time[-1][1]))
+            newAudio = Audio[time[0]:time[1]]
             new_path = path_without_extension + "_part_" + str(index) + "." + format_audio
-            newAudio.export(path_without_extension, format=format_audio) #Exports to a wav file in the current path.
+            newAudio.export(new_path, format=format_audio) #Exports to a wav file in the current path.
+            
+            # rate, data = wavfile.read('/home/serkhane/Repositories/marketing-analysis/DATA/youtube_data_taflowtron/en/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0/clips/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0_part_6.wav')
+            # reduced_noise = nr.reduce_noise(y=data, sr=rate)
         
         
         

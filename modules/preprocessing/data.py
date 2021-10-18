@@ -225,15 +225,19 @@ class DataPreprocessor:
         new_list_subtitle = []
         
         index = 0
-        while index < len(list_subtitle)-1:
+        while index < len(list_subtitle):
             compt = 0
             subtitle = list_subtitle[index]
-            end_time = list_time[index][0][1]
-            while list_time[index+compt][0][1] == list_time[index+compt+1][0][0] and list_subtitle[index+compt][-1] != ".":
-                subtitle += " " + list_subtitle[index+compt+1]
-                end_time = list_time[index+compt+1][0][1]
-                compt += 1
-            new_list_time.append((list_time[index][0][0],list_time[index+compt][0][1]))
+            beg_time = list_time[index][0]
+            end_time = list_time[index][1]
+            if index+compt < len(list_subtitle)-1:
+                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] != ".":
+                    subtitle += " " + list_subtitle[index+compt+1]
+                    end_time = list_time[index+compt+1][1]
+                    compt += 1
+                    if index+compt == len(list_subtitle)-1:
+                        break
+            new_list_time.append((beg_time,end_time))
             new_list_subtitle.append(subtitle)
             index += compt + 1
             
@@ -275,11 +279,11 @@ class DataPreprocessor:
             index += 1
             
         index_to_remove = self._useless_data(list_subtitle)
-        list_time = [element for index,element in enumerate(list_time) if index not in index_to_remove]
+        list_time = [element[0] for index,element in enumerate(list_time) if index not in index_to_remove]
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
         
         '''
-        Improvement merge separetaed time from vtt
+        Improvement merge separated time from vtt
         '''
         list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle)
         
