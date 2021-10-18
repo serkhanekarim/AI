@@ -56,6 +56,7 @@ def main(args):
     url = args.url
     language = args.language
     data_directory = args.data_directory
+    path_youtube_cleaner = args.path_youtube_cleaner
     
     
     '''
@@ -70,7 +71,8 @@ def main(args):
     Parse subtitles to get trim and text information
     '''
     data_subtitle = DataReader(path_subtitle).read_data_file()
-    list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data_subtitle)
+    list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
+                                                                    path_cleaner=path_youtube_cleaner)
     list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
     
     '''
@@ -115,6 +117,7 @@ if __name__ == "__main__":
     parser.add_argument("-url", help="Youtube url", required=True, nargs='?')
     parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
+    parser.add_argument("-path_youtube_cleaner", help="Path of a tsv file containing regex substitution", nargs='?')
     parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')

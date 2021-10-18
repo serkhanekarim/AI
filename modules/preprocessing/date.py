@@ -7,14 +7,14 @@ from datetime import datetime
 import holidays
 
 from tqdm import tqdm
-from modules.Global import variable
+from modules.Global.variable import Var
 
 class DatePreprocessor:
     '''
     Class used to make feature engineering on date data
     '''
     
-    DATE_FORMAT = variable.Var().DATE_FORMAT
+    DATE_FORMAT = Var().DATE_FORMAT
     
     def __init__(self, dataframe=None):
         self.dataframe = dataframe

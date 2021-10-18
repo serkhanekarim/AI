@@ -52,3 +52,5 @@ class Var:
         "microsecond": 100000,
         "nanosecond": 1000000000
     }
+    
+    END_CHARS = [".","?","!"]

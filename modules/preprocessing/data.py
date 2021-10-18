@@ -6,13 +6,17 @@ import pandas as pd
 from tqdm import tqdm
 import re
 
+from modules.Global.variable import Var
 from modules.preprocessing.audio import AudioPreprocessor
+from modules.preprocessing.cleaner import DataCleaner
 import librosa
 
 class DataPreprocessor:
     '''
     Class used to make data preprocessor
     '''
+        
+    END_CHARS = Var().END_CHARS
     
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
@@ -231,7 +235,7 @@ class DataPreprocessor:
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
             if index+compt < len(list_subtitle)-1:
-                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] != ".":
+                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in END_CHARS:
                     subtitle += " " + list_subtitle[index+compt+1]
                     end_time = list_time[index+compt+1][1]
                     compt += 1
@@ -244,7 +248,7 @@ class DataPreprocessor:
         return new_list_time, new_list_subtitle
         
     
-    def get_info_from_vtt(self, data):
+    def get_info_from_vtt(self, data, path_cleaner):
         '''
         Get time of subtitile and subtitle
 
@@ -252,6 +256,8 @@ class DataPreprocessor:
         ----------
         data : list
             list of vtt data
+        path_cleaner : string
+            path of a cleaner (.tsv file)
 
         Returns
         -------
@@ -273,10 +279,11 @@ class DataPreprocessor:
                 while data[index + compt] != '\n':
                     subtitle += data[index + compt].replace('\n',' ')
                     compt += 1
-                subtitle = re.sub(r'\[.*\]|^\s+|\s+$','',subtitle)
-                subtitle = re.sub(r'\s{2,]',' ',subtitle)
                 list_subtitle.append(subtitle)
             index += 1
+            
+        list_subtitle = DataCleaner().clean_text(data=list_subtitle,
+                                            path_cleaner=path_cleaner)
             
         index_to_remove = self._useless_data(list_subtitle)
         list_time = [element[0] for index,element in enumerate(list_time) if index not in index_to_remove]
