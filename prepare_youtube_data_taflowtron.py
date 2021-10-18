@@ -57,6 +57,7 @@ def main(args):
     language = args.language
     data_directory = args.data_directory
     path_youtube_cleaner = args.path_youtube_cleaner
+    directory_taflowtron_filelist = args.directory_taflowtron_filelist
     
     
     '''
@@ -91,11 +92,19 @@ def main(args):
     
     path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
     
-    AudioPreprocessor().trim_audio(path_input=path_audio, 
-                                 path_output=path_audio_output, 
-                                 list_time=list_time)
+    list_new_audio_path = AudioPreprocessor().trim_audio(path_input=path_audio, 
+                                                         path_output=path_audio_output, 
+                                                         list_time=list_time)
     
-
+    os.remove(path_audio)
+    os.remove(path_subtitle)
+    
+    '''
+    Create tqflowtron filelist
+    '''
+    data_filelist = [list_new_audio_path[index] + "|" + subtitle for index,subtitle in enumerate(list_subtitle)]
+    DataWriter(data_filelist, directory_taflowtron_filelist).write_data_file()
+    
 
 
 if __name__ == "__main__":
