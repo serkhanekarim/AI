@@ -33,15 +33,18 @@ class DataCleaner:
         '''
         
         print('Start cleaning...')
-        cleaner = DataReader(path_cleaner).read_data_file()
+        obj = {'header':None, 'na_filter':False}
+        cleaner = DataReader(path_cleaner).read_data_file(**obj)
         len_cleaner = cleaner.shape[0]
 
         for index in range(len_cleaner):
-            print("Cleaner - Applying regex substitution:" + str(cleaner[0][index]) + "|||" + str(cleaner[1][index]))
+            regex = re.compile(cleaner[0][index])
+            substitution = str(cleaner[1][index])
+            print("Cleaner - Applying regex substitution:" + str(cleaner[0][index]) + "|||" + substitution)
             if type(data) == list:
-                data = [re.sub(cleaner[0][index],cleaner[1][index],element) for element in data]
+                data = [re.sub(regex,substitution,element) for element in data]
             if type(data) == pd.core.frame.DataFrame:
-                data = data.apply(lambda element : re.sub(cleaner[0][index],cleaner[1][index],element))
+                data = data.apply(lambda element : re.sub(regex,substitution,element))
                 
         return data
         

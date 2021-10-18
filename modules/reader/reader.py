@@ -84,7 +84,7 @@ class DataReader:
         
         return self._extension_to_filetype(self.path_file.split(".")[-1])
     
-    def _extension_filetype_to_reader(self, filetype, separator):
+    def _extension_filetype_to_reader(self, filetype, separator, **kwargs):
         '''
         Read data file from a related data file extension and type
         
@@ -101,14 +101,14 @@ class DataReader:
         
         '''
         if filetype == "sv":
-            return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator)
+            return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator, **kwargs)
         if filetype == "excel":
             return pd.read_excel(io=self.path_file)
         if filetype in ["text", "python"]:
             with open(self.path_file,'r') as FileObj:
                 return FileObj.readlines()
             
-    def read_data_file(self):        
+    def read_data_file(self, **kwargs):        
         '''
         Return dataframe from data file data
         
@@ -127,7 +127,7 @@ class DataReader:
         self.separator = self.separator or self._separator_finder() 
         print("Reading files - DONE") 
         
-        return self._extension_filetype_to_reader(filetype=self.filetype,separator=self.separator)
+        return self._extension_filetype_to_reader(filetype=self.filetype, separator=self.separator, **kwargs)
     
     def read_data_value(self, key):
         '''

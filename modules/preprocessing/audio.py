@@ -258,7 +258,7 @@ class AudioPreprocessor:
         format_audio = os.path.splitext(path_output)[1].split('.')[-1]
         Audio = AudioSegment.from_wav(path_input)
         for index,time in enumerate(list_time):
-            print(str(time[1]) + "/" + str(list_time[-1][1]))
+            #print(str(time[1]) + "/" + str(list_time[-1][1]))
             newAudio = Audio[time[0]:time[1]]
             new_path = path_without_extension + "_part_" + str(index) + "." + format_audio
             newAudio.export(new_path, format=format_audio) #Exports to a wav file in the current path.

@@ -235,7 +235,7 @@ class DataPreprocessor:
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
             if index+compt < len(list_subtitle)-1:
-                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in END_CHARS:
+                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in self.END_CHARS:
                     subtitle += " " + list_subtitle[index+compt+1]
                     end_time = list_time[index+compt+1][1]
                     compt += 1

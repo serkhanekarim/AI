@@ -75,6 +75,9 @@ def main(args):
                                                                     path_cleaner=path_youtube_cleaner)
     list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
     
+    print(list_time)
+    print(list_subtitle)
+    
     '''
     Trim audio regarding vtt information
     '''
