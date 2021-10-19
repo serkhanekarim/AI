@@ -75,10 +75,12 @@ def main(args):
         '''
         Download audio and subtitle from youtube using youtube-dl
         '''
+        dir_original_youtube_data = os.path.join(data_directory,language,'original')
+        os.makedirs(dir_original_youtube_data,exist_ok=True)
         path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
                                                                           audio_format=AUDIO_FORMAT, 
                                                                           subtitle_language=language, 
-                                                                          directory_output=data_directory)
+                                                                          directory_output=dir_original_youtube_data)
         
         '''
         Parse subtitles to get trim and text information
@@ -124,8 +126,8 @@ def main(args):
         list_total_subtitle += list_subtitle
         
         #Remove downloaded files
-        os.remove(path_audio)
-        os.remove(path_subtitle)
+        #os.remove(path_audio)
+        #os.remove(path_subtitle)
     
     '''
     Create taflowtron filelist
@@ -140,7 +142,6 @@ def main(args):
 
     # Now since we want the valid and test size to be equal (10% each of overall data). 
     # we have to define valid_size=0.5 (that is 50% of remaining data)
-    test_size = 0.5
     X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
     
     '''
@@ -163,8 +164,8 @@ def main(args):
         Update hparams with filelist and batch size
         '''
         data_haparams = DataReader(path_hparam_file).read_data_file()
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = "'" + path_train_filelist + "',\n")
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = "'" + path_valid_filelist + "',\n")
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_train_filelist + '",\n')
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_valid_filelist + '",\n')
         # if language == 'en':
         #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
         # else:
