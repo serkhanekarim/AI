@@ -83,7 +83,7 @@ def main(args):
     '''
     if file_lister.lower() == 'true' or user_informations.lower() == 'true':
         print("Find the max user...")
-        data_information = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
+        data_info_lsj, data_info_user = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
                                                                             path_column=PATH_COLUMN, 
                                                                             element_column=ELEMENT_COLUMN,
                                                                             data_directory=dir_audio_data_files,
@@ -91,10 +91,7 @@ def main(args):
                                                                             option_column=OPTION_COLUMN,
                                                                             option=gender)
         
-        data_info_lsj = data_information[0]
-        
         if user_informations.lower() == "true":
-            data_info_user = data_information[1]
             filename_user_information = "mcv_user_voice_informations_" + language + ".tsv"
             DataWriter(data_info_user, os.path.join(directory_of_results,filename_user_information)).write_data_file()
         

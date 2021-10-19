@@ -181,12 +181,12 @@ class DataPreprocessor:
         
         user = self._find_max_user(list_unique_user, option)
         
-        return (self._get_information_from_user(user, 
+        return self._get_information_from_user(user, 
                                                user_column, 
                                                path_column, 
                                                element_column,
                                                data_directory_converted,
-                                               format_conversion),data_info)
+                                               format_conversion), data_info
     
     def _useless_data(self, data):
         '''

@@ -51,60 +51,133 @@ def main(args):
     
     
     SEED = 42
-    AUDIO_FORMAT = 'wav' #Required qudio formqt for taflowtron
+    AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
        
-    url = args.url
+    path_list_url = args.path_list_url
     language = args.language
     data_directory = args.data_directory
     path_youtube_cleaner = args.path_youtube_cleaner
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
+    converter = args.converter
     
     
     '''
     Get audio and subtitle from youtube url
     '''
-    path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
-                                                                      audio_format=AUDIO_FORMAT, 
-                                                                      subtitle_language=language, 
-                                                                      directory_output=data_directory)
+    list_total_new_audio_path = []
+    list_total_subtitle = []
+    
+    for in tqdm(set(list_url)):
+        path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
+                                                                          audio_format=AUDIO_FORMAT, 
+                                                                          subtitle_language=language, 
+                                                                          directory_output=data_directory)
+        
+        '''
+        Parse subtitles to get trim and text information
+        '''
+        data_subtitle = DataReader(path_subtitle).read_data_file()
+        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
+                                                                        path_cleaner=path_youtube_cleaner)
+        list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
+        
+        '''
+        Trim audio regarding vtt information
+        '''
+        base = os.path.basename(path_audio)
+        filename = os.path.splitext(base)[0]
+        dir_audio_data_files = os.path.join(data_directory,language,filename,'clips')
+        os.makedirs(dir_audio_data_files,exist_ok=True)
+        path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
+        list_new_audio_path = AudioPreprocessor().trim_audio(path_input=path_audio, 
+                                                             path_output=path_audio_output, 
+                                                             list_time=list_time)
+        
+        
+        '''
+        Convert audio data for taflowtron model
+        '''
+        if converter.lower() == 'true':
+            print("Audio conversion...")
+            dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
+            os.makedirs(dir_audio_data_files_converted,exist_ok=True)
+            for element in tqdm(list_new_audio_path):
+                base = os.path.basename(element.split('|')[0])
+                filename = os.path.splitext(base)[0]
+                AudioPreprocessor().convert_audio(path_input=element, 
+                                                  path_output=os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT),
+                                                  sample_rate=22050, 
+                                                  channel=1, 
+                                                  bits=16)    
+        
+        #Get a full list of all path audio and subtitles for taflowtron filelist
+        list_total_new_audio_path += list_new_audio_path
+        list_total_subtitle += list_subtitle
+        
+        #Remove downloaded files
+        os.remove(path_audio)
+        os.remove(path_subtitle)
     
     '''
-    Parse subtitles to get trim and text information
+    Create taflowtron filelist
     '''
-    data_subtitle = DataReader(path_subtitle).read_data_file()
-    list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
-                                                                    path_cleaner=path_youtube_cleaner)
-    list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
-    
-    print(list_time)
-    print(list_subtitle)
+    data_filelist = [list_total_new_audio_path[index] + "|" + subtitle for index,subtitle in enumerate(list_total_subtitle)]
     
     '''
-    Trim audio regarding vtt information
+    Train, test, validation splitting
     '''
-    base = os.path.basename(path_audio)
-    filename = os.path.splitext(base)[0]
-    
-    dir_audio_data_files = os.path.join(data_directory,language,filename,'clips')
-    dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
-    os.makedirs(dir_audio_data_files,exist_ok=True)
-    os.makedirs(dir_audio_data_files_converted,exist_ok=True)
-    
-    path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
-    
-    list_new_audio_path = AudioPreprocessor().trim_audio(path_input=path_audio, 
-                                                         path_output=path_audio_output, 
-                                                         list_time=list_time)
-    
-    os.remove(path_audio)
-    os.remove(path_subtitle)
+    # In the first step we will split the data in training and remaining dataset
+    X_train, X_rem = train_test_split(data_filelist,train_size=0.8, random_state=SEED)
+
+    # Now since we want the valid and test size to be equal (10% each of overall data). 
+    # we have to define valid_size=0.5 (that is 50% of remaining data)
+    test_size = 0.5
+    X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
     
     '''
-    Create tqflowtron filelist
+    Write Training, Test, and validation file
     '''
-    data_filelist = [list_new_audio_path[index] + "|" + subtitle for index,subtitle in enumerate(list_subtitle)]
-    DataWriter(data_filelist, directory_taflowtron_filelist).write_data_file()
+    filename_train = "youtube_audio_text_train_filelist_" + language + "_" + str(gender) + ".txt"
+    filename_valid = "youtube_audio_text_valid_filelist_" + language + "_" + str(gender) + ".txt"
+    filename_test = "youtube_audio_text_test_filelist_" + language + "_" + str(gender) + ".txt"
     
+    path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
+    path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
+    path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)    
+    
+    DataWriter(X_train, path_train_filelist).write_data_file()
+    DataWriter(X_valid, path_valid_filelist).write_data_file()
+    DataWriter(X_test, path_test_filelist).write_data_file()
+    
+    if path_hparam_file is not None:
+        '''
+        Update hparams with filelist and batch size
+        '''
+        data_haparams = DataReader(path_hparam_file).read_data_file()
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = "'" + path_train_filelist + "',\n")
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = "'" + path_valid_filelist + "',\n")
+        # if language == 'en':
+        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
+        # else:
+        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
+        
+        # if batch_size is not None:
+        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
+
+    # if path_symbols_file is not None:
+    #     '''
+    #     Update symbols
+    #     '''
+    #     data_symbols = DataReader(path_symbols_file).read_data_file()
+    #     pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
+    #     punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
+    #     special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
+        
+    #     unique_char = set("".join(data_info[ELEMENT_COLUMN]))
+    #     unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
+    #     unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
+        
+    #     DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
 
 
 if __name__ == "__main__":
