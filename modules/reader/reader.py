@@ -102,9 +102,9 @@ class DataReader:
         '''
         if filetype == "sv":
             return pd.read_csv(filepath_or_buffer=self.path_file, sep=separator, **kwargs)
-        if filetype == "excel":
+        elif filetype == "excel":
             return pd.read_excel(io=self.path_file)
-        if filetype in ["text", "python"]:
+        else:
             with open(self.path_file,'r') as FileObj:
                 return FileObj.readlines()
             

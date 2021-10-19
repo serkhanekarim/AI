@@ -59,15 +59,22 @@ def main(args):
     path_youtube_cleaner = args.path_youtube_cleaner
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
     converter = args.converter
-    
+    path_hparam_file = args.path_hparam_file
     
     '''
     Get audio and subtitle from youtube url
     '''
+    list_url = DataReader(path_list_url).read_data_file()
+    list_url = [line[:-1] for line in list_url]
+    
     list_total_new_audio_path = []
     list_total_subtitle = []
     
-    for in tqdm(set(list_url)):
+    for url in tqdm(set(list_url)):
+        
+        '''
+        Download audio and subtitle from youtube using youtube-dl
+        '''
         path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
                                                                           audio_format=AUDIO_FORMAT, 
                                                                           subtitle_language=language, 
@@ -77,8 +84,7 @@ def main(args):
         Parse subtitles to get trim and text information
         '''
         data_subtitle = DataReader(path_subtitle).read_data_file()
-        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
-                                                                        path_cleaner=path_youtube_cleaner)
+        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,path_cleaner=path_youtube_cleaner)
         list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
         
         '''
@@ -101,17 +107,20 @@ def main(args):
             print("Audio conversion...")
             dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
-            for element in tqdm(list_new_audio_path):
-                base = os.path.basename(element.split('|')[0])
+            for new_audio_path in tqdm(list_new_audio_path):
+                base = os.path.basename(new_audio_path.split('|')[0])
                 filename = os.path.splitext(base)[0]
-                AudioPreprocessor().convert_audio(path_input=element, 
-                                                  path_output=os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT),
+                path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
+                list_total_new_audio_path.append(path_converted_audio)
+                AudioPreprocessor().convert_audio(path_input=new_audio_path, 
+                                                  path_output=path_converted_audio,
                                                   sample_rate=22050, 
                                                   channel=1, 
                                                   bits=16)    
         
-        #Get a full list of all path audio and subtitles for taflowtron filelist
-        list_total_new_audio_path += list_new_audio_path
+        else:
+            #Get a full list of all path audio and subtitles for taflowtron filelist
+            list_total_new_audio_path += list_new_audio_path
         list_total_subtitle += list_subtitle
         
         #Remove downloaded files
@@ -137,9 +146,9 @@ def main(args):
     '''
     Write Training, Test, and validation file
     '''
-    filename_train = "youtube_audio_text_train_filelist_" + language + "_" + str(gender) + ".txt"
-    filename_valid = "youtube_audio_text_valid_filelist_" + language + "_" + str(gender) + ".txt"
-    filename_test = "youtube_audio_text_test_filelist_" + language + "_" + str(gender) + ".txt"
+    filename_train = "youtube_audio_text_train_filelist_" + language + ".txt"
+    filename_valid = "youtube_audio_text_valid_filelist_" + language + ".txt"
+    filename_test = "youtube_audio_text_test_filelist_" + language + ".txt"
     
     path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
     path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
@@ -199,7 +208,7 @@ if __name__ == "__main__":
     os.makedirs(directory_of_data,exist_ok=True)
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-url", help="Youtube url", required=True, nargs='?')
+    parser.add_argument("-path_list_url", help="Path of a file containing Youtube urls", required=True, nargs='?')
     parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
     parser.add_argument("-path_youtube_cleaner", help="Path of a tsv file containing regex substitution", nargs='?')
@@ -207,6 +216,7 @@ if __name__ == "__main__":
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", nargs='?')
+    parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
     
     args = parser.parse_args()
     

@@ -211,7 +211,7 @@ class AudioPreprocessor:
 
         '''
         
-        command = 'sox ' + path_input + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + path_output
+        command = 'sox ' + "'" + path_input + "'" + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + "'" + path_output + "'"
         os.system(command)
         
     def get_audio_length(self, path_audio):
