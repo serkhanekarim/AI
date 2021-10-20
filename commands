@@ -4,7 +4,7 @@
 
 ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'ar' -gender 'male' -directory_tacotron_filelist '/home/serkhane/Repositories/flowtron/filelists' -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'True' -file_lister 'True' -user_informations 'True'
 
-./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True'
+./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True' -concatenate 'True'
 
 sox '/home/serkhane/Repositories/marketing-analysis/DATA/youtube_data_taflowtron/en/Michael B. Jordan Tribute to Denzel Washington _ AFI 2019 _ TNT-mrbUSRZEr6o/clips/Michael B. Jordan Tribute to Denzel Washington _ AFI 2019 _ TNT-mrbUSRZEr6o_part_0.wav' -r 22050 -c 1 -b 16 
 

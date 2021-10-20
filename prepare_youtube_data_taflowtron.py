@@ -52,6 +52,7 @@ def main(args):
     
     SEED = 42
     AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
+    VOICE_ID = "0"
        
     path_list_url = args.path_list_url
     language = args.language
@@ -60,6 +61,8 @@ def main(args):
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
     converter = args.converter
     path_hparam_file = args.path_hparam_file
+    concatenate_vtt = args.concatenate_vtt.lower() == "true"
+    # path_filename_youtube_cleaner = args.path_filename_youtube_cleaner
     
     '''
     Get audio and subtitle from youtube url
@@ -70,7 +73,7 @@ def main(args):
     list_total_new_audio_path = []
     list_total_subtitle = []
     
-    for url in tqdm(set(list_url)):
+    for url in tqdm(list_url):
         
         '''
         Download audio and subtitle from youtube using youtube-dl
@@ -86,7 +89,7 @@ def main(args):
         Parse subtitles to get trim and text information
         '''
         data_subtitle = DataReader(path_subtitle).read_data_file()
-        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,path_cleaner=path_youtube_cleaner)
+        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,path_cleaner=path_youtube_cleaner,concatenate=concatenate_vtt)
         list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
         
         '''
@@ -114,11 +117,12 @@ def main(args):
                 filename = os.path.splitext(base)[0]
                 path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
                 list_total_new_audio_path.append(path_converted_audio)
-                AudioPreprocessor().convert_audio(path_input=new_audio_path, 
-                                                  path_output=path_converted_audio,
-                                                  sample_rate=22050, 
-                                                  channel=1, 
-                                                  bits=16)    
+                if not os.path.isfile(path_converted_audio):
+                    AudioPreprocessor().convert_audio(path_input=new_audio_path, 
+                                                      path_output=path_converted_audio,
+                                                      sample_rate=22050, 
+                                                      channel=1, 
+                                                      bits=16)    
         
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
@@ -132,7 +136,7 @@ def main(args):
     '''
     Create taflowtron filelist
     '''
-    data_filelist = [list_total_new_audio_path[index] + "|" + subtitle for index,subtitle in enumerate(list_total_subtitle)]
+    data_filelist = [list_total_new_audio_path[index] + "|" + subtitle + "|" + VOICE_ID for index,subtitle in enumerate(list_total_subtitle)]
     
     '''
     Train, test, validation splitting
@@ -213,11 +217,13 @@ if __name__ == "__main__":
     parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
     parser.add_argument("-path_youtube_cleaner", help="Path of a tsv file containing regex substitution", nargs='?')
+    # parser.add_argument("-path_filename_youtube_cleaner", help="Path of a tsv file containing regex substitution to clean filename", nargs='?')
     parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", nargs='?')
     parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
+    parser.add_argument("-concatenate_vtt", help="Concatenate subtitles/sentences to avoid small or cut audio subtitles/sentences", required=True, nargs='?')
     
     args = parser.parse_args()
     

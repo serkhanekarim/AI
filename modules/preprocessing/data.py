@@ -248,7 +248,7 @@ class DataPreprocessor:
         return new_list_time, new_list_subtitle
         
     
-    def get_info_from_vtt(self, data, path_cleaner):
+    def get_info_from_vtt(self, data, path_cleaner, concatenate=False):
         '''
         Get time of subtitile and subtitle
 
@@ -258,6 +258,8 @@ class DataPreprocessor:
             list of vtt data
         path_cleaner : string
             path of a cleaner (.tsv file)
+        concatenate : boolean
+            concatenate vtt sentences/subtitles by using time and end characters to make bigger sentence/subtitle
 
         Returns
         -------
@@ -290,9 +292,10 @@ class DataPreprocessor:
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
         
         '''
-        Improvement merge separated time from vtt
+        Concatenation of sentence/subtitle
         '''
-        list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle)
+        if concatenate:
+            list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle)
         
         return list_time, list_subtitle
         

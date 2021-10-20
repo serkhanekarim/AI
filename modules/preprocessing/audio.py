@@ -261,7 +261,7 @@ class AudioPreprocessor:
         for index,time in enumerate(list_time):
             #print(str(time[1]) + "/" + str(list_time[-1][1]))
             newAudio = Audio[time[0]:time[1]]
-            new_path = path_without_extension + "_part_" + str(index) + "." + format_audio
+            new_path = path_without_extension + "_trim_" + str(time[0]) + "_" + str(time[1]) + "." + format_audio
             list_new_audio_path.append(new_path)
             newAudio.export(new_path, format=format_audio) #Exports to a wav file in the current path.
             
