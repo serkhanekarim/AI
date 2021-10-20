@@ -52,7 +52,7 @@ def main(args):
     
     SEED = 42
     AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
-    VOICE_ID = "0"
+    #VOICE_ID = 0
        
     path_list_url = args.path_list_url
     language = args.language
@@ -70,8 +70,12 @@ def main(args):
     list_url = DataReader(path_list_url).read_data_file()
     list_url = [line[:-1] for line in list_url]
     
-    list_total_new_audio_path = []
-    list_total_subtitle = []
+    # list_total_new_audio_path = []
+    # list_total_subtitle = []
+    
+    data_filelist = []
+    
+    voice_id = 0
     
     for url in tqdm(list_url):
         
@@ -110,6 +114,7 @@ def main(args):
         '''
         if converter.lower() == 'true':
             print("Audio conversion...")
+            list_total_new_audio_path = []
             dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
             for new_audio_path in tqdm(list_new_audio_path):
@@ -126,18 +131,20 @@ def main(args):
         
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
-            list_total_new_audio_path += list_new_audio_path
-        list_total_subtitle += list_subtitle
+            list_total_new_audio_path = list_new_audio_path
+        #list_total_subtitle += list_subtitle
         
         #Remove downloaded files
         #os.remove(path_audio)
         #os.remove(path_subtitle)
     
-    '''
-    Create taflowtron filelist
-    '''
-    data_filelist = [list_total_new_audio_path[index] + "|" + subtitle + "|" + VOICE_ID for index,subtitle in enumerate(list_total_subtitle)]
-    
+        '''
+        Create taflowtron filelist
+        '''
+        data_filelist += [list_total_new_audio_path[index] + "|" + subtitle + "|" + str(voice_id) for index,subtitle in enumerate(list_subtitle)]
+        voice_id += 1
+        
+        
     '''
     Train, test, validation splitting
     '''
