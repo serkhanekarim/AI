@@ -9,6 +9,7 @@ import re
 from modules.Global.variable import Var
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.cleaner import DataCleaner
+from modules.preprocessing.time import TimePreprocessor
 import librosa
 
 class DataPreprocessor:
@@ -209,7 +210,7 @@ class DataPreprocessor:
         
         return index_to_remove
     
-    def _concatenate_subtitle(self, list_time, list_subtitle):
+    def _concatenate_subtitle(self, list_time, list_subtitle, limit_duration=10000):
         '''
         Concatenate subtitle to get long sentences and not cut sentences
 
@@ -219,6 +220,8 @@ class DataPreprocessor:
             list of data containing time
         list_subtitle : list
             list of data containing string
+        limit_duration : int
+            maximum audio length/duration authorized
 
         Returns
         -------
@@ -235,7 +238,8 @@ class DataPreprocessor:
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
             if index+compt < len(list_subtitle)-1:
-                while list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= limit_duration and list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                    # Append next subtitle
                     subtitle += " " + list_subtitle[index+compt+1]
                     end_time = list_time[index+compt+1][1]
                     compt += 1

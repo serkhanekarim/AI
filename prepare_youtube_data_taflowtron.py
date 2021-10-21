@@ -104,10 +104,16 @@ def main(args):
         dir_audio_data_files = os.path.join(data_directory,language,filename,'clips')
         os.makedirs(dir_audio_data_files,exist_ok=True)
         path_audio_output = os.path.join(dir_audio_data_files,filename) + "." + AUDIO_FORMAT
-        list_new_audio_path = AudioPreprocessor().trim_audio(path_input=path_audio, 
-                                                             path_output=path_audio_output, 
-                                                             list_time=list_time)
+        list_trimmed_audio_path = AudioPreprocessor().trim_audio_wav(path_input=path_audio, 
+                                                                 path_output=path_audio_output, 
+                                                                 list_time=list_time)
         
+        
+        '''
+        Remove leading and trailing silence
+        '''
+        
+        [remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, path_output=trimmed_audio_path) for trimmed_audio_path in list_trimmed_audio_path]
         
         '''
         Convert audio data for taflowtron model
@@ -117,7 +123,7 @@ def main(args):
             list_total_new_audio_path = []
             dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
-            for new_audio_path in tqdm(list_new_audio_path):
+            for new_audio_path in tqdm(list_trimmed_audio_path):
                 base = os.path.basename(new_audio_path.split('|')[0])
                 filename = os.path.splitext(base)[0]
                 path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
@@ -131,7 +137,7 @@ def main(args):
         
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
-            list_total_new_audio_path = list_new_audio_path
+            list_total_new_audio_path = list_trimmed_audio_path
         #list_total_subtitle += list_subtitle
         
         #Remove downloaded files

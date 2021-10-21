@@ -6,6 +6,7 @@ import subprocess
 import tensorflow as tf
 
 from pydub import AudioSegment
+from pydub.silence import detect_leading_silence
 # import noisereduce as nr
 # import wavfile
 
@@ -235,14 +236,39 @@ class AudioPreprocessor:
         proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
         return float(proc)
         
-    def trim_audio(self, path_input, path_output, list_time):
+    def remove_lead_trail_audio_wav_silence(self, path_input, path_output):
+        '''
+        Method to remove lead and trail silence
+
+        Parameters
+        ----------
+        path_input : string
+            path of a waw audio to remove trail/lead silence
+        path_output : string
+            name of the processed audio
+
+        Returns
+        -------
+        None.
+
+        '''
+
+        trim_leading_silence: AudioSegment = lambda x: x[detect_leading_silence(x) :]
+        trim_trailing_silence: AudioSegment = lambda x: trim_leading_silence(x.reverse()).reverse()
+        strip_silence: AudioSegment = lambda x: trim_trailing_silence(trim_leading_silence(x))
+
+        audio = AudioSegment.from_wav(path_input)
+        newAudio = strip_silence(audio)
+        newAudio.export(path_output, format='wav') #Exports to a wav file in the current path.
+
+    def trim_audio_wav(self, path_input, path_output, list_time):
         '''
         Trim an audio
 
         Parameters
         ----------
         path_input : string
-            path of the audio to trim
+            path of a waw audio to trim
         path_output : string
             name of the trimmed audio
         list_time : list
@@ -268,6 +294,5 @@ class AudioPreprocessor:
         return list_new_audio_path
             # rate, data = wavfile.read('/home/serkhane/Repositories/marketing-analysis/DATA/youtube_data_taflowtron/en/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0/clips/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0_part_6.wav')
             # reduced_noise = nr.reduce_noise(y=data, sr=rate)
-        
-        
+
         
