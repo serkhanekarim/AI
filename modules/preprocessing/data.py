@@ -210,7 +210,7 @@ class DataPreprocessor:
         
         return index_to_remove
     
-    def _concatenate_subtitle(self, list_time, list_subtitle, limit_duration=10000):
+    def _concatenate_subtitle(self, list_time, list_subtitle, max_limit_duration, min_limit_duration):
         '''
         Concatenate subtitle to get long sentences and not cut sentences
 
@@ -220,8 +220,10 @@ class DataPreprocessor:
             list of data containing time
         list_subtitle : list
             list of data containing string
-        limit_duration : int
+        max_limit_duration : int
             maximum audio length/duration authorized
+        min_limit_duration : int
+            minimum audio length/duration authorized
 
         Returns
         -------
@@ -233,12 +235,18 @@ class DataPreprocessor:
         
         index = 0
         while index < len(list_subtitle):
+            #Concatenate subtile/audio with a limit of 10 seconds maximum
             compt = 0
             subtitle = list_subtitle[index]
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
             if index+compt < len(list_subtitle)-1:
-                while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= limit_duration and list_time[index+compt][1] == list_time[index+compt+1][0] and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= max_limit_duration \
+                    and list_time[index+compt][1] == list_time[index+compt+1][0] \
+                        and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                        #limit of 10 second
+                        #If beginning of next timestamp is the end of the actual timestamp
+                        #If actual subtitle does not end with an end chars
                     # Append next subtitle
                     subtitle += " " + list_subtitle[index+compt+1]
                     end_time = list_time[index+compt+1][1]
@@ -248,11 +256,15 @@ class DataPreprocessor:
             new_list_time.append((beg_time,end_time))
             new_list_subtitle.append(subtitle)
             index += compt + 1
-            
+        
+        #Remove audio smaller than min_limit_duration
+        new_list_subtitle = [subtitle for index,subtitle in enumerate(new_list_subtitle) if TimePreprocessor().convert_time_format(new_list_time[index][1]) - TimePreprocessor().convert_time_format(new_list_time[index][0]) >= min_limit_duration]
+        new_list_time = [time for time in new_list_time if TimePreprocessor().convert_time_format(time[1]) - TimePreprocessor().convert_time_format(time[0]) >= min_limit_duration]
+        
         return new_list_time, new_list_subtitle
         
     
-    def get_info_from_vtt(self, data, path_cleaner, concatenate=False):
+    def get_info_from_vtt(self, data, path_cleaner, concatenate=False, max_limit_duration=10000, min_limit_duration=1000):
         '''
         Get time of subtitile and subtitle
 
@@ -264,6 +276,10 @@ class DataPreprocessor:
             path of a cleaner (.tsv file)
         concatenate : boolean
             concatenate vtt sentences/subtitles by using time and end characters to make bigger sentence/subtitle
+        max_limit_duration : int
+            maximum audio length/duration authorized
+        min_limit_duration : int
+            minimum audio length/duration authorized
 
         Returns
         -------
@@ -299,7 +315,7 @@ class DataPreprocessor:
         Concatenation of sentence/subtitle
         '''
         if concatenate:
-            list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle)
+            list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle, max_limit_duration, min_limit_duration)
         
         return list_time, list_subtitle
         

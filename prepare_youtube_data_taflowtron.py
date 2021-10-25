@@ -52,7 +52,6 @@ def main(args):
     
     SEED = 42
     AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
-    #VOICE_ID = 0
        
     path_list_url = args.path_list_url
     language = args.language
@@ -62,19 +61,14 @@ def main(args):
     converter = args.converter
     path_hparam_file = args.path_hparam_file
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
-    # path_filename_youtube_cleaner = args.path_filename_youtube_cleaner
     
     '''
     Get audio and subtitle from youtube url
     '''
     list_url = DataReader(path_list_url).read_data_file()
-    list_url = [line[:-1] for line in list_url]
-    
-    # list_total_new_audio_path = []
-    # list_total_subtitle = []
+    list_url = [line[:-1] for line in list_url]    
     
     data_filelist = []
-    
     voice_id = 0
     
     for url in tqdm(list_url):
@@ -99,6 +93,7 @@ def main(args):
         '''
         Trim audio regarding vtt information
         '''
+        print("Trimming audio...")
         base = os.path.basename(path_audio)
         filename = os.path.splitext(base)[0]
         dir_audio_data_files = os.path.join(data_directory,language,filename,'clips')
@@ -112,8 +107,8 @@ def main(args):
         '''
         Remove leading and trailing silence
         '''
-        
-        [remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, path_output=trimmed_audio_path) for trimmed_audio_path in list_trimmed_audio_path]
+        print("Revoming leading and trailing silence...")
+        [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, path_output=trimmed_audio_path) for trimmed_audio_path in list_trimmed_audio_path]
         
         '''
         Convert audio data for taflowtron model
@@ -138,11 +133,7 @@ def main(args):
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
             list_total_new_audio_path = list_trimmed_audio_path
-        #list_total_subtitle += list_subtitle
         
-        #Remove downloaded files
-        #os.remove(path_audio)
-        #os.remove(path_subtitle)
     
         '''
         Create taflowtron filelist
@@ -183,28 +174,6 @@ def main(args):
         data_haparams = DataReader(path_hparam_file).read_data_file()
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_valid_filelist + '",\n')
-        # if language == 'en':
-        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
-        # else:
-        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
-        
-        # if batch_size is not None:
-        #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
-
-    # if path_symbols_file is not None:
-    #     '''
-    #     Update symbols
-    #     '''
-    #     data_symbols = DataReader(path_symbols_file).read_data_file()
-    #     pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
-    #     punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
-    #     special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
-        
-    #     unique_char = set("".join(data_info[ELEMENT_COLUMN]))
-    #     unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
-    #     unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
-        
-    #     DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
 
 
 if __name__ == "__main__":
@@ -230,13 +199,16 @@ if __name__ == "__main__":
     parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
     parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
     parser.add_argument("-path_youtube_cleaner", help="Path of a tsv file containing regex substitution", nargs='?')
-    # parser.add_argument("-path_filename_youtube_cleaner", help="Path of a tsv file containing regex substitution to clean filename", nargs='?')
-    parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", nargs='?')
+    parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", required=True, nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", nargs='?')
     parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
     parser.add_argument("-concatenate_vtt", help="Concatenate subtitles/sentences to avoid small or cut audio subtitles/sentences", required=True, nargs='?')
+    parser.add_argument("-silence_threshold", help="Silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
+    parser.add_argument("-max_limit_duration", help="Maximum length authorized of an audion in millisecond", required=False, nargs='?')
+    parser.add_argument("-min_limit_duration", help="Minimum length authorized of an audion in millisecond", required=False, nargs='?')
+    
     
     args = parser.parse_args()
     

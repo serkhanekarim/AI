@@ -236,7 +236,7 @@ class AudioPreprocessor:
         proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
         return float(proc)
         
-    def remove_lead_trail_audio_wav_silence(self, path_input, path_output):
+    def remove_lead_trail_audio_wav_silence(self, path_input, path_output, silence_threshold=-50):
         '''
         Method to remove lead and trail silence
 
@@ -246,6 +246,8 @@ class AudioPreprocessor:
             path of a waw audio to remove trail/lead silence
         path_output : string
             name of the processed audio
+        silence_threshold : int
+            The upper bound for how quiet is silent in dFBS
 
         Returns
         -------
@@ -253,7 +255,7 @@ class AudioPreprocessor:
 
         '''
 
-        trim_leading_silence: AudioSegment = lambda x: x[detect_leading_silence(x) :]
+        trim_leading_silence: AudioSegment = lambda x: x[detect_leading_silence(x, silence_threshold=silence_threshold) :]
         trim_trailing_silence: AudioSegment = lambda x: trim_leading_silence(x.reverse()).reverse()
         strip_silence: AudioSegment = lambda x: trim_trailing_silence(trim_leading_silence(x))
 
@@ -285,14 +287,22 @@ class AudioPreprocessor:
         format_audio = os.path.splitext(path_output)[1].split('.')[-1]
         Audio = AudioSegment.from_wav(path_input)
         for index,time in enumerate(list_time):
-            #print(str(time[1]) + "/" + str(list_time[-1][1]))
             newAudio = Audio[time[0]:time[1]]
             new_path = path_without_extension + "_trim_" + str(time[0]) + "_" + str(time[1]) + "." + format_audio
             list_new_audio_path.append(new_path)
             newAudio.export(new_path, format=format_audio) #Exports to a wav file in the current path.
             
         return list_new_audio_path
-            # rate, data = wavfile.read('/home/serkhane/Repositories/marketing-analysis/DATA/youtube_data_taflowtron/en/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0/clips/Morgan Freeman Roasts Denzel Washington _ AFI 2019 _ TNT-XIGWjzqKTp0_part_6.wav')
-            # reduced_noise = nr.reduce_noise(y=data, sr=rate)
+            
+    # def voice_activity_detection(self, ):
+    #     import webrtcvad
+    #     vad = webrtcvad.Vad()
+        
+    #     # Run the VAD on 10 ms of silence. The result should be False.
+    #     sample_rate = 16000
+    #     frame_duration = 10  # ms
+    #     frame = b'\x00\x00' * int(sample_rate * frame_duration / 1000)
+    #     print('Contains speech: %s' % (vad.is_speech(frame, sample_rate)))
+        
 
         
