@@ -61,6 +61,9 @@ def main(args):
     converter = args.converter
     path_hparam_file = args.path_hparam_file
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
+    silence_threshold = int(args.silence_threshold)
+    max_limit_duration = int(args.max_limit_duration)
+    min_limit_duration = int(args.min_limit_duration)
     
     '''
     Get audio and subtitle from youtube url
@@ -86,8 +89,13 @@ def main(args):
         '''
         Parse subtitles to get trim and text information
         '''
+        print("Extracting information from vtt files...")
         data_subtitle = DataReader(path_subtitle).read_data_file()
-        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,path_cleaner=path_youtube_cleaner,concatenate=concatenate_vtt)
+        list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
+                                                                        path_cleaner=path_youtube_cleaner,
+                                                                        concatenate=concatenate_vtt,
+                                                                        max_limit_duration=max_limit_duration, 
+                                                                        min_limit_duration=min_limit_duration)
         list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
         
         '''
@@ -108,7 +116,9 @@ def main(args):
         Remove leading and trailing silence
         '''
         print("Revoming leading and trailing silence...")
-        [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, path_output=trimmed_audio_path) for trimmed_audio_path in list_trimmed_audio_path]
+        [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
+                                                                 path_output=trimmed_audio_path,
+                                                                 silence_threshold=silence_threshold) for trimmed_audio_path in list_trimmed_audio_path]
         
         '''
         Convert audio data for taflowtron model
@@ -178,13 +188,7 @@ def main(args):
 
 if __name__ == "__main__":
     
-# 	'''
-#     ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
-#     -gender 'female' -directory_tacotron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
-#     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
-#     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
-#     -batch_size 8 -user_informations 'True'
-# 	'''
+#./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True' -concatenate_vtt 'True' -silence_threshold 25 -max_limit_duration 10000 -min_limit_duration 1000
 
     PROJECT_NAME = "youtube_data_taflowtron"
     
