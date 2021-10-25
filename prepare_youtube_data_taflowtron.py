@@ -188,7 +188,7 @@ def main(args):
 
 if __name__ == "__main__":
     
-#./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True' -concatenate_vtt 'True' -silence_threshold 25 -max_limit_duration 10000 -min_limit_duration 1000
+#./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True' -concatenate_vtt 'True' -silence_threshold '-25' -max_limit_duration 10000 -min_limit_duration 1000
 
     PROJECT_NAME = "youtube_data_taflowtron"
     
