@@ -5,6 +5,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 import re
+import csv
 
 from modules.Global.variable import Var
 from modules.reader.reader import DataReader
@@ -33,7 +34,7 @@ class DataCleaner:
         '''
         
         print('Start cleaning...')
-        obj = {'header':None, 'na_filter':False}
+        obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
         cleaner = DataReader(path_cleaner).read_data_file(**obj)
         len_cleaner = cleaner.shape[0]
 

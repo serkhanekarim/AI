@@ -230,6 +230,7 @@ class DataPreprocessor:
         None.
 
         '''
+        align_duration = 10
         new_list_time = []
         new_list_subtitle = []
         
@@ -243,10 +244,12 @@ class DataPreprocessor:
             if index+compt < len(list_subtitle)-1:
                 while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= max_limit_duration \
                     and list_time[index+compt][1] == list_time[index+compt+1][0] \
-                        and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                        and list_subtitle[index+compt][-1] not in self.END_CHARS \
+                            and (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(list_time[index+compt+1][0])) == align_duration:
                         #limit of 10 second
                         #If beginning of next timestamp is the end of the actual timestamp
                         #If actual subtitle does not end with an end chars
+                        #If duration is 10ms, subtitle from issue display of subtitle or.... ???
                     # Append next subtitle
                     subtitle += " " + list_subtitle[index+compt+1]
                     end_time = list_time[index+compt+1][1]
@@ -299,7 +302,7 @@ class DataPreprocessor:
             if re.search(r'\d\d\:\d\d\:\d\d\.\d\d\d --> \d\d\:\d\d\:\d\d\.\d\d\d', element):
                 list_time.append(re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element))
                 while data[index + compt] != '\n':
-                    subtitle += data[index + compt].replace('\n',' ')
+                    subtitle += data[index + compt]
                     compt += 1
                 list_subtitle.append(subtitle)
             index += 1
@@ -318,6 +321,32 @@ class DataPreprocessor:
             list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle, max_limit_duration, min_limit_duration)
         
         return list_time, list_subtitle
+    
+    def get_ITN_data(self, data_text, data_option=None, regex_match=re.compile('[^a-zA-Z-\']+')):
+        '''
+        Find ITN/symbols elements in text
+
+        Parameters
+        ----------
+        data_text : list
+            list containing text
+        data_option : list
+            list containing other data for instance audio path related to the data_text        
+        regex_match : string
+            regex to use to match required symbols
         
+        Returns
+        -------
+        list
+            list of ITN/symbols found
+
+        '''
+        
+        regex_match_only_digit = re.compile('^\d+\.?$')
+        
+        if data_option is not None:
+            return [word + "|" + sentence + "|" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
+        else:
+            return [word + "|" + sentence for sentence in tqdm(data_text) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
         
         

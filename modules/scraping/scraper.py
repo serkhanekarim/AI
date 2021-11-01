@@ -5,6 +5,8 @@ import yfinance as yf
 from modules.preprocessing.date import DatePreprocessor
 from modules.Global import variable
 
+from tqdm import tqdm
+
 class DataScraper:
     '''
     Class used to scrap data
@@ -12,7 +14,7 @@ class DataScraper:
     
     DATE_FORMAT = variable.Var().DATE_FORMAT
     
-    def __init__(self, dataframe):
+    def __init__(self, dataframe=None):
         self.dataframe = dataframe
     
     def add_scraped_data(self,
@@ -48,3 +50,15 @@ class DataScraper:
         print("Concatenation of stock data - DONE")
         
         return self.dataframe
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
