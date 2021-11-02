@@ -236,28 +236,28 @@ class DataPreprocessor:
         
         index = 0
         while index < len(list_subtitle):
-            #Concatenate subtile/audio with a limit of 10 seconds maximum
             compt = 0
             subtitle = list_subtitle[index]
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
-            if index+compt < len(list_subtitle)-1:
+            if index+compt < len(list_subtitle)-1 and (TimePreprocessor().convert_time_format(list_time[index+compt][1]) - TimePreprocessor().convert_time_format(list_time[index+compt][0])) != align_duration:
+                #If not out of index range and duration is not the aligned 10 ms one
                 while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= max_limit_duration \
                     and list_time[index+compt][1] == list_time[index+compt+1][0] \
-                        and list_subtitle[index+compt][-1] not in self.END_CHARS \
-                            and (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(list_time[index+compt+1][0])) == align_duration:
-                        #limit of 10 second
-                        #If beginning of next timestamp is the end of the actual timestamp
-                        #If actual subtitle does not end with an end chars
-                        #If duration is 10ms, subtitle from issue display of subtitle or.... ???
-                    # Append next subtitle
-                    subtitle += " " + list_subtitle[index+compt+1]
-                    end_time = list_time[index+compt+1][1]
-                    compt += 1
-                    if index+compt == len(list_subtitle)-1:
-                        break
-            new_list_time.append((beg_time,end_time))
-            new_list_subtitle.append(subtitle)
+                        and list_subtitle[index+compt][-1] not in self.END_CHARS:
+                            #Concatenate next subtitles if:
+                            #If limit of 10 second
+                            #If beginning of next timestamp is the end of the actual timestamp or FOR FUTURE MAYBE ADD CONCATENATION IF DIIF < 10 MS
+                            #If actual subtitle does not end with an end chars 
+                            if (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(list_time[index+compt+1][0])) != align_duration:
+                                #If duration is not 10ms, concatenation is done
+                                subtitle += " " + list_subtitle[index+compt+1]
+                                end_time = list_time[index+compt+1][1]
+                            compt += 1                                    
+                            if index+compt >= len(list_subtitle)-1:
+                                break
+                new_list_time.append((beg_time,end_time))
+                new_list_subtitle.append(subtitle)
             index += compt + 1
         
         #Remove audio smaller than min_limit_duration
@@ -306,13 +306,15 @@ class DataPreprocessor:
                     compt += 1
                 list_subtitle.append(subtitle)
             index += 1
-            
+        
         list_subtitle = DataCleaner().clean_text(data=list_subtitle,
                                             path_cleaner=path_cleaner)
             
         index_to_remove = self._useless_data(list_subtitle)
+        print(index_to_remove)
         list_time = [element[0] for index,element in enumerate(list_time) if index not in index_to_remove]
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
+        print(list_subtitle[100:400])
         
         '''
         Concatenation of sentence/subtitle
@@ -320,6 +322,7 @@ class DataPreprocessor:
         if concatenate:
             list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle, max_limit_duration, min_limit_duration)
         
+        print(list_subtitle[100:200])
         return list_time, list_subtitle
     
     def get_ITN_data(self, data_text, data_option=None, regex_match=re.compile('[^a-zA-Z-\']+')):
