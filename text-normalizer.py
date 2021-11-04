@@ -29,7 +29,8 @@ def main(args):
     print(unit_test)
     sentences_normalized = unit_test[unit_test.columns[0]].apply(lambda sentence : normalizer(sentence))
     sentences_target = unit_test[unit_test.columns[1]]
-    results_test = [(str(sentence_normalized) + "\t" + str(sentences_target[index]),print("FAIL TEST: " + str(sentence_normalized) + "\t" + str(sentences_target[index])))[0] 
+    results_test = [(str(unit_test[unit_test.columns[0]][index]) + "\t" + str(sentence_normalized) + "\t" + str(sentences_target[index]),
+                     print("FAIL TEST: " + str(unit_test[unit_test.columns[0]][index]) + " (Original)" + " | " + str(sentence_normalized) + " (Normalized)" + " | " + str(sentences_target[index]) + " (Expected Normalization)"))[0] 
                     for index,sentence_normalized in enumerate(tqdm(sentences_normalized)) if str(sentence_normalized) != str(sentences_target[index])]
     
     '''
