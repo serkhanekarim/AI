@@ -1,10 +1,52 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-class DataMethod:
+import os
+
+class Method:
     '''
     Class used to store general method
     '''
+    
+    def call_func(self, dispatcher, func):
+        '''
+        Call a function by using a string
+
+        Parameters
+        ----------
+        dispatcher : dictionnary
+            Dictionnary which contains function name to string key.
+        func : string
+            function to be called
+
+        Returns
+        -------
+        function value or string
+            Return the function to be called or error string
+
+        '''
+        try:
+            return dispatcher[func]
+        except:
+            return "Invalid function"
+        
+    def get_filename(self, path):
+        '''
+        Return filename of a path
+
+        Parameters
+        ----------
+        path : string
+            path of a file
+
+        Returns
+        -------
+        string
+            Name of the file without the extension
+
+        '''
+        base = os.path.basename(path.split('|')[0])
+        return os.path.splitext(base)[0]
     
     @staticmethod    
     def get_new_column_name(length_new_matrix, prefix):

@@ -14,6 +14,7 @@ from modules.scraping.media import MediaScraper
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
 from modules.preprocessing.time import TimePreprocessor
+from modules.Global.method import Method
 
 from sklearn.model_selection import train_test_split
 
@@ -130,8 +131,7 @@ def main(args):
             dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
             for new_audio_path in tqdm(list_trimmed_audio_path):
-                base = os.path.basename(new_audio_path.split('|')[0])
-                filename = os.path.splitext(base)[0]
+                filename = Method().get_filename(new_audio_path)
                 path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
                 list_total_new_audio_path.append(path_converted_audio)
                 if not os.path.isfile(path_converted_audio):

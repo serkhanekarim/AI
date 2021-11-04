@@ -124,7 +124,7 @@ class DataReader:
         
         print("Reading files...")        
         self.filetype = self.filetype or self._filetype_finder()
-        self.separator = self.separator or self._separator_finder() 
+        self.separator = self.separator or self._separator_finder()
         print("Reading files - DONE") 
         
         return self._extension_filetype_to_reader(filetype=self.filetype, separator=self.separator, **kwargs)
