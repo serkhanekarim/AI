@@ -3,6 +3,7 @@
 
 import os
 import argparse
+import csv
 
 from modules.Global.variable import Var
 from modules.Global.method import Method
@@ -24,19 +25,22 @@ def main(args):
     '''
     Get unit test from path_test and get failed test
     '''
-    obj = {'header':None}
+    obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
     unit_test = DataReader(path_file=path_test,filetype="sv",separator="\t").read_data_file(**obj)
-    print(unit_test)
     sentences_normalized = unit_test[unit_test.columns[0]].apply(lambda sentence : normalizer(sentence))
     sentences_target = unit_test[unit_test.columns[1]]
-    results_test = [(str(unit_test[unit_test.columns[0]][index]) + "\t" + str(sentence_normalized) + "\t" + str(sentences_target[index]),
-                     print("FAIL TEST: " + str(unit_test[unit_test.columns[0]][index]) + " (Original)" + " | " + str(sentence_normalized) + " (Normalized)" + " | " + str(sentences_target[index]) + " (Expected Normalization)"))[0] 
+    results_test = ["Original\tNormalized\tExpected Normalization"]
+    results_test += [(str(unit_test[unit_test.columns[0]][index]) + "\t" + str(sentence_normalized) + "\t" + str(sentences_target[index]),
+                     print("FAIL TEST: " + str(unit_test[unit_test.columns[0]][index]) + " - (Original)" + " ||| " + str(sentence_normalized) + " - (Normalized)" + " ||| " + str(sentences_target[index]) + " (Expected Normalization)"))[0] 
                     for index,sentence_normalized in enumerate(tqdm(sentences_normalized)) if str(sentence_normalized) != str(sentences_target[index])]
+    
+    if len(results_test)-1 == 0: print("ALL TEST(S) PASSED!")
+    else: print(str(len(results_test)-1) + "/" + str(unit_test.shape[0]) + " TEST(S) FAILED!")
     
     '''
     Write results test
     '''
-    test_filename = filename = Method().get_filename(path_test)
+    test_filename = Method().get_filename(path_test)
     filename_results = "results" + "_" + test_filename + ".txt"
     path_results = os.path.join(directory_of_results,filename_results) 
     DataWriter(results_test, path_results).write_data_file()

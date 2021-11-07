@@ -311,10 +311,10 @@ class DataPreprocessor:
                                             path_cleaner=path_cleaner)
             
         index_to_remove = self._useless_data(list_subtitle)
-        print(index_to_remove)
+        #print(index_to_remove)
         list_time = [element[0] for index,element in enumerate(list_time) if index not in index_to_remove]
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
-        print(list_subtitle[100:400])
+        #print(list_subtitle[100:400])
         
         '''
         Concatenation of sentence/subtitle
@@ -322,7 +322,7 @@ class DataPreprocessor:
         if concatenate:
             list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle, max_limit_duration, min_limit_duration)
         
-        print(list_subtitle[100:200])
+        #print(list_subtitle[100:200])
         return list_time, list_subtitle
     
     def get_ITN_data(self, data_text, data_option=None, regex_match=re.compile('[^a-zA-Z-\']+')):
@@ -348,8 +348,8 @@ class DataPreprocessor:
         regex_match_only_digit = re.compile('^\d+\.?$')
         
         if data_option is not None:
-            return [word + "|" + sentence + "|" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
+            return [word + "\t" + sentence + "\t" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
         else:
-            return [word + "|" + sentence for sentence in tqdm(data_text) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
+            return [word + "\t" + sentence for sentence in tqdm(data_text) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
         
         
