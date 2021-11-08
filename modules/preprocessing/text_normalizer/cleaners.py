@@ -17,7 +17,8 @@ from unidecode import unidecode
 from .numbers import normalize_numbers
 from .acronyms import normalize_acronyms
 from .datestime import normalize_datestime
-
+from .datestime import normalize_datestime
+from .urls import normalize_url
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r'\s+')
@@ -119,6 +120,7 @@ def transliteration_cleaners(text):
 
 def flowtron_cleaners(text):
     text = collapse_whitespace(text)
+    text = normalize_url(text)
     text = remove_hyphens(text)
     text = expand_datestime(text)
     text = expand_numbers(text)

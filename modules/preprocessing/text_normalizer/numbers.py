@@ -17,12 +17,10 @@ _dollars_re = re.compile(r'\$([0-9\.\,]*[0-9]+[ ]?{}?)'.format(_large_numbers), 
 
 _measurement_re = re.compile(r'([0-9\.\,]*[0-9]+(\s)?{}\b)'.format(_measurements), re.IGNORECASE)
 
-_ordinal_re = re.compile(r'[0-9]+(st|nd|rd|th)')
-_number_re = re.compile(r"[0-9]+'s|[0-9]+")
+_ordinal_re = re.compile(r'\d+(st|nd|rd|th)')
+_number_re = re.compile(r"(\b([12]\d)?\d0'?s\b)|\d+")
 
-_percent_re = re.compile(r'\d( ?%)')
-
-_century_re = re.compile(r'\b[23456789]0s\b')
+_percent_re = re.compile(r'\d(\s?%)')
 
 def _remove_commas(m):
   return m.group(1).replace(',', '')
@@ -73,15 +71,12 @@ def _expand_measurement(m):
     return "{} {}".format(number, measurement)
 
 def _expand_percents(m):   
-    if m.group(1)[0] == ' ':
+    if re.match(r'\s',m.group(1)[0]) is None:
         #if there is a space between the digit and the percent symbol
         return m.group(0).replace("%","percent")
     else:
         #Else add a space
         return m.group(0).replace("%"," percent")
-
-def _expand_century(m):
-    _, number, suffix = re.split(r"(\d+(?:'\d+)?)", m.group(0))
 
 
 def _expand_number(m):
@@ -104,7 +99,7 @@ def _expand_number(m):
         num = re.sub(r',', '', num)
         text = num
 
-    if suffix == "'s" and text[-1] == 'y':
+    if re.match("'?s",suffix) is not None and text[-1] == 'y':
         #For centuries
         text = text[:-1] + 'ies'
 
