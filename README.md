@@ -1,6 +1,6 @@
 Clone the full repo by opening a console on Ubuntu and run:
 
-git clone https://github.com/serkhanekarim/marketing-analysis.git
+git clone https://github.com/serkhanekarim/ai.git
 
 Create a python3 env and open a console on the marketing-analysis folder and run :
 make install
