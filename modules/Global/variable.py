@@ -2,10 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from modules.preprocessing.text_normalizer.cleaners import basic_cleaners
-from modules.preprocessing.text_normalizer.cleaners import transliteration_cleaners
-from modules.preprocessing.text_normalizer.cleaners import flowtron_cleaners
-from modules.preprocessing.text_normalizer.cleaners import english_cleaners
+# import sys
+# dir_cleaners = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","tts","flowtron","text")
+# print(dir_cleaners)
+# sys.path.append(dir_cleaners)
+# from cleaners import basic_cleaners
+# from cleaners import transliteration_cleaners
+# from cleaners import flowtron_cleaners
+# from cleaners import english_cleaners
 
 
 class Var:
@@ -60,9 +64,9 @@ class Var:
     
     END_CHARS = [".","?","!"]
     
-    TEXT_NORMALIZATION_CLEANERS_FUNCTION_MAPPINGS = {
-        'basic_cleaners': basic_cleaners,
-        'transliteration_cleaners': transliteration_cleaners,
-        'flowtron_cleaners': flowtron_cleaners,
-        'english_cleaners': english_cleaners
-    }
+    # TEXT_NORMALIZATION_CLEANERS_FUNCTION_MAPPINGS = {
+    #     'basic_cleaners': basic_cleaners,
+    #     'transliteration_cleaners': transliteration_cleaners,
+    #     'flowtron_cleaners': flowtron_cleaners,
+    #     'english_cleaners': english_cleaners
+    # }
