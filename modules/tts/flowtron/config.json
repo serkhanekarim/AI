@@ -47,7 +47,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers": "1",
+        "n_speakers": 1,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,

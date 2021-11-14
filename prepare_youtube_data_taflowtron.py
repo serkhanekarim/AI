@@ -197,7 +197,7 @@ def main(args):
         data_haparams = DataReader(path_hparam_file).read_data_file()
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_valid_filelist + '",\n')
-        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "n_speakers": ', value = '"' + str(voice_id + 1) + '",\n')
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "n_speakers": ', value = ' ' + str(voice_id + 1) + ',\n')
 
 
 if __name__ == "__main__":
