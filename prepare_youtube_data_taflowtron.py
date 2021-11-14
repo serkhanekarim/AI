@@ -65,6 +65,7 @@ def main(args):
     silence_threshold = int(args.silence_threshold)
     max_limit_duration = int(args.max_limit_duration)
     min_limit_duration = int(args.min_limit_duration)
+    nb_speaker = int(args.nb_speaker)
     
     '''
     Get audio and subtitle from youtube url
@@ -156,7 +157,7 @@ def main(args):
         Create taflowtron filelist
         '''
         data_filelist += [list_total_new_audio_path[index] + "|" + subtitle + "|" + str(voice_id) for index,subtitle in enumerate(list_subtitle)]
-        voice_id += 1
+        if nb_speaker > 1: voice_id += 1
         
     
     ITN_symbols = set(ITN_symbols)
@@ -196,6 +197,7 @@ def main(args):
         data_haparams = DataReader(path_hparam_file).read_data_file()
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_valid_filelist + '",\n')
+        data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        "n_speakers": ', value = '"' + str(voice_id + 1) + '",\n')
 
 
 if __name__ == "__main__":
@@ -224,6 +226,7 @@ if __name__ == "__main__":
     parser.add_argument("-silence_threshold", help="Silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
     parser.add_argument("-max_limit_duration", help="Maximum length authorized of an audion in millisecond", required=False, nargs='?')
     parser.add_argument("-min_limit_duration", help="Minimum length authorized of an audion in millisecond", required=False, nargs='?')
+    parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, nargs='?')
     
     
     args = parser.parse_args()
