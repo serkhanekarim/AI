@@ -24,8 +24,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/youtube_audio_text_train_filelist_en.txt",
-        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/youtube_audio_text_valid_filelist_en.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_train_filelist_en.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_valid_filelist_en.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
