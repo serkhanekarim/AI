@@ -8,7 +8,7 @@
         "grad_clip_val": 1,
         "sigma": 1.0,
         "iters_per_checkpoint": 1000,
-        "batch_size": 12,
+        "batch_size": 6,
         "seed": 1234,
         "checkpoint_path": "",
         "ignore_layers": [],
@@ -47,7 +47,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers": 1,
+        "n_speakers":  1,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,
