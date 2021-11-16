@@ -70,9 +70,9 @@ if __name__ == "__main__":
     
     directory_of_script = os.path.dirname(os.path.realpath(__file__))
     directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
-    directory_of_data = os.path.join(directory_of_script,"DATA",PROJECT_NAME)
+    #directory_of_data = os.path.join(directory_of_script,"DATA",PROJECT_NAME)
     os.makedirs(directory_of_results,exist_ok=True)
-    os.makedirs(directory_of_data,exist_ok=True)
+    #os.makedirs(directory_of_data,exist_ok=True)
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-path_test", help="Path of a file containing Youtube urls", required=True, nargs='?')
