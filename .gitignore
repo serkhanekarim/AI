@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 
 #Jupyter Notebook checkpoint
-.ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
 #Ignore DATA folder which contain big data
 DATA/
