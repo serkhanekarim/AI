@@ -3,12 +3,9 @@
 
 import os
 import argparse
-from scipy.io.wavfile import write
-import torch
-import pandas as pd
-import csv
 
 from modules.preprocessing.audio import AudioPreprocessor
+from modules.preprocessing.preprocess_audio import preprocess_audio
 from modules.preprocessing.data import DataPreprocessor
 from modules.scraping.media import MediaScraper
 from modules.reader.reader import DataReader
@@ -19,7 +16,7 @@ from modules.Global.method import Method
 from sklearn.model_selection import train_test_split
 
 from tqdm import tqdm
-    
+
 def main(args):
     '''
     Prepare youtube data for Tacotron2 and Flowtron
@@ -119,9 +116,11 @@ def main(args):
         Remove leading and trailing silence
         '''
         print("Revoming leading and trailing silence...")
-        [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
-                                                                 path_output=trimmed_audio_path,
-                                                                 silence_threshold=silence_threshold) for trimmed_audio_path in list_trimmed_audio_path]
+        preprocess_audio(file_list=list_trimmed_audio_path,
+                         silence_audio_size=0)
+        # [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
+        #                                                          path_output=trimmed_audio_path,
+        #                                                          silence_threshold=silence_threshold) for trimmed_audio_path in list_trimmed_audio_path]
         
         '''
         Convert audio data for taflowtron model
@@ -171,7 +170,7 @@ def main(args):
     # Now since we want the valid and test size to be equal (10% each of overall data). 
     # we have to define valid_size=0.5 (that is 50% of remaining data)
     X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
-    
+
     '''
     Write Training, Test, and validation file and ITN symbols file
     '''
@@ -179,17 +178,17 @@ def main(args):
     filename_valid = "youtube_audio_text_valid_filelist_" + language + ".txt"
     filename_test = "youtube_audio_text_test_filelist_" + language + ".txt"
     filename_ITN_symbols = "youtube_audio_ITN_symbols_" + language + ".txt"
-    
+
     path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
     path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
-    path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)    
-    path_ITN_symbols = os.path.join(directory_of_results,filename_ITN_symbols)    
-    
+    path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)
+    path_ITN_symbols = os.path.join(directory_of_results,filename_ITN_symbols)
+
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
     DataWriter(X_test, path_test_filelist).write_data_file()
     DataWriter(ITN_symbols, path_ITN_symbols).write_data_file()
-    
+
     if path_hparam_file is not None:
         '''
         Update hparams with filelist and batch size
