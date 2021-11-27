@@ -13,6 +13,7 @@ from modules.writer.writer import DataWriter
 from modules.preprocessing.time import TimePreprocessor
 from modules.Global.method import Method
 
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from tqdm import tqdm
@@ -70,9 +71,11 @@ def main(args):
     list_url = DataReader(path_list_url).read_data_file()
     list_url = [line[:-1] for line in list_url]    
     
+    data_information = pd.DataFrame()
     data_filelist = []
     ITN_symbols = []
     voice_id = 0
+    total_set_audio_length = 0
     
     for url in tqdm(list_url):
         
@@ -113,14 +116,22 @@ def main(args):
         
         
         '''
-        Remove leading and trailing silence
+        Add and/or Remove leading and trailing silence and/or convert audio
         '''
-        print("Revoming leading and trailing silence...")
-        preprocess_audio(file_list=list_trimmed_audio_path,
-                         silence_audio_size=0)
+        
+        # print("Add and/or Revoming leading and trailing silence and/or Convert audio...")
+        # preprocess_audio(file_list=list_trimmed_audio_path,
+        #                   silence_audio_size=0)
+        
         # [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
         #                                                          path_output=trimmed_audio_path,
         #                                                          silence_threshold=silence_threshold) for trimmed_audio_path in list_trimmed_audio_path]
+        
+        [AudioPreprocessor().add_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
+                                                                  path_output=trimmed_audio_path,
+                                                                  silence_duration=500,
+                                                                  before=True, 
+                                                                  after=True) for trimmed_audio_path in list_trimmed_audio_path]
         
         '''
         Convert audio data for taflowtron model
@@ -128,7 +139,7 @@ def main(args):
         if converter.lower() == 'true':
             print("Audio conversion...")
             list_total_new_audio_path = []
-            dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
+            dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
             for new_audio_path in tqdm(list_trimmed_audio_path):
                 filename = Method().get_filename(new_audio_path)
@@ -139,7 +150,8 @@ def main(args):
                                                       path_output=path_converted_audio,
                                                       sample_rate=22050, 
                                                       channel=1, 
-                                                      bits=16)    
+                                                      bits=16)
+                    
         
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
@@ -153,13 +165,26 @@ def main(args):
         ITN_symbols += DataPreprocessor().get_ITN_data(data_text=list_subtitle, data_option=list_total_new_audio_path)
     
         '''
-        Create taflowtron filelist
+        Create taflowtron filelist and data information
         '''
+        list_duration = [(time[1]-time[0])/1000 for time in list_time]
+        list_total_video_extraction = [sum(list_duration)/3600]*len(list_duration)
+        total_set_audio_length += sum(list_duration)
+        mem_info = pd.DataFrame({"Audio Path":list_total_new_audio_path,
+                                 "Text":list_subtitle,
+                                 "Speaker ID":voice_id,
+                                 "Duration (seconds)":list_duration,
+                                 "Total Video Extraction Duration (hours)":list_total_video_extraction},
+                                columns=["Audio Path","Text","Speaker ID", "Duration (seconds)", "Total Video Extraction Duration (hours)"])
+        
+        data_information = data_information.append(mem_info)
+        
         data_filelist += [list_total_new_audio_path[index] + "|" + subtitle + "|" + str(voice_id) for index,subtitle in enumerate(list_subtitle)]
         if nb_speaker > 1: voice_id += 1
         
     
     ITN_symbols = set(ITN_symbols)
+    data_information["Total Set Extraction Duration (hours)"] = total_set_audio_length/3600
         
     '''
     Train, test, validation splitting
@@ -172,22 +197,25 @@ def main(args):
     X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
 
     '''
-    Write Training, Test, and validation file and ITN symbols file
+    Write Training, Test, and validation file and ITN symbols file and data information
     '''
     filename_train = "youtube_audio_text_train_filelist_" + language + ".txt"
     filename_valid = "youtube_audio_text_valid_filelist_" + language + ".txt"
     filename_test = "youtube_audio_text_test_filelist_" + language + ".txt"
     filename_ITN_symbols = "youtube_audio_ITN_symbols_" + language + ".txt"
+    filename_data_information = "youtube_audio_data_information_" + language + ".tsv"
 
     path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
     path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
     path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)
     path_ITN_symbols = os.path.join(directory_of_results,filename_ITN_symbols)
+    path_data_information = os.path.join(directory_of_results,filename_data_information)
 
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
     DataWriter(X_test, path_test_filelist).write_data_file()
     DataWriter(ITN_symbols, path_ITN_symbols).write_data_file()
+    DataWriter(data_information, path_data_information, header=True).write_data_file()
 
     if path_hparam_file is not None:
         '''

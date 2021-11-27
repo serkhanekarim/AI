@@ -262,6 +262,44 @@ class AudioPreprocessor:
         audio = AudioSegment.from_wav(path_input)
         newAudio = strip_silence(audio)
         newAudio.export(path_output, format='wav') #Exports to a wav file in the current path.
+        
+    def add_lead_trail_audio_wav_silence(self, path_input, path_output, silence_duration=250, before=True, after=True):
+        '''
+        Method to add lead and/or trail silence
+
+        Parameters
+        ----------
+        path_input : string
+            path of a waw audio to remove trail/lead silence
+        path_output : string
+            name of the processed audio
+        silence_duration: int
+            Duration to add in milliseconds
+        before: boolean
+            Boolean for adding silence at the beginning or not
+        after: boolean
+            Boolean for adding silence at the ending or not
+
+        Returns
+        -------
+        None.
+
+        '''
+        
+        # create silence audio segment
+        silence_segment = AudioSegment.silent(duration=silence_duration)  #duration in milliseconds
+        
+        #read wav file to an audio segment
+        audio = AudioSegment.from_wav(path_input)
+        
+        #Add above two audio segments
+        if before:
+            audio = silence_segment + audio
+        if after:
+            audio = audio + silence_segment
+        
+        #Either save modified audio
+        audio.export(path_output, format="wav")
 
     def trim_audio_wav(self, path_input, path_output, list_time):
         '''
