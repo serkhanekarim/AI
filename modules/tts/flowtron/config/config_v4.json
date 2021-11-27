@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_4_v4_10_video_jacko/outdir",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_4_v4_10_video_jacko/outdir/",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 9e-5,
