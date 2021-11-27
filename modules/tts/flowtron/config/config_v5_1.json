@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_5_v5_1_10_new_video_noconcate_addsilence_jacko_warm_ljs",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_5_v5_1_10_new_video_noconcate_addsilence_jacko_warm_ljs/outdir/",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-4,
