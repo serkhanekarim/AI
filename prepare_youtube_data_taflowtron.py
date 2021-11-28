@@ -3,6 +3,7 @@
 
 import os
 import argparse
+import shutil
 
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.preprocess_audio import preprocess_audio
@@ -139,7 +140,7 @@ def main(args):
         if converter.lower() == 'true':
             print("Audio conversion...")
             list_total_new_audio_path = []
-            dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips')
+            dir_audio_data_files_converted = os.path.join(data_directory,language,filename,'clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
             for new_audio_path in tqdm(list_trimmed_audio_path):
                 filename = Method().get_filename(new_audio_path)
@@ -151,7 +152,8 @@ def main(args):
                                                       sample_rate=22050, 
                                                       channel=1, 
                                                       bits=16)
-                    
+            shutil.rmtree(dir_audio_data_files)
+            os.rename(dir_audio_data_files_converted,dir_audio_data_files)
         
         else:
             #Get a full list of all path audio and subtitles for taflowtron filelist
