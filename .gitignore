@@ -5,7 +5,7 @@ __pycache__/
 #Jupyter Notebook checkpoint
 **/.ipynb_checkpoints/
 
-#Ignore DATA folder which contain big data
+#Ignore following folders
 DATA/
 logs/
 results/

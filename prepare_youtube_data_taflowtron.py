@@ -16,6 +16,8 @@ from modules.Global.method import Method
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from scipy.io import wavfile
+import noisereduce as nr
 
 from tqdm import tqdm
 
@@ -64,6 +66,7 @@ def main(args):
     path_hparam_file = args.path_hparam_file
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
     silence = args.silence.lower()
+    noise = args.noise.lower() == "true"
     name_train_param_config = args.name_train_param_config
     name_data_config = args.name_data_config
     warmstart_model = args.warmstart_model
@@ -125,7 +128,6 @@ def main(args):
                                                                      path_output=path_audio_output,
                                                                      list_time=list_time)
         
-        
         '''
         Add and/or Remove leading and trailing silence and/or convert audio
         '''
@@ -164,6 +166,16 @@ def main(args):
                                                       bits=16)
             shutil.rmtree(dir_audio_data_files)
             os.rename(dir_audio_data_files_converted,dir_audio_data_files)        
+        
+        '''
+        Remove Noise
+        '''
+        if noise:
+            print("Revoming noise...")
+            for audio_path in tqdm(list_trimmed_audio_path):
+                rate, data = wavfile.read(audio_path)
+                reduced_noise = nr.reduce_noise(y=data, sr=rate)
+                wavfile.write(audio_path, rate, reduced_noise)
         
         '''
         Get ITN symbols from subtitles
@@ -283,8 +295,9 @@ if __name__ == "__main__":
     parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
     parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
     parser.add_argument("-concatenate_vtt", help="Concatenate subtitles/sentences to avoid small or cut audio subtitles/sentences", required=True, nargs='?')
-    parser.add_argument("-silence", help="add or remove silence", required=False, choices=['add', 'remove'],nargs='?')
+    parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
     parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
+    parser.add_argument("-noise", help="Remove noise", required=True,nargs='?')
     parser.add_argument("-max_limit_duration", help="Maximum length authorized of an audion in millisecond", required=False, default=10000, type=int, nargs='?')
     parser.add_argument("-min_limit_duration", help="Minimum length authorized of an audion in millisecond", required=False, default=1000, type=int, nargs='?')
     parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, type=int, nargs='?')

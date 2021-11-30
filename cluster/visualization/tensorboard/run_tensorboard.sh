@@ -12,7 +12,7 @@
 # Usage:
 # Open a terminal in the same directory as ./run_tensorboard.sh and run:
 #
-# ./run_tensorboard /home/ks1/models/tts/flowtron/ 'abc@140.30.20.10' 'password123'
+# ./run_tensorboard.sh /home/ks1/models/tts/flowtron/ 'abc@140.30.20.10' 'password123'
 #
 
 
@@ -44,5 +44,5 @@ mkdir -p $HOME/$dir_log_local
 sshpass -p "$password_cluster" rsync -avr --exclude={'model_*','*.pt'} $remote_address:$dir_tensorboard_logs $HOME/$dir_log_local
 
 pkill -9 -x 'tensorboard'
-tensorboard --logdir=$HOME/$dir_log --port 8080 & (sleep 2; firefox --new-window http://localhost:8080/)
+tensorboard --logdir=$HOME/$dir_log --port 8080 & (sleep 5; firefox --new-window http://localhost:8080/)
 
