@@ -125,25 +125,26 @@ class DataPreprocessor:
         Returns
         -------
         Pandas dataframe
-            dataframe containg information about user in LJ Speech Dataset format
+            dataframe containg information about user in taflowtron filelist format
 
         '''
         
         table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
         return table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
     
-    def convert_data_mcv_to_lsj(self,
+    def convert_data_mcv_to_taflowtron(self,
                                 user_column, 
                                 path_column, 
                                 element_column,
                                 data_directory,
                                 data_directory_converted,
+                                tts,
                                 option_column=None,
                                 option=None,
                                 format_conversion=".wav"):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
-        into LJ Speech Dataset audio information format
+        into taflowtron fileslist format
 
         Parameters
         ----------
@@ -157,6 +158,8 @@ class DataPreprocessor:
             directory containing audio data
         data_directory_converted : string
             directory containing converted audio data
+        tts : string
+            name of the tts to use; flowtron or tacotron2
         option_column : string
             Name of an additional column to consider to find user
         option : string
@@ -180,14 +183,19 @@ class DataPreprocessor:
         data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2]},
                                   columns=[user_column, element_column, option_column])
         
-        user = self._find_max_user(list_unique_user, option)
-        
-        return self._get_information_from_user(user, 
-                                               user_column, 
-                                               path_column, 
-                                               element_column,
-                                               data_directory_converted,
-                                               format_conversion), data_info
+        if tts == "tacotron2":
+            user = self._find_max_user(list_unique_user, option)
+            
+            return self._get_information_from_user(user, 
+                                                   user_column, 
+                                                   path_column, 
+                                                   element_column,
+                                                   data_directory_converted,
+                                                   format_conversion), data_info
+        if tts == "flowtron":
+            exit()
+            #TO FINISH
+            
     
     def _useless_data(self, data):
         '''
@@ -346,10 +354,11 @@ class DataPreprocessor:
         '''
         
         regex_match_only_digit = re.compile('^\d+\.?$')
+        regex_match_punctuation = re.compile('[a-zA-Z]{3,}[,.;:]')
         
         if data_option is not None:
-            return [word + "\t" + sentence + "\t" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
+            return [word + "\t" + sentence + "\t" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None and re.search(regex_match_punctuation,word) is None]
         else:
-            return [word + "\t" + sentence for sentence in tqdm(data_text) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None]
+            return [word + "\t" + sentence for sentence in tqdm(data_text) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None and re.search(regex_match_punctuation,word) is None]
         
         

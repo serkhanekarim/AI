@@ -62,9 +62,9 @@ def main(args):
     path_hparam_file = args.path_hparam_file
     path_symbols_file = args.path_symbols_file
     batch_size = args.batch_size
-    file_lister = args.file_lister
+    file_lister = args.file_lister.lower() == "true"
     converter = args.converter
-    user_informations = args.user_informations
+    user_informations = args.user_informations.lower() == "true"
     
     dir_audio_data_files = os.path.join(data_directory,language,'clips')
     dir_audio_data_files_converted = os.path.join(data_directory,language,'clips_converted')
@@ -81,17 +81,17 @@ def main(args):
     '''
     Conversion of Mozilla Common Voice audio data information into LSJ format for taflowtron training
     '''
-    if file_lister.lower() == 'true' or user_informations.lower() == 'true':
+    if file_lister or user_informations:
         print("Find the max user...")
-        data_info_lsj, data_info_user = DataPreprocessor(data_info).convert_data_mcv_to_lsj(user_column=USER_COLUMN, 
-                                                                            path_column=PATH_COLUMN, 
-                                                                            element_column=ELEMENT_COLUMN,
-                                                                            data_directory=dir_audio_data_files,
-                                                                            data_directory_converted=dir_audio_data_files_converted,
-                                                                            option_column=OPTION_COLUMN,
-                                                                            option=gender)
+        data_info_lsj, data_info_user = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN, 
+                                                                                                    path_column=PATH_COLUMN, 
+                                                                                                    element_column=ELEMENT_COLUMN,
+                                                                                                    data_directory=dir_audio_data_files,
+                                                                                                    data_directory_converted=dir_audio_data_files_converted,
+                                                                                                    option_column=OPTION_COLUMN,
+                                                                                                    option=gender)
         
-        if user_informations.lower() == "true":
+        if user_informations:
             filename_user_information = "mcv_user_voice_informations_" + language + ".tsv"
             DataWriter(data_info_user, os.path.join(directory_of_results,filename_user_information)).write_data_file()
         

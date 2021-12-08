@@ -48,12 +48,23 @@ class MediaScraper:
         youtube_id = subprocess.check_output(command_get_id, text=True, shell=True)[:-1]
         
         filename_audio = os.path.join(directory_output,youtube_id + "." + audio_format)
+        filename_subtitle = os.path.join(directory_output,youtube_id + "." + subtitle_language + "." + "vtt") 
         
-        if os.path.isfile(filename_audio):
+        if os.path.isfile(filename_audio) and os.path.isfile(filename_subtitle):
+            print("File: " + filename_audio + " already exists")
+            print("File: " + filename_subtitle + " already exists")
+            path_subtitle = os.path.join(directory_output,filename_subtitle)
+            path_audio = os.path.join(directory_output,filename_audio)            
+            return path_subtitle, path_audio
+            
+        if not os.path.isfile(filename_audio) and not os.path.isfile(filename_subtitle):
+            command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + "'" + os.path.join(directory_output,"%(id)s.%(ext)s") + "'"
+        if not os.path.isfile(filename_audio) and os.path.isfile(filename_subtitle):
+            print("File: " + filename_subtitle + " already exists")
+            command = "youtube-dl " + url + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + "'" + os.path.join(directory_output,"%(id)s.%(ext)s") + "'"
+        if os.path.isfile(filename_audio) and not os.path.isfile(filename_subtitle):
             print("File: " + filename_audio + " already exists")
             command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + "'" + os.path.join(directory_output,"%(id)s.%(ext)s") + "' --skip-download"
-        else:
-            command = "youtube-dl " + url + " --write-sub --sub-lang " + subtitle_language + " --extract-audio --audio-format " + audio_format + " --audio-quality 0 --output " + "'" + os.path.join(directory_output,"%(id)s.%(ext)s") + "'"          
             
         print("Downloading youtube data...")
         proc = ''

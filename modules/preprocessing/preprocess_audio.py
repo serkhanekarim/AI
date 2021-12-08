@@ -11,12 +11,6 @@ trim_hop_size = 256
 trim_top_db = 23
 
 def preprocess_audio(file_list, silence_audio_size):
-    # for F in file_list:
-    #     print(F)
-    #     f = open(F)
-    #     R = f.readlines()
-    #     f.close()
-    #     print('='*5+F+'='*5)
 
     for i, r in enumerate(tqdm(file_list)):
         wav_file = r.split('|')[0]
@@ -27,9 +21,6 @@ def preprocess_audio(file_list, silence_audio_size):
         data_ = np.append(data_, [0.]*silence_audio_size)
         data_ = data_.astype(dtype=np.int16)
         write(wav_file, sr, data_)
-        #print(len(data),len(data_))
-        # if(i%100 == 0):
-        #     print (i)
 
 if __name__ == "__main__":
     """

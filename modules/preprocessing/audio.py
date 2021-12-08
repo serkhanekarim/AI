@@ -7,8 +7,9 @@ import tensorflow as tf
 
 from pydub import AudioSegment
 from pydub.silence import detect_leading_silence
-# import noisereduce as nr
-# import wavfile
+from scipy.io import wavfile
+import noisereduce as nr
+import librosa
 
 class AudioPreprocessor:
     '''
@@ -300,6 +301,27 @@ class AudioPreprocessor:
         
         #Either save modified audio
         audio.export(path_output, format="wav")
+        
+    def reduce_audio_noise(self, path_input, path_output):
+        '''
+        Reduce background noise from audio
+
+        Parameters
+        ----------
+        path_input : string
+            path of a waw audio to trim
+        path_output : string
+            name of the reduced noise audio
+
+        Returns
+        -------
+        None.
+
+        '''
+        
+        data, rate = librosa.core.load(path_input)
+        reduced_noise = nr.reduce_noise(y=data, sr=rate)
+        wavfile.write(path_output, rate, reduced_noise)
 
     def trim_audio_wav(self, path_input, path_output, list_time):
         '''

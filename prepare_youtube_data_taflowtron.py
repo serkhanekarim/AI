@@ -16,9 +16,6 @@ from modules.Global.method import Method
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from scipy.io import wavfile
-import noisereduce as nr
-
 from tqdm import tqdm
 
 def main(args):
@@ -129,6 +126,15 @@ def main(args):
                                                                      list_time=list_time)
         
         '''
+        Remove Noise
+        '''
+        if noise:
+            print("Revoming noise...")
+            [AudioPreprocessor().reduce_audio_noise(path_input=audio_path,
+                                                    path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
+                
+        
+        '''
         Add and/or Remove leading and trailing silence and/or convert audio
         '''
         if silence == "remove":
@@ -145,7 +151,7 @@ def main(args):
                                                                       path_output=trimmed_audio_path,
                                                                       silence_duration=silence_threshold,
                                                                       before=True, 
-                                                                      after=True) for trimmed_audio_path in list_trimmed_audio_path]
+                                                                      after=True) for trimmed_audio_path in tqdm(list_trimmed_audio_path)]
         
         '''
         Convert audio data for taflowtron model
@@ -165,17 +171,7 @@ def main(args):
                                                       channel=1, 
                                                       bits=16)
             shutil.rmtree(dir_audio_data_files)
-            os.rename(dir_audio_data_files_converted,dir_audio_data_files)        
-        
-        '''
-        Remove Noise
-        '''
-        if noise:
-            print("Revoming noise...")
-            for audio_path in tqdm(list_trimmed_audio_path):
-                rate, data = wavfile.read(audio_path)
-                reduced_noise = nr.reduce_noise(y=data, sr=rate)
-                wavfile.write(audio_path, rate, reduced_noise)
+            os.rename(dir_audio_data_files_converted,dir_audio_data_files)
         
         '''
         Get ITN symbols from subtitles
