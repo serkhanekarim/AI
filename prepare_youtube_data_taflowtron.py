@@ -64,6 +64,7 @@ def main(args):
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
     silence = args.silence.lower()
     noise = args.noise.lower() == "true"
+    audio_normalization = args.audio_normalization.lower() == "true"
     name_train_param_config = args.name_train_param_config
     name_data_config = args.name_data_config
     warmstart_model = args.warmstart_model
@@ -132,13 +133,32 @@ def main(args):
             print("Revoming noise...")
             [AudioPreprocessor().reduce_audio_noise(path_input=audio_path,
                                                     path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
-                
+            
+        '''
+        Normalize audio
+        '''
+        if audio_normalization:
+            print("Audio Normalization...")
+            [AudioPreprocessor().normalize_audio(path_input=audio_path,
+                                                 path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
         
         '''
         Add and/or Remove leading and trailing silence and/or convert audio
         '''
         if silence == "remove":
-            print("Revoming leading and trailing silence and convert audio...")
+            print("Revoming leading/middle/trailing silence and convert audio...")
+            dir_audio_data_files_converted = os.path.join(data_directory,language,source,name_data_config,youtube_code,'clips_trimmed')
+            os.makedirs(dir_audio_data_files_converted,exist_ok=True)
+            for new_audio_path in tqdm(list_trimmed_audio_path):
+                filename = Method().get_filename(new_audio_path)
+                path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
+                if not os.path.isfile(path_converted_audio):
+                    #Need to update if converted file already exist
+                    AudioPreprocessor().trim_silence(path_input=new_audio_path,
+                                                     path_output=path_converted_audio)                    
+            shutil.rmtree(dir_audio_data_files)
+            os.rename(dir_audio_data_files_converted,dir_audio_data_files)
+            
             preprocess_audio(file_list=list_trimmed_audio_path,silence_audio_size=0)
         
             # [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
@@ -213,18 +233,18 @@ def main(args):
     Train, test, validation splitting
     '''
     # In the first step we will split the data in training and remaining dataset
-    X_train, X_rem = train_test_split(data_filelist,train_size=0.8, random_state=SEED)
+    X_train, X_valid = train_test_split(data_filelist,train_size=0.8, random_state=SEED)
 
     # Now since we want the valid and test size to be equal (10% each of overall data). 
     # we have to define valid_size=0.5 (that is 50% of remaining data)
-    X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
+    #X_valid, X_test = train_test_split(X_rem, test_size=0.5, random_state=SEED)
 
     '''
     Write Training, Test, and validation file and ITN symbols file and data information
     '''
     filename_train = "youtube_audio_text_train_filelist_" + language + "_" + name_data_config + "_" + source + ".txt"
     filename_valid = "youtube_audio_text_valid_filelist_" + language + "_" + name_data_config + "_" + source + ".txt"
-    filename_test = "youtube_audio_text_test_filelist_" + language + "_" + name_data_config + "_" + source + ".txt"
+    #filename_test = "youtube_audio_text_test_filelist_" + language + "_" + name_data_config + "_" + source + ".txt"
     filename_ITN_symbols = "youtube_audio_ITN_symbols_" + language + "_" + name_data_config + "_" + source + ".txt"
     filename_data_information = "youtube_audio_data_information_" + language + "_" + name_data_config + "_" + source + ".tsv"
 
@@ -237,13 +257,13 @@ def main(args):
     
     path_train_filelist = os.path.join(new_dir_filelist,filename_train)
     path_valid_filelist = os.path.join(new_dir_filelist,filename_valid)
-    path_test_filelist = os.path.join(new_dir_filelist,filename_test)
+    #path_test_filelist = os.path.join(new_dir_filelist,filename_test)
     path_ITN_symbols = os.path.join(dir_ITN,filename_ITN_symbols)
     path_data_information = os.path.join(dir_information,filename_data_information)
 
     DataWriter(X_train, path_train_filelist).write_data_file()
     DataWriter(X_valid, path_valid_filelist).write_data_file()
-    DataWriter(X_test, path_test_filelist).write_data_file()
+    #DataWriter(X_test, path_test_filelist).write_data_file()
     DataWriter(ITN_symbols, path_ITN_symbols).write_data_file()
     DataWriter(data_information, path_data_information, header=True).write_data_file()
 
@@ -294,6 +314,7 @@ if __name__ == "__main__":
     parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
     parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
     parser.add_argument("-noise", help="Remove noise", required=True,nargs='?')
+    parser.add_argument("-audio_normalization", help="Boost quiet audio", required=True,nargs='?')
     parser.add_argument("-max_limit_duration", help="Maximum length authorized of an audion in millisecond", required=False, default=10000, type=int, nargs='?')
     parser.add_argument("-min_limit_duration", help="Minimum length authorized of an audion in millisecond", required=False, default=1000, type=int, nargs='?')
     parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, type=int, nargs='?')

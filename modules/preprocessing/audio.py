@@ -5,7 +5,7 @@ import os
 import subprocess
 import tensorflow as tf
 
-from pydub import AudioSegment
+from pydub import AudioSegment, effects
 from pydub.silence import detect_leading_silence
 from scipy.io import wavfile
 import noisereduce as nr
@@ -236,6 +236,29 @@ class AudioPreprocessor:
         #Get audio length
         proc = subprocess.check_output("soxi -D " + path_audio, shell=True)
         return float(proc)
+    
+    def normalize_audio(self, path_input, path_output):
+        '''
+        Luckily, PyDub's effects module has a function called normalize() which finds the maximum volume 
+        of an AudioSegment, then adjusts the rest of the AudioSegment to be in proportion. This means 
+        the quiet parts will get a volume boost.
+
+        Parameters
+        ----------
+        path_input : string
+            path of a waw audio to normalize
+        path_output : string
+            name of the processed audio
+
+        Returns
+        -------
+        None.
+
+        '''
+        
+        rawsound = AudioSegment.from_file(path_input, "wav")  
+        normalizedsound = effects.normalize(rawsound)  
+        normalizedsound.export(path_output, format="wav")
         
     def remove_lead_trail_audio_wav_silence(self, path_input, path_output, silence_threshold=-50):
         '''
@@ -263,6 +286,28 @@ class AudioPreprocessor:
         audio = AudioSegment.from_wav(path_input)
         newAudio = strip_silence(audio)
         newAudio.export(path_output, format='wav') #Exports to a wav file in the current path.
+        
+    def trim_silence(self, path_input, path_output):
+        '''
+        Shortening long periods of silence and ignoring noise bursts
+
+        Parameters
+        ----------
+        path_input : string
+            path of a waw audio to trim silence
+        path_output : string
+            path of the new processed audio (should be different of path_input)
+
+        Returns
+        -------
+        None.
+            Create new trimmed audio file
+
+        '''
+        
+        command = 'sox ' + path_input + ' ' + path_output + ' silence -l 1 0.1 1% -1 0.5 1%'
+        os.system(command)
+        
         
     def add_lead_trail_audio_wav_silence(self, path_input, path_output, silence_duration=250, before=True, after=True):
         '''
