@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_18_v7_1_video_noconcate_removesilence_obama_clean_libri/outdir",
+        "output_directory": "/home/serkhane/models/tts/flowtron/exp_18_v7_1_video_concate_removesilence_removenoise_obama_clean_libri/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -24,8 +24,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_noconcate_removesilence/youtube_audio_text_train_filelist_en_v2_obama_clean_noconcate_removesilence_obama_clean.txt",
-        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_noconcate_removesilence/youtube_audio_text_valid_filelist_en_v2_obama_clean_noconcate_removesilence_obama_clean.txt",
+        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence_removenoise/youtube_audio_text_train_filelist_en_v2_obama_clean_concate_removesilence_removenoise_obama_clean.txt",
+        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence_removenoise/youtube_audio_text_valid_filelist_en_v2_obama_clean_concate_removesilence_removenoise_obama_clean.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",

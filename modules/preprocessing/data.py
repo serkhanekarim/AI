@@ -43,8 +43,8 @@ class DataPreprocessor:
 
         Returns
         -------
-        tuple
-            tuple containg list of ([user], [number of element], [option element])
+        lists
+            [user], [number of element], [option element]
 
         '''
         
@@ -56,16 +56,13 @@ class DataPreprocessor:
         print("List creation of number of element and option from user")
         for user in tqdm(list_user):
             list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
-            #Find a way to make faster audio length computation usinf data info and soxi -D directly in console...
-            #list_element_length.append(self.dataframe[self.dataframe[user_column]==user][path_column].apply(lambda path_audio : librosa.get_duration(filename=os.path.join(data_directory,path_audio))).sum())            
-            #print(max(list_element_length))
             if option_column is not None:
                 #Sometimes gender contain male and/or female and/or NaN
                 list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
                 
-        return (list_user, list_number_element, list_option_element, list_element_length)
+        return list_user, list_number_element, list_option_element, list_element_length
     
-    def _find_max_user(self, list_unique_user, option):
+    def _find_max_user(self, list_user, list_number_element, list_option_element, option):
         '''
         Find the user who have the biggest amount of elements
 
@@ -83,10 +80,6 @@ class DataPreprocessor:
 
         '''
         
-        list_user = list_unique_user[0]
-        list_number_element = list_unique_user[1]
-        list_option_element = list_unique_user[2]
-        
         if option is None:
             biggest_user = list_user[list_number_element.index(max(list_number_element))]
         else:
@@ -97,51 +90,17 @@ class DataPreprocessor:
 
         return biggest_user
     
-    def _get_information_from_user(self, 
-                                   user, 
-                                   user_column, 
-                                   path_column, 
-                                   element_column,
-                                   data_directory_converted,
-                                   format_conversion):
-        '''
-        Get information from an user
-
-        Parameters
-        ----------
-        user : string
-            User id or user name...
-        user_column : string
-            Name of the column containing user name, id or anything else...
-        path_column : string
-            Name of the column containing file path
-        element_column : string
-            Name of the column containing element like sentences...
-        data_directory_converted : string
-            directory containing converted audio data
-        format_conversion : string
-            format used by tacotron2 training (always .wav)
-
-        Returns
-        -------
-        Pandas dataframe
-            dataframe containg information about user in taflowtron filelist format
-
-        '''
-        
-        table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
-        return table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
     
     def convert_data_mcv_to_taflowtron(self,
-                                user_column, 
-                                path_column, 
-                                element_column,
-                                data_directory,
-                                data_directory_converted,
-                                tts,
-                                option_column=None,
-                                option=None,
-                                format_conversion=".wav"):
+                                       user_column, 
+                                       path_column, 
+                                       element_column,
+                                       data_directory,
+                                       data_directory_converted,
+                                       tts,
+                                       option_column=None,
+                                       option=None,
+                                       format_conversion=".wav"):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
         into taflowtron fileslist format
@@ -170,32 +129,25 @@ class DataPreprocessor:
         Returns
         -------
         Pandas dataframe
-            dataframe containg information about user in LJ Speech Dataset format
+            taflowtron filelist dataframe, dataframe containg information about user, number of speaker
 
         '''
         
-        list_unique_user = self._find_unique_user(user_column, element_column, option_column, path_column, data_directory, format_conversion)
-        #(list_user, list_number_element, list_option_element, list_element_length)
-        # Waiting for a fast audio length computation
-        # data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2],path_column:list_unique_user[3]},
-        #                          columns=[user_column, element_column, option_column, path_column])
-        
-        data_info = pd.DataFrame({user_column:list_unique_user[0],element_column:list_unique_user[1],option_column:list_unique_user[2]},
-                                  columns=[user_column, element_column, option_column])
+        list_user, list_number_element, list_option_element, _ = self._find_unique_user(user_column, element_column, option_column, path_column, data_directory, format_conversion)
+        data_info = pd.DataFrame({user_column:list_user,element_column:list_number_element,option_column:list_option_element},columns=[user_column, element_column, option_column])
         
         if tts == "tacotron2":
-            user = self._find_max_user(list_unique_user, option)
-            
-            return self._get_information_from_user(user, 
-                                                   user_column, 
-                                                   path_column, 
-                                                   element_column,
-                                                   data_directory_converted,
-                                                   format_conversion), data_info
+            user = self._find_max_user(list_user, list_number_element, list_option_element, option)
+            table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
+            table_filelist = table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
+            return table_filelist, data_info, 1
+
         if tts == "flowtron":
-            exit()
-            #TO FINISH
-            
+            table_filelist = pd.DataFrame()
+            for index, user in enumerate(list_user):
+                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
+                table_filelist = table_filelist.append(table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column] + "|" + str(index), axis=1).reset_index(drop=True))
+            return table_filelist, data_info, len(user)
     
     def _useless_data(self, data):
         '''
