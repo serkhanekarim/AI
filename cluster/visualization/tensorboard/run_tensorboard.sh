@@ -44,5 +44,5 @@ mkdir -p $HOME/$dir_log_local
 sshpass -p "$password_cluster" rsync -avr --exclude={'model_*','*.pt'} $remote_address:$dir_tensorboard_logs $HOME/$dir_log_local
 
 pkill -9 -x 'tensorboard'
-tensorboard --logdir=$HOME/$dir_log --port 8080 & (sleep 5; firefox --new-window http://localhost:8080/)
+tensorboard --logdir=$HOME/$dir_log --port 8080 --samples_per_plugin images=1000 & (sleep 5; firefox --new-window http://localhost:8080/)
 

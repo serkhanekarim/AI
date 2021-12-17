@@ -135,7 +135,7 @@ def main(args):
                                                     path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
             
         '''
-        Normalize audio
+        Normalize audio (Boosting quiet audio)
         '''
         if audio_normalization:
             print("Audio Normalization...")
@@ -160,11 +160,7 @@ def main(args):
             os.rename(dir_audio_data_files_converted,dir_audio_data_files)
             
             preprocess_audio(file_list=list_trimmed_audio_path,silence_audio_size=0)
-        
-            # [AudioPreprocessor().remove_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
-            #                                                          path_output=trimmed_audio_path,
-            #                                                          silence_threshold=silence_threshold) for trimmed_audio_path in list_trimmed_audio_path]
-        
+ 
         if silence == "add":
             print("Padding silence...")
             [AudioPreprocessor().add_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 

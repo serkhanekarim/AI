@@ -97,6 +97,7 @@ class DataPreprocessor:
                                        element_column,
                                        data_directory,
                                        data_directory_converted,
+                                       path_cleaner,
                                        tts,
                                        option_column=None,
                                        option=None,
@@ -117,6 +118,8 @@ class DataPreprocessor:
             directory containing audio data
         data_directory_converted : string
             directory containing converted audio data
+        path_cleaner : string
+            path of a cleaner (.tsv file)    
         tts : string
             name of the tts to use; flowtron or tacotron2
         option_column : string
@@ -129,7 +132,7 @@ class DataPreprocessor:
         Returns
         -------
         Pandas dataframe
-            taflowtron filelist dataframe, dataframe containg information about user, number of speaker
+            taflowtron filelist (dataframe or list), dataframe containg information about user, number of speaker
 
         '''
         
@@ -139,15 +142,20 @@ class DataPreprocessor:
         if tts == "tacotron2":
             user = self._find_max_user(list_user, list_number_element, list_option_element, option)
             table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
+            table[element_column] = DataCleaner().clean_text(data=table[element_column],
+                                                             path_cleaner=path_cleaner)
             table_filelist = table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
-            return table_filelist, data_info, 1
+            return table_filelist, data_info, 0
 
         if tts == "flowtron":
-            table_filelist = pd.DataFrame()
+            total_filelist = []
             for index, user in enumerate(list_user):
-                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
-                table_filelist = table_filelist.append(table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column] + "|" + str(index), axis=1).reset_index(drop=True))
-            return table_filelist, data_info, len(user)
+                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]                  
+                table[element_column] = DataCleaner().clean_text(data=table[element_column],
+                                                                 path_cleaner=path_cleaner)
+                filelist = list(table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column] + "|" + str(index), axis=1).reset_index(drop=True))
+                total_filelist += filelist
+            return total_filelist, data_info, len(user)-1
     
     def _useless_data(self, data):
         '''

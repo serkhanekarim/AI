@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import pandas as pd
 from tqdm import tqdm
 import re
@@ -44,9 +45,10 @@ class DataCleaner:
             print("Cleaner - Applying regex substitution:" + str(cleaner[0][index]) + "|||" + substitution)
             if type(data) == list:
                 data = [re.sub(regex,substitution,element) for element in data]
-            if type(data) == pd.core.frame.DataFrame:
+            elif type(data) == pd.core.series.Series:
                 data = data.apply(lambda element : re.sub(regex,substitution,element))
-                
+            else:
+                sys.exit('Data type not detected for cleaning')
         return data
         
                 

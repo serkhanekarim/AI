@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import shutil
+from tqdm import tqdm
 
 class Method:
     '''
@@ -29,6 +31,26 @@ class Method:
             return dispatcher[func]
         except:
             return "Invalid function"
+        
+    def copy_dir(self, dir_source, dir_destination):
+        '''
+        Copy paste a directory
+
+        Parameters
+        ----------
+        dir_source : string
+            Source directory.
+        dir_destination : string
+            Destination directory.
+
+        Returns
+        -------
+        None.
+            Copy paste a directory into a destination directory
+
+        '''
+        os.makedirs(dir_destination,exist_ok=True)
+        [shutil.copy(os.path.join(dir_source,file_name), dir_destination) for file_name in tqdm(os.listdir(dir_source))]
         
     def get_filename(self, path):
         '''
