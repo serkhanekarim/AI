@@ -4,12 +4,16 @@
 import os
 import subprocess
 import tensorflow as tf
-
+from scipy.io.wavfile import write
+import numpy as np
 from pydub import AudioSegment, effects
 from pydub.silence import detect_leading_silence
 from scipy.io import wavfile
 import noisereduce as nr
 import librosa
+
+from modules.Global.method import Method
+
 
 class AudioPreprocessor:
     '''
@@ -269,7 +273,7 @@ class AudioPreprocessor:
         path_input : string
             path of a waw audio to remove trail/lead silence
         path_output : string
-            name of the processed audio
+            path of the processed audio
         silence_threshold : int
             The upper bound for how quiet is silent in dFBS
 
@@ -286,6 +290,40 @@ class AudioPreprocessor:
         audio = AudioSegment.from_wav(path_input)
         newAudio = strip_silence(audio)
         newAudio.export(path_output, format='wav') #Exports to a wav file in the current path.
+        
+    def trim_lead_trail_silence(self, path_input, path_output):
+        '''
+        Trim leading and trailing silence from an audio wav file
+
+        Parameters
+        ----------
+        path_input : string
+            Path of an audio wav file
+        path_output : string
+            Path of the processed audio
+
+        Returns
+        -------
+        None.
+            Trail and Lead silence removed audio file
+
+        '''
+        
+        sr = 22050
+        max_wav_value=32768.0
+        trim_fft_size = 1024
+        trim_hop_size = 256
+        trim_top_db = 23
+        silence_mel_padding = 0
+        silence_audio_size = trim_hop_size * silence_mel_padding
+        
+        data, sampling_rate = librosa.core.load(path_input, sr)
+        data = data / np.abs(data).max() *0.999
+        data_= librosa.effects.trim(data, top_db= trim_top_db, frame_length=trim_fft_size, hop_length=trim_hop_size)[0]
+        data_ = data_*max_wav_value
+        data_ = np.append(data_, [0.]*silence_audio_size)
+        data_ = data_.astype(dtype=np.int16)
+        write(path_input, sr, data_)
         
     def trim_silence(self, path_input, path_output):
         '''

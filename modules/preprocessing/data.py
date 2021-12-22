@@ -18,6 +18,7 @@ class DataPreprocessor:
     '''
         
     END_CHARS = Var().END_CHARS
+    NB_LIMIT_FILE_CLUSTER = Var().NB_LIMIT_FILE_CLUSTER
     
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
@@ -96,7 +97,7 @@ class DataPreprocessor:
                                        path_column, 
                                        element_column,
                                        data_directory,
-                                       data_directory_converted,
+                                       data_directory_preprocessed,
                                        path_cleaner,
                                        tts,
                                        option_column=None,
@@ -116,8 +117,8 @@ class DataPreprocessor:
             Name of the column containg the element of the user
         data_directory : string
             directory containing audio data
-        data_directory_converted : string
-            directory containing converted audio data
+        data_directory_preprocessed : string
+            directory containing futur preprocessed audio data
         path_cleaner : string
             path of a cleaner (.tsv file)    
         tts : string
@@ -144,18 +145,26 @@ class DataPreprocessor:
             table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
             table[element_column] = DataCleaner().clean_text(data=table[element_column],
                                                              path_cleaner=path_cleaner)
-            table_filelist = table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
+            table_filelist = table.apply(lambda x : os.path.join(data_directory_preprocessed,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
             return table_filelist, data_info, 0
 
         if tts == "flowtron":
             total_filelist = []
+            dir_to_create = []
+            list_original_path = []
             for index, user in enumerate(list_user):
-                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]                  
+                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
+                len_table = table.shape[0]
                 table[element_column] = DataCleaner().clean_text(data=table[element_column],
                                                                  path_cleaner=path_cleaner)
-                filelist = list(table.apply(lambda x : os.path.join(data_directory_converted,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column] + "|" + str(index), axis=1).reset_index(drop=True))
+                nb_part = len_table // (self.NB_LIMIT_FILE_CLUSTER + 1)
+                part_extension = ["part_" + str(index) for index in range(nb_part+1)]
+                dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
+                list_original_path += [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
+                list_path = [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
+                filelist = [list_path[index] + "|" + list(table[element_column])[index] + "|" + str(index) for index in range(len_table)]
                 total_filelist += filelist
-            return total_filelist, data_info, len(user)-1
+            return total_filelist, data_info, len(user)-1, dir_to_create, list_original_path
     
     def _useless_data(self, data):
         '''

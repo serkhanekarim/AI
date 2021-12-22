@@ -18,6 +18,7 @@ class Var:
     '''
     
     SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+    NB_LIMIT_FILE_CLUSTER = 10000
     DATE_FORMAT = '%Y-%m-%d'
     TIME_FORMAT = "%H:%M:%S.%f"
     MAX_NUMBER_OF_CATEGORICAL_OCCURENCES = 20

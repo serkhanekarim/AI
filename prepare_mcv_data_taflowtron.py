@@ -20,7 +20,9 @@ from modules.Global.method import Method
 from sklearn.model_selection import train_test_split
 
 from tqdm import tqdm
-    
+from multiprocessing import Pool
+from functools import partial
+
 def main(args):
     '''
     Prepare Mozilla common voice data for Tacotron2 and Flowtron
@@ -55,7 +57,7 @@ def main(args):
     USER_CLUSTER = 'ks1'
     DIR_CLUSTER = os.path.join('/home',USER_CLUSTER)
     AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
-    LIST_AUDIO_FILES = ["test.tsv", "train.tsv", "validated.tsv"]
+    LIST_AUDIO_FILES = ["validated.tsv"]
     USER_COLUMN = "client_id"
     PATH_COLUMN = "path"
     ELEMENT_COLUMN = "sentence"
@@ -69,7 +71,6 @@ def main(args):
     nb_speaker = args.nb_speaker
     path_mcv_cleaner = args.path_mcv_cleaner
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
-    converter = args.converter.lower() == "true"
     path_hparam_file = args.path_hparam_file
     path_symbols_file = args.path_symbols_file
     silence = args.silence.lower()
@@ -90,11 +91,12 @@ def main(args):
     
     dir_audio_data_files = os.path.join(data_directory,language,'clips')
     dir_audio_data_files_preprocessed = os.path.join(data_directory,language,'clips_preprocessed')
-    print("Copy paste original data into a preprocessed folder to be preprocessed...")
-    Method().copy_dir(dir_source=dir_audio_data_files, dir_destination=dir_audio_data_files_preprocessed)
+    dir_audio_data_files_preprocessing = os.path.join(data_directory,language,'clips_preprocessing')
+    os.makedirs(dir_audio_data_files_preprocessed,exist_ok=True)
+    os.makedirs(dir_audio_data_files_preprocessing,exist_ok=True)
     
     '''
-    Aggregation of test, train and validation data file 
+    Aggregation of test, train and validation data file
     '''
     list_path_audio_files = [os.path.join(directory_file_audio_info,language,file) for file in LIST_AUDIO_FILES]
     data_info = pd.DataFrame()
@@ -107,75 +109,88 @@ def main(args):
     Conversion of Mozilla Common Voice audio data information into taflowtron format
     '''
     print("Find the max user...")
-    data_info_mcv, data_info_user, nb_speaker = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN, 
-                                                                                                            path_column=PATH_COLUMN, 
-                                                                                                            element_column=ELEMENT_COLUMN,
-                                                                                                            data_directory=dir_audio_data_files,
-                                                                                                            data_directory_converted=dir_audio_data_files_preprocessed,
-                                                                                                            path_cleaner=path_mcv_cleaner,
-                                                                                                            tts=tts_model,
-                                                                                                            option_column=OPTION_COLUMN,
-                                                                                                            option=gender)
+    data_info_mcv, data_info_user, nb_speaker, dir_to_create, list_audio_path_original = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN,
+                                                                                                                                                    path_column=PATH_COLUMN, 
+                                                                                                                                                    element_column=ELEMENT_COLUMN,
+                                                                                                                                                    data_directory=dir_audio_data_files,
+                                                                                                                                                    data_directory_preprocessed=dir_audio_data_files_preprocessed,
+                                                                                                                                                    path_cleaner=path_mcv_cleaner,
+                                                                                                                                                    tts=tts_model,
+                                                                                                                                                    option_column=OPTION_COLUMN,
+                                                                                                                                                    option=gender)
     list_audio_path = [line.split('|')[0] for line in list(data_info_mcv)]
+    list_audio_path_preprocessing = [os.path.join(dir_audio_data_files_preprocessing,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_original]
     list_subtitle = [line.split('|')[1] for line in list(data_info_mcv)]
     list_speaker_id = [line.split('|')[2] for line in list(data_info_mcv)]
     
+    #Fix number of ,ax parallelized process
+    nb_max_parallelized_process = min(len(list_audio_path_original), os.cpu_count())
+    
+    '''
+    Convert audio data for taflowtron model
+    '''
+    list_arg = [(audio_path,
+                list_audio_path_preprocessing[index],
+                22050,
+                1,
+                16) for index, audio_path in enumerate(list_audio_path_original)]
+    
+    with Pool(processes=nb_max_parallelized_process) as pool:
+        pool.starmap(AudioPreprocessor().convert_audio, tqdm(list_arg))
+
     '''
     Remove Noise
     '''
     if noise:
         print("Revoming noise...")
-        [AudioPreprocessor().reduce_audio_noise(path_input=audio_path,
-                                                path_output=audio_path) for index, audio_path in tqdm(enumerate(list_audio_path))]
-        
+        list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            pool.starmap(AudioPreprocessor().reduce_audio_noise, tqdm(list_arg))   
+    
     '''
     Normalize audio
     '''
     if audio_normalization:
         print("Audio Normalization...")
-        [AudioPreprocessor().normalize_audio(path_input=audio_path,
-                                             path_output=audio_path) for audio_path in tqdm(list_audio_path)]
-    
+        list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            pool.starmap(AudioPreprocessor().normalize_audio, tqdm(list_arg))
+            
     '''
     Add and/or Remove leading and trailing silence and/or convert audio
     '''
     if silence == "remove":
         print("Revoming leading/middle/trailing silence and convert audio...")
-        for audio_path in tqdm(list_audio_path):
-            #Removing middle silence
-            filename = Method().get_filename(audio_path)
-            path_silence_audio = os.path.join(dir_audio_data_files_preprocessed,filename + "." + AUDIO_FORMAT)
-            AudioPreprocessor().trim_silence(path_input=audio_path,
-                                                 path_output=path_silence_audio)                    
-        shutil.rmtree(dir_audio_data_files)
-        os.rename(dir_audio_data_files_preprocessed,dir_audio_data_files)
+        dir_audio_data_files_trimmed = os.path.join(data_directory,language,'clips_trimmed')
+        os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
+        list_audio_path_trimmed = [os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_preprocessing]
+        list_arg = [(audio_path, list_audio_path_trimmed[index]) for index, audio_path in enumerate(list_audio_path_preprocessing)]
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
+                 
+        shutil.rmtree(dir_audio_data_files_preprocessing)
+        os.rename(dir_audio_data_files_trimmed,dir_audio_data_files_preprocessing)
         
-        #REmoving leading and trailing silence
-        preprocess_audio(file_list=list_audio_path,silence_audio_size=0)
-        
+        list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            pool.starmap(AudioPreprocessor().trim_lead_trail_silence, tqdm(list_arg))
+ 
     if silence == "add":
         print("Padding silence...")
-        [AudioPreprocessor().add_lead_trail_audio_wav_silence(path_input=audio_path, 
-                                                                  path_output=audio_path,
-                                                                  silence_duration=silence_threshold,
-                                                                  before=True, 
-                                                                  after=True) for audio_path in tqdm(list_audio_path)]
-        
+        list_arg = [(audio_path,audio_path,silence,silence_threshold,True,True) for audio_path in tqdm(list_audio_path_preprocessing)]
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            pool.starmap(AudioPreprocessor().add_lead_trail_audio_wav_silence, tqdm(list_arg))
+            
+   
     '''
-    Convert audio data for taflowtron model
+    Copying audio files tro keep original and preprocess new one
     '''
-    if (converter or silence == "add") and silence != "remove":
-        print("Audio conversion...")
-        for audio_path in tqdm(list_audio_path):
-            filename = Method().get_filename(audio_path)
-            path_converted_audio = os.path.join(dir_audio_data_files_preprocessed,filename + "." + AUDIO_FORMAT)
-            AudioPreprocessor().convert_audio(path_input=audio_path, 
-                                                  path_output=path_converted_audio,
-                                                  sample_rate=22050, 
-                                                  channel=1, 
-                                                  bits=16)
-        shutil.rmtree(dir_audio_data_files)
-        os.rename(dir_audio_data_files_preprocessed,dir_audio_data_files)
+    print("Copy paste original data into a preprocessed folder to be preprocessed...")
+    [os.makedirs(directory,exist_ok=True) for directory in dir_to_create]
+    list_arg = [(path_audio, list_audio_path[index]) for index, path_audio in enumerate(list_audio_path_preprocessing)]
+    with Pool(processes=nb_max_parallelized_process) as pool:
+        pool.starmap(shutil.copy, tqdm(list_arg))
+    shutil.rmtree(dir_audio_data_files_preprocessing)
         
     '''
     Get ITN symbols from subtitles
@@ -234,10 +249,10 @@ def main(args):
     os.makedirs(dir_ITN,exist_ok=True)
     os.makedirs(dir_information,exist_ok=True)
     
-    path_train_filelist = os.path.join(directory_taflowtron_filelist,filename_train)
-    path_valid_filelist = os.path.join(directory_taflowtron_filelist,filename_valid)
+    path_train_filelist = os.path.join(new_dir_filelist,filename_train)
+    path_valid_filelist = os.path.join(new_dir_filelist,filename_valid)
     #path_test_filelist = os.path.join(directory_taflowtron_filelist,filename_test)
-    path_filename_user_information = os.path.join(directory_of_results,filename_user_information)
+    path_filename_user_information = os.path.join(dir_information,filename_user_information)
     path_ITN_symbols = os.path.join(dir_ITN,filename_ITN_symbols)
     
     DataWriter(X_train, path_train_filelist).write_data_file()
@@ -325,7 +340,6 @@ if __name__ == "__main__":
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=False, nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=False, nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
-    parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
     parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
     parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
     parser.add_argument("-noise", help="Remove noise", required=True,nargs='?')
