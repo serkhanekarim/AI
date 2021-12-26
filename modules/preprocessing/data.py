@@ -5,12 +5,11 @@ import os
 import pandas as pd
 from tqdm import tqdm
 import re
+from multiprocessing import Pool
 
 from modules.Global.variable import Var
-from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.cleaner import DataCleaner
 from modules.preprocessing.time import TimePreprocessor
-import librosa
 
 class DataPreprocessor:
     '''
@@ -23,45 +22,38 @@ class DataPreprocessor:
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
         
-    def _find_unique_user(self, user_column, element_column, option_column, path_column, data_directory, format_conversion):
+    def _find_user_information(self, user_id, user_column):
         '''
-        Method used to find unique user
+        Method used to get user data
 
         Parameters
         ----------
+        user_id : string
+            User ID
         user_column : string
             Name of the column containing user name, id or anything else...
-        element_column : string
-            Name of the column containg the element of the user
-        option_column : string
-            Name of an additional column to consider to find user
-        path_column : string
-            Name of the column containing file path
-        data_directory : string
-            directory containg audio data
-        format_conversion : string
-            format used by tacotron2 training (always .wav)
 
         Returns
         -------
-        lists
-            [user], [number of element], [option element]
+        tuple
+            User ID and dataframe realted to the USer ID given
 
         '''
         
-        unique_users = self.dataframe[user_column].unique()
-        list_user = list(unique_users)
-        list_number_element = []
-        list_option_element = []
-        list_element_length = []
-        print("List creation of number of element and option from user")
-        for user in tqdm(list_user):
-            list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
-            if option_column is not None:
-                #Sometimes gender contain male and/or female and/or NaN
-                list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
+        return user_id, self.dataframe[self.dataframe[user_column]==user_id]
+       # return user_id, self.dataframe[self.dataframe[user_column]==user_id], list(self.dataframe[self.dataframe[user_column]==user_id][option_column].unique())[0]
+        
+        # list_user = list(self.dataframe[user_column].unique())
+        # list_number_element = []
+        # list_option_element = []
+        # print("List creation of number of element and option from user")
+        # for user in tqdm(list_user):
+        #     list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
+        #     if option_column is not None:
+        #         #Sometimes gender contain male and/or female and/or NaN
+        #         list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
                 
-        return list_user, list_number_element, list_option_element, list_element_length
+        # return list_user, list_number_element, list_option_element
     
     def _find_max_user(self, list_user, list_number_element, list_option_element, option):
         '''
@@ -98,10 +90,11 @@ class DataPreprocessor:
                                        element_column,
                                        data_directory,
                                        data_directory_preprocessed,
-                                       path_cleaner,
+                                       cleaner,
                                        tts,
+                                       user_id=None,
                                        option_column=None,
-                                       option=None,
+                                       option_value=None,
                                        format_conversion=".wav"):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
@@ -119,14 +112,16 @@ class DataPreprocessor:
             directory containing audio data
         data_directory_preprocessed : string
             directory containing futur preprocessed audio data
-        path_cleaner : string
-            path of a cleaner (.tsv file)    
+        cleaner : dataframe
+            table containing regex and substitution
+        user_id : list
+            list of user to select
         tts : string
             name of the tts to use; flowtron or tacotron2
         option_column : string
             Name of an additional column to consider to find user
-        option : string
-            option use to specify parameter on optional list from list_unique_user to find max user
+        option_value : string
+            option value to use to specify parameter on optional list from list_unique_user to find max user
         format_conversion : string
             format used by tacotron2 training (always .wav)
             
@@ -136,35 +131,49 @@ class DataPreprocessor:
             taflowtron filelist (dataframe or list), dataframe containg information about user, number of speaker
 
         '''
+        list_user_id = list(self.dataframe[user_column].unique())
+        #Fix number of max parallelized process
+        nb_max_parallelized_process = min(len(list_user_id), os.cpu_count())
+        list_arg = [(user_id, user_column) for user_id in list_user_id]        
+        with Pool(processes=nb_max_parallelized_process) as pool:
+            res = pool.starmap(self._find_user_information, tqdm(list_arg))
+            
+        list_user = []
+        list_number_element = []
+        list_user_df = []
+        list_option_element = []
+        for index in range(len(res)):
+            list_user.append(res[index][0])
+            list_number_element.append(res[index][1].shape[0])
+            list_user_df.append(res[index][1])
+            if option_column is not None: list_option_element.append(list(list_user_df[index][option_column].unique())[0])
         
-        list_user, list_number_element, list_option_element, _ = self._find_unique_user(user_column, element_column, option_column, path_column, data_directory, format_conversion)
-        data_info = pd.DataFrame({user_column:list_user,element_column:list_number_element,option_column:list_option_element},columns=[user_column, element_column, option_column])
+        data_info = pd.DataFrame({user_column:list_user,element_column:list_number_element,option_column:list_option_element},columns=[user_column, element_column, option_column])  
         
         if tts == "tacotron2":
-            user = self._find_max_user(list_user, list_number_element, list_option_element, option)
+            user = self._find_max_user(list_user, list_number_element, list_option_element, option_value)
             table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
             table[element_column] = DataCleaner().clean_text(data=table[element_column],
-                                                             path_cleaner=path_cleaner)
+                                                             cleaner=cleaner)
             table_filelist = table.apply(lambda x : os.path.join(data_directory_preprocessed,os.path.splitext(x[path_column])[0]+format_conversion) + "|" + x[element_column], axis=1).reset_index(drop=True)
             return table_filelist, data_info, 0
 
         if tts == "flowtron":
-            total_filelist = []
+            filelist = []
             dir_to_create = []
             list_original_path = []
-            for index, user in enumerate(list_user):
-                table = self.dataframe[self.dataframe[user_column]==user][[path_column,element_column]]
+            for index, user in enumerate(tqdm(list_user)):
+                table = list_user_df[index][[path_column,element_column]]
                 len_table = table.shape[0]
                 table[element_column] = DataCleaner().clean_text(data=table[element_column],
-                                                                 path_cleaner=path_cleaner)
+                                                                 cleaner=cleaner)
                 nb_part = len_table // (self.NB_LIMIT_FILE_CLUSTER + 1)
                 part_extension = ["part_" + str(index) for index in range(nb_part+1)]
                 dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
                 list_original_path += [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
                 list_path = [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
-                filelist = [list_path[index] + "|" + list(table[element_column])[index] + "|" + str(index) for index in range(len_table)]
-                total_filelist += filelist
-            return total_filelist, data_info, len(user)-1, dir_to_create, list_original_path
+                filelist += [list_path[index] + "|" + list(table[element_column])[index] + "|" + str(index) for index in range(len_table)]
+            return filelist, data_info, len(user)-1, dir_to_create, list_original_path
     
     def _useless_data(self, data):
         '''
@@ -244,7 +253,7 @@ class DataPreprocessor:
         return new_list_time, new_list_subtitle
         
     
-    def get_info_from_vtt(self, data, path_cleaner, concatenate=False, max_limit_duration=10000, min_limit_duration=1000):
+    def get_info_from_vtt(self, data, cleaner, concatenate=False, max_limit_duration=10000, min_limit_duration=1000):
         '''
         Get time of subtitile and subtitle
 
@@ -252,8 +261,8 @@ class DataPreprocessor:
         ----------
         data : list
             list of vtt data
-        path_cleaner : string
-            path of a cleaner (.tsv file)
+        cleaner : dataframe
+            table containing regex and substitution
         concatenate : boolean
             concatenate vtt sentences/subtitles by using time and end characters to make bigger sentence/subtitle
         max_limit_duration : int
@@ -285,7 +294,7 @@ class DataPreprocessor:
             index += 1
         
         list_subtitle = DataCleaner().clean_text(data=list_subtitle,
-                                            path_cleaner=path_cleaner)
+                                                 cleaner=cleaner)
             
         index_to_remove = self._useless_data(list_subtitle)
         #print(index_to_remove)

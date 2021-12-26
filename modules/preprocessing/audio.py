@@ -11,8 +11,7 @@ from pydub.silence import detect_leading_silence
 from scipy.io import wavfile
 import noisereduce as nr
 import librosa
-
-from modules.Global.method import Method
+import shutil
 
 
 class AudioPreprocessor:
@@ -193,7 +192,7 @@ class AudioPreprocessor:
             self.get_spectrogram_and_label_id(x,y,labels),  num_parallel_calls=tf.data.AUTOTUNE)
         return output_ds
     
-    def convert_audio(self, path_input, path_output, sample_rate, channel, bits):
+    def convert_audio(self, path_input, path_output, sample_rate, channel, bits, replace=False):
         '''
         Convert audio file
 
@@ -209,6 +208,8 @@ class AudioPreprocessor:
             number of channel
         bits : int
             number of bits
+        replace : boolean
+            Replace or not the orginal audio file by the converted one
 
         Returns
         -------
@@ -216,9 +217,12 @@ class AudioPreprocessor:
             Convert audio
 
         '''
-        
-        command = 'sox ' + "'" + path_input + "'" + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + "'" + path_output + "'"
-        os.system(command)
+        if not os.path.isfile(path_output):
+            command = 'sox ' + "'" + path_input + "'" + ' -r ' + str(sample_rate) + ' -c ' + str(channel) + ' -b ' + str(bits) + ' ' + "'" + path_output + "'"
+            os.system(command)
+            if replace: shutil.move(path_output,path_input)
+        else:
+            print("File already exist: " + path_output)
         
     def get_audio_length(self, path_audio):
         '''
@@ -325,7 +329,7 @@ class AudioPreprocessor:
         data_ = data_.astype(dtype=np.int16)
         write(path_input, sr, data_)
         
-    def trim_silence(self, path_input, path_output):
+    def trim_silence(self, path_input, path_output, replace=False):
         '''
         Shortening long periods of silence and ignoring noise bursts
 
@@ -335,6 +339,8 @@ class AudioPreprocessor:
             path of a waw audio to trim silence
         path_output : string
             path of the new processed audio (should be different of path_input)
+        replace : boolean
+            Replace or not the orginal audio file by the preprocessed one
 
         Returns
         -------
@@ -345,6 +351,7 @@ class AudioPreprocessor:
         
         command = 'sox ' + path_input + ' ' + path_output + ' silence -l 1 0.1 1% -1 0.5 1%'
         os.system(command)
+        if replace: shutil.move(path_output,path_input)
         
         
     def add_lead_trail_audio_wav_silence(self, path_input, path_output, silence_duration=250, before=True, after=True):

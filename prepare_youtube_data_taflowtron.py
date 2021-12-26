@@ -6,7 +6,6 @@ import argparse
 import shutil
 
 from modules.preprocessing.audio import AudioPreprocessor
-from modules.preprocessing.preprocess_audio import preprocess_audio
 from modules.preprocessing.data import DataPreprocessor
 from modules.scraping.media import MediaScraper
 from modules.reader.reader import DataReader
@@ -17,6 +16,9 @@ from modules.Global.method import Method
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+from multiprocessing import Pool
+import csv
+import re
 
 def main(args):
     '''
@@ -61,6 +63,7 @@ def main(args):
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
     converter = args.converter.lower() == "true"
     path_hparam_file = args.path_hparam_file
+    generated_subtitle = args.generated_subtitle
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
     silence = args.silence.lower()
     noise = args.noise.lower() == "true"
@@ -89,6 +92,9 @@ def main(args):
     list_url = DataReader(path_list_url).read_data_file()
     list_url = [line[:-1] for line in list_url]
     
+    obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
+    cleaner_youtube = DataReader(path_youtube_cleaner).read_data_file(**obj)
+    
     for url in tqdm(list_url):
         
         '''
@@ -99,15 +105,17 @@ def main(args):
         path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
                                                                           audio_format=AUDIO_FORMAT, 
                                                                           subtitle_language=language, 
-                                                                          directory_output=dir_original_youtube_data)
-        
+                                                                          directory_output=dir_original_youtube_data,
+                                                                          generated_subtitle=generated_subtitle)
+        if re.search('NO_(MANUAL|GENERATED)_SUBTITLE\.vtt',path_subtitle) is not None:
+            continue
         '''
         Parse subtitles to get trim and text information
         '''
         print("Extracting information from vtt files...")
         data_subtitle = DataReader(path_subtitle).read_data_file()
         list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
-                                                                        path_cleaner=path_youtube_cleaner,
+                                                                        cleaner=cleaner_youtube,
                                                                         concatenate=concatenate_vtt,
                                                                         max_limit_duration=max_limit_duration, 
                                                                         min_limit_duration=min_limit_duration)
@@ -126,68 +134,68 @@ def main(args):
                                                                      path_output=path_audio_output,
                                                                      list_time=list_time)
         
+        #Fix number of max parallelized process
+        nb_max_parallelized_process = min(len(list_trimmed_audio_path), os.cpu_count())
+            
         '''
         Remove Noise
         '''
         if noise:
             print("Revoming noise...")
-            [AudioPreprocessor().reduce_audio_noise(path_input=audio_path,
-                                                    path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
+            list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().reduce_audio_noise, tqdm(list_arg))
             
         '''
         Normalize audio (Boosting quiet audio)
         '''
         if audio_normalization:
             print("Audio Normalization...")
-            [AudioPreprocessor().normalize_audio(path_input=audio_path,
-                                                 path_output=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
-        
+            list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().normalize_audio, tqdm(list_arg))           
+            
         '''
         Add and/or Remove leading and trailing silence and/or convert audio
         '''
         if silence == "remove":
             print("Revoming leading/middle/trailing silence and convert audio...")
-            dir_audio_data_files_converted = os.path.join(data_directory,language,source,name_data_config,youtube_code,'clips_trimmed')
-            os.makedirs(dir_audio_data_files_converted,exist_ok=True)
-            for new_audio_path in tqdm(list_trimmed_audio_path):
-                filename = Method().get_filename(new_audio_path)
-                path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
-                if not os.path.isfile(path_converted_audio):
-                    #Need to update if converted file already exist
-                    AudioPreprocessor().trim_silence(path_input=new_audio_path,
-                                                     path_output=path_converted_audio)                    
-            shutil.rmtree(dir_audio_data_files)
-            os.rename(dir_audio_data_files_converted,dir_audio_data_files)
+            dir_audio_data_files_trimmed = os.path.join(data_directory,language,source,name_data_config,youtube_code,'_temp_clips_trimmed')
+            os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
+            list_arg = [(audio_path, 
+                         os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
+                         True) for audio_path in list_trimmed_audio_path]
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
+            shutil.rmtree(dir_audio_data_files_trimmed)
             
-            preprocess_audio(file_list=list_trimmed_audio_path,silence_audio_size=0)
- 
+            list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().trim_lead_trail_silence, tqdm(list_arg))
+        
         if silence == "add":
             print("Padding silence...")
-            [AudioPreprocessor().add_lead_trail_audio_wav_silence(path_input=trimmed_audio_path, 
-                                                                      path_output=trimmed_audio_path,
-                                                                      silence_duration=silence_threshold,
-                                                                      before=True, 
-                                                                      after=True) for trimmed_audio_path in tqdm(list_trimmed_audio_path)]
-        
+            list_arg = [(audio_path,audio_path,silence_threshold,True,True) for audio_path in tqdm(list_trimmed_audio_path)]
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().add_lead_trail_audio_wav_silence, tqdm(list_arg))
+                
         '''
         Convert audio data for taflowtron model
         '''
-        if (converter or silence == "add") and silence != "remove":
+        if converter:
             print("Audio conversion...")
-            dir_audio_data_files_converted = os.path.join(data_directory,language,source,name_data_config,youtube_code,'clips_converted')
+            dir_audio_data_files_converted = os.path.join(data_directory,language,source,name_data_config,youtube_code,'_temp_clips_converted')
             os.makedirs(dir_audio_data_files_converted,exist_ok=True)
-            for new_audio_path in tqdm(list_trimmed_audio_path):
-                filename = Method().get_filename(new_audio_path)
-                path_converted_audio = os.path.join(dir_audio_data_files_converted,filename + "." + AUDIO_FORMAT)
-                if not os.path.isfile(path_converted_audio):
-                    #Need to update if converted file already exist
-                    AudioPreprocessor().convert_audio(path_input=new_audio_path, 
-                                                      path_output=path_converted_audio,
-                                                      sample_rate=22050, 
-                                                      channel=1, 
-                                                      bits=16)
-            shutil.rmtree(dir_audio_data_files)
-            os.rename(dir_audio_data_files_converted,dir_audio_data_files)
+            list_arg = [(audio_path,
+                        os.path.join(dir_audio_data_files_converted,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
+                        22050,
+                        1,
+                        16,
+                        True) for audio_path in list_trimmed_audio_path]
+            
+            with Pool(processes=nb_max_parallelized_process) as pool:
+                pool.starmap(AudioPreprocessor().convert_audio, tqdm(list_arg))    
+            shutil.rmtree(dir_audio_data_files_converted)
         
         '''
         Get ITN symbols from subtitles
@@ -306,6 +314,7 @@ if __name__ == "__main__":
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=False, nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
     parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
+    parser.add_argument("-generated_subtitle", help="Use generated or no generated subtitle", required=False, nargs='?')
     parser.add_argument("-concatenate_vtt", help="Concatenate subtitles/sentences to avoid small or cut audio subtitles/sentences", required=True, nargs='?')
     parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
     parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')

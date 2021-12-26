@@ -3,15 +3,11 @@
 
 import os
 import argparse
-from scipy.io.wavfile import write
-import torch
 import pandas as pd
 import csv
 import shutil
 
-
 from modules.preprocessing.audio import AudioPreprocessor
-from modules.preprocessing.preprocess_audio import preprocess_audio
 from modules.preprocessing.data import DataPreprocessor
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
@@ -21,7 +17,6 @@ from sklearn.model_selection import train_test_split
 
 from tqdm import tqdm
 from multiprocessing import Pool
-from functools import partial
 
 def main(args):
     '''
@@ -108,27 +103,31 @@ def main(args):
     '''
     Conversion of Mozilla Common Voice audio data information into taflowtron format
     '''
-    print("Find the max user...")
+    print("Collect information from MCV data...")
+    obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
+    cleaner_mcv = DataReader(path_mcv_cleaner).read_data_file(**obj)
+    
     data_info_mcv, data_info_user, nb_speaker, dir_to_create, list_audio_path_original = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN,
                                                                                                                                                     path_column=PATH_COLUMN, 
                                                                                                                                                     element_column=ELEMENT_COLUMN,
                                                                                                                                                     data_directory=dir_audio_data_files,
                                                                                                                                                     data_directory_preprocessed=dir_audio_data_files_preprocessed,
-                                                                                                                                                    path_cleaner=path_mcv_cleaner,
+                                                                                                                                                    cleaner=cleaner_mcv,
                                                                                                                                                     tts=tts_model,
                                                                                                                                                     option_column=OPTION_COLUMN,
-                                                                                                                                                    option=gender)
+                                                                                                                                                    option_value=gender)
     list_audio_path = [line.split('|')[0] for line in list(data_info_mcv)]
     list_audio_path_preprocessing = [os.path.join(dir_audio_data_files_preprocessing,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_original]
     list_subtitle = [line.split('|')[1] for line in list(data_info_mcv)]
     list_speaker_id = [line.split('|')[2] for line in list(data_info_mcv)]
     
-    #Fix number of ,ax parallelized process
+    #Fix number of max parallelized process
     nb_max_parallelized_process = min(len(list_audio_path_original), os.cpu_count())
     
     '''
     Convert audio data for taflowtron model
     '''
+    print("Audio conversion...")
     list_arg = [(audio_path,
                 list_audio_path_preprocessing[index],
                 22050,
@@ -161,15 +160,14 @@ def main(args):
     '''
     if silence == "remove":
         print("Revoming leading/middle/trailing silence and convert audio...")
-        dir_audio_data_files_trimmed = os.path.join(data_directory,language,'clips_trimmed')
+        dir_audio_data_files_trimmed = os.path.join(data_directory,language,'_temp_clips_trimmed')
         os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
-        list_audio_path_trimmed = [os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_preprocessing]
-        list_arg = [(audio_path, list_audio_path_trimmed[index]) for index, audio_path in enumerate(list_audio_path_preprocessing)]
+        list_arg = [(audio_path,
+                     os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
+                     True) for audio_path in list_audio_path_preprocessing]
         with Pool(processes=nb_max_parallelized_process) as pool:
             pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
-                 
-        shutil.rmtree(dir_audio_data_files_preprocessing)
-        os.rename(dir_audio_data_files_trimmed,dir_audio_data_files_preprocessing)
+        shutil.rmtree(dir_audio_data_files_trimmed)
         
         list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
         with Pool(processes=nb_max_parallelized_process) as pool:
@@ -177,19 +175,19 @@ def main(args):
  
     if silence == "add":
         print("Padding silence...")
-        list_arg = [(audio_path,audio_path,silence,silence_threshold,True,True) for audio_path in tqdm(list_audio_path_preprocessing)]
+        list_arg = [(audio_path,audio_path,silence_threshold,True,True) for audio_path in tqdm(list_audio_path_preprocessing)]
         with Pool(processes=nb_max_parallelized_process) as pool:
             pool.starmap(AudioPreprocessor().add_lead_trail_audio_wav_silence, tqdm(list_arg))
             
    
     '''
-    Copying audio files tro keep original and preprocess new one
+    Copying audio files into ImageNET tree style
     '''
-    print("Copy paste original data into a preprocessed folder to be preprocessed...")
+    print("Copying audio files into ImageNET tree style...")
     [os.makedirs(directory,exist_ok=True) for directory in dir_to_create]
     list_arg = [(path_audio, list_audio_path[index]) for index, path_audio in enumerate(list_audio_path_preprocessing)]
     with Pool(processes=nb_max_parallelized_process) as pool:
-        pool.starmap(shutil.copy, tqdm(list_arg))
+        pool.starmap(shutil.move, tqdm(list_arg))
     shutil.rmtree(dir_audio_data_files_preprocessing)
         
     '''
