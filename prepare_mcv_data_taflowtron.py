@@ -6,6 +6,7 @@ import argparse
 import pandas as pd
 import csv
 import shutil
+import re
 
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.data import DataPreprocessor
@@ -68,6 +69,7 @@ def main(args):
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
     path_hparam_file = args.path_hparam_file
     path_symbols_file = args.path_symbols_file
+    path_speaker_whitelist = args.path_speaker_whitelist
     silence = args.silence.lower()
     noise = args.noise.lower() == "true"
     audio_normalization = args.audio_normalization.lower() == "true"
@@ -106,7 +108,11 @@ def main(args):
     print("Collect information from MCV data...")
     obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
     cleaner_mcv = DataReader(path_mcv_cleaner).read_data_file(**obj)
-    
+    if path_speaker_whitelist is not None:
+        speaker_whitelist = DataReader(path_speaker_whitelist).read_data_file(**obj)
+        speaker_whitelist = [re.sub('\\n','',element) for element in speaker_whitelist]
+    else:
+        speaker_whitelist = None
     data_info_mcv, data_info_user, nb_speaker, dir_to_create, list_audio_path_original = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN,
                                                                                                                                                     path_column=PATH_COLUMN, 
                                                                                                                                                     element_column=ELEMENT_COLUMN,
@@ -115,7 +121,8 @@ def main(args):
                                                                                                                                                     cleaner=cleaner_mcv,
                                                                                                                                                     tts=tts_model,
                                                                                                                                                     option_column=OPTION_COLUMN,
-                                                                                                                                                    option_value=gender)
+                                                                                                                                                    option_value=gender,
+                                                                                                                                                    speaker_whitelist=speaker_whitelist)
     list_audio_path = [line.split('|')[0] for line in list(data_info_mcv)]
     list_audio_path_preprocessing = [os.path.join(dir_audio_data_files_preprocessing,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_original]
     list_subtitle = [line.split('|')[1] for line in list(data_info_mcv)]
@@ -337,6 +344,7 @@ if __name__ == "__main__":
     parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", required=True, nargs='?')
     parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=False, nargs='?')
     parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=False, nargs='?')
+    parser.add_argument("-path_speaker_whitelist", help="Path of the file containing list of authoriozed speaker ID to use", required=False, nargs='?')
     parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
     parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
     parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
@@ -345,8 +353,7 @@ if __name__ == "__main__":
     parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, type=int, nargs='?')
     parser.add_argument("-name_train_param_config", help="Name of the experimentation of the training parameters configuration", required=True, nargs='?')
     parser.add_argument("-name_data_config", help="Name of the experimentation of the training data configuration", required=True, nargs='?')
-    parser.add_argument("-warmstart_model", help="Name of the model to use for warmstart", required=True, choices=["flowtron_ljs.pt", "flowtron_libritts2p3k.pt", "tacotron2_statedict.pt"], nargs='?')   
-   
+    parser.add_argument("-warmstart_model", help="Name of the model to use for warmstart", required=True, choices=["flowtron_ljs.pt", "flowtron_libritts2p3k.pt", "tacotron2_statedict.pt"], nargs='?')
     
     args = parser.parse_args()
     

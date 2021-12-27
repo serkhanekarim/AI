@@ -82,7 +82,8 @@ class DataPreprocessor:
                                        user_id=None,
                                        option_column=None,
                                        option_value=None,
-                                       format_conversion=".wav"):
+                                       format_conversion=".wav",
+                                       speaker_whitelist=None):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
         into taflowtron fileslist format
@@ -111,6 +112,8 @@ class DataPreprocessor:
             option value to use to specify parameter on optional list from list_unique_user to find max user
         format_conversion : string
             format used by tacotron2 training (always .wav)
+        speaker_whitelist : list
+            list of speaker ID to use
             
         Returns
         -------
@@ -118,7 +121,10 @@ class DataPreprocessor:
             taflowtron filelist (dataframe or list), dataframe containg information about user, number of speaker
 
         '''
-        list_user_id = list(self.dataframe[user_column].unique())
+        if speaker_whitelist is None:
+            list_user_id = list(self.dataframe[user_column].unique())
+        else:
+            list_user_id = speaker_whitelist
         #Fix number of max parallelized process
         nb_max_parallelized_process = min(len(list_user_id), os.cpu_count())
         list_arg = [(user_id, user_column) for user_id in list_user_id]        

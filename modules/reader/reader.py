@@ -122,7 +122,7 @@ class DataReader:
         
         '''
         
-        print("Reading files...")        
+        print("Reading files...: " + self.path_file)        
         self.filetype = self.filetype or self._filetype_finder()
         self.separator = self.separator or self._separator_finder()
         print("Reading files - DONE") 

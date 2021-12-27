@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_22_v7_2_mcv_en_removesilence_libri/outdir",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_24_v7_4_mcv_en_0_1_0_removesilence_libri/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -24,8 +24,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_removesilence/mcv_audio_text_train_filelist_en_None.txt",
-        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_removesilence/mcv_audio_text_valid_filelist_en_None.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_0_1_0_removesilence/mcv_audio_text_train_filelist_en_None.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_0_1_0_removesilence/mcv_audio_text_valid_filelist_en_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
