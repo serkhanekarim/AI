@@ -8,6 +8,7 @@ import shutil
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.data import DataPreprocessor
 from modules.scraping.media import MediaScraper
+from modules.scraping.text import TextScraper
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
 from modules.preprocessing.time import TimePreprocessor
@@ -63,7 +64,7 @@ def main(args):
     directory_taflowtron_filelist = args.directory_taflowtron_filelist
     converter = args.converter.lower() == "true"
     path_hparam_file = args.path_hparam_file
-    generated_subtitle = args.generated_subtitle
+    generated_subtitle = args.generated_subtitle.lower() == "true"
     concatenate_vtt = args.concatenate_vtt.lower() == "true"
     silence = args.silence.lower()
     noise = args.noise.lower() == "true"
@@ -109,24 +110,25 @@ def main(args):
                                                                           generated_subtitle=generated_subtitle)
         if re.search('NO_(MANUAL|GENERATED)_SUBTITLE\.vtt',path_subtitle) is not None:
             continue
+        base = os.path.basename(path_audio)
+        youtube_code = os.path.splitext(base)[0]
         '''
         Parse subtitles to get trim and text information
         '''
         print("Extracting information from vtt files...")
         data_subtitle = DataReader(path_subtitle).read_data_file()
+        #data_subtitle = TextScraper().get_youtube_subtitle(youtube_id=youtube_code, generated_mode=generated_subtitle, language_code=[language])
         list_time, list_subtitle = DataPreprocessor().get_info_from_vtt(data=data_subtitle,
                                                                         cleaner=cleaner_youtube,
                                                                         concatenate=concatenate_vtt,
                                                                         max_limit_duration=max_limit_duration, 
-                                                                        min_limit_duration=min_limit_duration)
-        list_time = [(TimePreprocessor().convert_time_format(time[0]),TimePreprocessor().convert_time_format(time[1])) for time in list_time]
+                                                                        min_limit_duration=min_limit_duration,
+                                                                        use_youtube_transcript_api=False)
         
         '''
         Trim audio regarding vtt information
         '''
         print("Trimming audio...")
-        base = os.path.basename(path_audio)
-        youtube_code = os.path.splitext(base)[0]
         dir_audio_data_files = os.path.join(data_directory,language,source,name_data_config,youtube_code,'clips')
         os.makedirs(dir_audio_data_files,exist_ok=True)
         path_audio_output = os.path.join(dir_audio_data_files,youtube_code) + "." + AUDIO_FORMAT

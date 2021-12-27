@@ -41,19 +41,6 @@ class DataPreprocessor:
         '''
         
         return user_id, self.dataframe[self.dataframe[user_column]==user_id]
-       # return user_id, self.dataframe[self.dataframe[user_column]==user_id], list(self.dataframe[self.dataframe[user_column]==user_id][option_column].unique())[0]
-        
-        # list_user = list(self.dataframe[user_column].unique())
-        # list_number_element = []
-        # list_option_element = []
-        # print("List creation of number of element and option from user")
-        # for user in tqdm(list_user):
-        #     list_number_element.append(self.dataframe[self.dataframe[user_column]==user].shape[0])
-        #     if option_column is not None:
-        #         #Sometimes gender contain male and/or female and/or NaN
-        #         list_option_element += [list(self.dataframe[self.dataframe[user_column]==user][option_column].unique())[0]]
-                
-        # return list_user, list_number_element, list_option_element
     
     def _find_max_user(self, list_user, list_number_element, list_option_element, option):
         '''
@@ -226,16 +213,16 @@ class DataPreprocessor:
             subtitle = list_subtitle[index]
             beg_time = list_time[index][0]
             end_time = list_time[index][1]
-            if index+compt < len(list_subtitle)-1 and (TimePreprocessor().convert_time_format(list_time[index+compt][1]) - TimePreprocessor().convert_time_format(list_time[index+compt][0])) != align_duration:
+            if index+compt < len(list_subtitle)-1 and (list_time[index+compt][1] - list_time[index+compt][0]) != align_duration:
                 #If not out of index range and duration is not the aligned 10 ms one
-                while (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(beg_time)) <= max_limit_duration \
+                while (list_time[index+compt+1][1] - beg_time) <= max_limit_duration \
                     and list_time[index+compt][1] == list_time[index+compt+1][0] \
                         and list_subtitle[index+compt][-1] not in self.END_CHARS:
                             #Concatenate next subtitles if:
                             #If limit of 10 second
                             #If beginning of next timestamp is the end of the actual timestamp or FOR FUTURE MAYBE ADD CONCATENATION IF DIIF < 10 MS
                             #If actual subtitle does not end with an end chars 
-                            if (TimePreprocessor().convert_time_format(list_time[index+compt+1][1]) - TimePreprocessor().convert_time_format(list_time[index+compt+1][0])) != align_duration:
+                            if (list_time[index+compt+1][1] - list_time[index+compt+1][0]) != align_duration:
                                 #If duration is not 10ms, concatenation is done
                                 subtitle += " " + list_subtitle[index+compt+1]
                                 end_time = list_time[index+compt+1][1]
@@ -247,13 +234,13 @@ class DataPreprocessor:
             index += compt + 1
         
         #Remove audio smaller than min_limit_duration
-        new_list_subtitle = [subtitle for index,subtitle in enumerate(new_list_subtitle) if TimePreprocessor().convert_time_format(new_list_time[index][1]) - TimePreprocessor().convert_time_format(new_list_time[index][0]) >= min_limit_duration]
-        new_list_time = [time for time in new_list_time if TimePreprocessor().convert_time_format(time[1]) - TimePreprocessor().convert_time_format(time[0]) >= min_limit_duration]
+        new_list_subtitle = [subtitle for index,subtitle in enumerate(new_list_subtitle) if new_list_time[index][1] - new_list_time[index][0] >= min_limit_duration]
+        new_list_time = [time for time in new_list_time if time[1] - time[0] >= min_limit_duration]
         
         return new_list_time, new_list_subtitle
         
     
-    def get_info_from_vtt(self, data, cleaner, concatenate=False, max_limit_duration=10000, min_limit_duration=1000):
+    def get_info_from_vtt(self, data, cleaner, concatenate=False, max_limit_duration=10000, min_limit_duration=1000, use_youtube_transcript_api=True):
         '''
         Get time of subtitile and subtitle
 
@@ -269,6 +256,8 @@ class DataPreprocessor:
             maximum audio length/duration authorized
         min_limit_duration : int
             minimum audio length/duration authorized
+        use_youtube_transcript_api : boolean
+            use or not youtube_transcript_api
 
         Returns
         -------
@@ -280,27 +269,30 @@ class DataPreprocessor:
         list_time = []
         list_subtitle = []
         
-        index = 0
-        while index < len(data):
-            element = data[index]
-            compt = 1
-            subtitle = ''
-            if re.search(r'\d\d\:\d\d\:\d\d\.\d\d\d --> \d\d\:\d\d\:\d\d\.\d\d\d', element):
-                list_time.append(re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element))
-                while data[index + compt] != '\n':
-                    subtitle += data[index + compt]
-                    compt += 1
-                list_subtitle.append(subtitle)
-            index += 1
-        
+        if use_youtube_transcript_api:
+            list_subtitle = [element['text'] for element in data]
+            list_time = [(element['start']*1000,(element['start']+element['duration'])*1000) for element in data]
+        else:
+            index = 0
+            while index < len(data):
+                element = data[index]
+                compt = 1
+                subtitle = ''
+                if re.search(r'\d\d\:\d\d\:\d\d\.\d\d\d --> \d\d\:\d\d\:\d\d\.\d\d\d', element):
+                    list_time.append(re.findall(r'(\d\d\:\d\d\:\d\d\.\d\d\d) --> (\d\d\:\d\d\:\d\d\.\d\d\d)', element))
+                    while data[index + compt] != '\n':
+                        subtitle += data[index + compt]
+                        compt += 1
+                    list_subtitle.append(subtitle)
+                index += 1
+            list_time = [(TimePreprocessor().convert_time_format(time[0][0]),TimePreprocessor().convert_time_format(time[0][1])) for time in list_time]
+            
         list_subtitle = DataCleaner().clean_text(data=list_subtitle,
                                                  cleaner=cleaner)
             
         index_to_remove = self._useless_data(list_subtitle)
-        #print(index_to_remove)
-        list_time = [element[0] for index,element in enumerate(list_time) if index not in index_to_remove]
+        list_time = [element for index,element in enumerate(list_time) if index not in index_to_remove]
         list_subtitle = [element for index,element in enumerate(list_subtitle) if index not in index_to_remove]
-        #print(list_subtitle[100:400])
         
         '''
         Concatenation of sentence/subtitle
@@ -308,7 +300,6 @@ class DataPreprocessor:
         if concatenate:
             list_time, list_subtitle = self._concatenate_subtitle(list_time, list_subtitle, max_limit_duration, min_limit_duration)
         
-        #print(list_subtitle[100:200])
         return list_time, list_subtitle
     
     def get_ITN_data(self, data_text, data_option=None, regex_match=re.compile('[^a-zA-Z-\']+')):

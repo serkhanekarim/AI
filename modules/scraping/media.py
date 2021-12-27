@@ -9,7 +9,7 @@ from modules.Global.method import Method
 
 class MediaScraper:
     '''
-    Class used to scrap media data like video audio...
+    Class used to scrap media data like video, audio...
     '''
     
     # def __init__(self, dataframe):

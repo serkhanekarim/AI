@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import yfinance as yf
+from youtube_transcript_api import YouTubeTranscriptApi
+
 from modules.preprocessing.date import DatePreprocessor
 from modules.Global import variable
 
 from tqdm import tqdm
 
-class DataScraper:
+class TextScraper:
     '''
     Class used to scrap data
     '''
@@ -16,8 +18,34 @@ class DataScraper:
     
     def __init__(self, dataframe=None):
         self.dataframe = dataframe
+        
+    def get_youtube_subtitle(self, youtube_id, generated_mode, language_code):
+        '''
+        Get youtube subtitle using youtube_transcript_api
+
+        Parameters
+        ----------
+        youtube_id : string
+            youtube video ID
+        generated_mode : boolean
+            Generated or manual subtitle (True of False)
+        language_code : list
+            list of string containing subtitle language code ['en','fr','ar']
+
+        Returns
+        -------
+        list
+            list containing youtube subtitle information [{text, start, duration}, ...]
+
+        '''
+        transcript_list = YouTubeTranscriptApi.list_transcripts(youtube_id)
+        if generated_mode:
+            return transcript_list.find_generated_transcript(language_code).fetch()
+        else:
+            return transcript_list.find_manually_created_transcript(language_code).fetch()
+            
     
-    def add_scraped_data(self,
+    def add_scraped_stock_data(self,
                          column_name,
                          date_format='%Y-%m-%d', 
                          product="GLD"):
