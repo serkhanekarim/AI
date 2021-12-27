@@ -14,7 +14,7 @@
         "ignore_layers": [],
         "finetune_layers": [],
         "include_layers": [],
-        "warmstart_checkpoint_path": "/home/ks1/models/tts/flowtron/exp_17_v7_0_video_concate_removesilence_obama_clean_libri/outdir/model_182000",
+        "warmstart_checkpoint_path": "/home/ks1/models/tts/flowtron/exp_20_v7_0_2_video_concate_removesilence_obama_clean_libri_nflow2/outdir/model_276000",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
