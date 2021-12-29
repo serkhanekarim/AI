@@ -1,4 +1,19 @@
-./prepare_youtube_data_taflowtron.py -tts_model 'flowtron' -path_list_url '/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/en/obama_clean.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/en/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json' -silence 'remove' -converter 'False' -concatenate_vtt 'True' -generated_subtitle 'False' -nb_speaker 1 -noise 'False' -audio_normalization 'True' -warmstart_model 'flowtron_libritts2p3k.pt' -name_train_param_config 'exp_11_v6_1_10_new_video_concate_removesilence_jacko_warm_libri' -name_data_config 'v5_concate_removesilence'
+./prepare_youtube_data_taflowtron.py 
+-tts_model 'flowtron' 
+-path_list_url '/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/en/obama_clean.txt' 
+-language 'en' 
+-path_youtube_cleaner '/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/en/youtube_subtitle_cleaner_flowtron.tsv' 
+-directory_taflowtron_filelist '/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists' 
+-path_hparam_file '/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json' 
+-silence 'remove' 
+-converter 'False' 
+-concatenate_vtt 'True' 
+-generated_subtitle 'False' 
+-nb_speaker 1 -noise 'False' 
+-audio_normalization 'True' 
+-warmstart_model 'flowtron_libritts2p3k.pt' 
+-name_train_param_config 'exp_11_v6_1_10_new_video_concate_removesilence_jacko_warm_libri' 
+-name_data_config 'v5_concate_removesilence'
 
 ./prepare_youtube_data_taflowtron.py -tts_model 'flowtron' -path_list_url '/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/en/jocko_podcast_shortlist.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/en/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json' -silence 'remove' -converter 'True' -concatenate_vtt 'True' -nb_speaker 1 -name_train_param_config 'exp_11_v6_1_10_new_video_concate_removesilence_jacko_warm_libri' -name_data_config 'v5_concate_removesilence' -warmstart_model 'flowtron_libritts2p3k.pt'
 

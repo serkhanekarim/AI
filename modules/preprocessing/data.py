@@ -152,7 +152,9 @@ class DataPreprocessor:
             return table_filelist, data_info, 0
 
         if tts == "flowtron":
-            filelist = []
+            list_audio_path = []
+            list_subtitle = []
+            list_speaker_id = []
             dir_to_create = []
             list_original_path = []
             for index, user in enumerate(tqdm(list_user)):
@@ -164,9 +166,10 @@ class DataPreprocessor:
                 part_extension = ["part_" + str(index) for index in range(nb_part+1)]
                 dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
                 list_original_path += [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
-                list_path = [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
-                filelist += [list_path[index] + "|" + list(table[element_column])[index] + "|" + str(index) for index in range(len_table)]
-            return filelist, data_info, len(user)-1, dir_to_create, list_original_path
+                list_audio_path += [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
+                list_subtitle += list(table[element_column])
+                list_speaker_id += [str(index)]*len_table
+            return list_audio_path, list_subtitle, list_speaker_id, data_info, len(list_user), dir_to_create, list_original_path
     
     def _useless_data(self, data):
         '''

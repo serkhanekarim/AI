@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import json
+
 import os
 import argparse
 import shutil
@@ -8,10 +10,8 @@ import shutil
 from modules.preprocessing.audio import AudioPreprocessor
 from modules.preprocessing.data import DataPreprocessor
 from modules.scraping.media import MediaScraper
-from modules.scraping.text import TextScraper
 from modules.reader.reader import DataReader
 from modules.writer.writer import DataWriter
-from modules.preprocessing.time import TimePreprocessor
 from modules.Global.method import Method
 
 import pandas as pd
@@ -21,7 +21,7 @@ from multiprocessing import Pool
 import csv
 import re
 
-def main(args):
+def main(args, project_name):
     '''
     Prepare youtube data for Tacotron2 and Flowtron
     
@@ -55,28 +55,38 @@ def main(args):
     DIR_CLUSTER = os.path.join('/home',USER_CLUSTER)
     SEED = 42
     AUDIO_FORMAT = 'wav' #Required audio format for taflowtron
-      
-    tts_model = args.tts_model
-    path_list_url = args.path_list_url
-    language = args.language.lower()
-    data_directory = args.data_directory
-    path_youtube_cleaner = args.path_youtube_cleaner
-    directory_taflowtron_filelist = args.directory_taflowtron_filelist
-    converter = args.converter.lower() == "true"
-    path_hparam_file = args.path_hparam_file
-    generated_subtitle = args.generated_subtitle.lower() == "true"
-    concatenate_vtt = args.concatenate_vtt.lower() == "true"
-    silence = args.silence.lower()
-    noise = args.noise.lower() == "true"
-    audio_normalization = args.audio_normalization.lower() == "true"
-    name_train_param_config = args.name_train_param_config
-    name_data_config = args.name_data_config
-    warmstart_model = args.warmstart_model
-    batch_size = args.batch_size
-    silence_threshold = args.silence_threshold
-    max_limit_duration = args.max_limit_duration
-    min_limit_duration = args.min_limit_duration
-    nb_speaker = args.nb_speaker
+    DATA_FOLDER_NAME = "DATA"
+    
+    directory_of_script = os.path.dirname(os.path.realpath(__file__))
+    directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
+    directory_of_data = os.path.join(directory_of_script,DATA_FOLDER_NAME,PROJECT_NAME)
+    os.makedirs(directory_of_results,exist_ok=True)
+    os.makedirs(directory_of_data,exist_ok=True)
+    
+    name_train_param_config = args["name_train_param_config"]
+    name_data_config = args["name_data_config"]
+    language = args["language"].lower()
+    data_directory = args["data_directory"]
+    directory_taflowtron_filelist = args["directory_taflowtron_filelist"]
+    path_hparam_file = args["path_hparam_file"]
+    path_symbols_file = args["path_symbols_file"]
+    path_list_url = args["path_list_url"]
+    path_youtube_cleaner = args["path_youtube_cleaner"]
+    converter = args["converter"]
+    silence = args["silence"]
+    silence_threshold = args["silence_threshold"]
+    remove_noise = args["remove_noise"]
+    audio_normalization = args["audio_normalization"]
+    generated_subtitle = args["generated_subtitle"]
+    concatenate_vtt = args["concatenate_vtt"]
+    max_limit_duration = args["max_limit_duration"]
+    min_limit_duration = args["min_limit_duration"]
+    tts_model = args["tts_model"]
+    warmstart_model = args["warmstart_model"]
+    batch_size = args["batch_size"]
+    nb_speaker = args["nb_speaker"]
+    
+    if data_directory is None: data_directory = directory_of_data
     
     dir_tts_model = os.path.join('models','tts',tts_model)
     dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME,PROJECT_NAME)
@@ -142,7 +152,7 @@ def main(args):
         '''
         Remove Noise
         '''
-        if noise:
+        if remove_noise:
             print("Revoming noise...")
             list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
             with Pool(processes=nb_max_parallelized_process) as pool:
@@ -208,7 +218,7 @@ def main(args):
         '''
         Update audio path for cluster
         '''
-        list_trimmed_audio_path = [audio_path.replace(directory_of_data,dir_cluster_data) for audio_path in list_trimmed_audio_path]
+        list_trimmed_audio_path = [audio_path.replace(data_directory,dir_cluster_data) for audio_path in list_trimmed_audio_path]
     
         '''
         Create taflowtron filelist and data information
@@ -294,42 +304,18 @@ def main(args):
 
 if __name__ == "__main__":
     
-#./prepare_youtube_data_taflowtron.py  -path_list_url '/home/serkhane/Repositories/marketing-analysis/modules/scraping/flowtron_youtube_url.txt' -language 'en' -path_youtube_cleaner '/home/serkhane/Repositories/marketing-analysis/modules/preprocessing/cleaners/youtube_subtitle_cleaner_flowtron.tsv' -directory_taflowtron_filelist '/home/serkhane/Repositories/flowtron/filelists' -path_hparam_file '/home/serkhane/Repositories/flowtron/config.json' -converter 'True' -concatenate_vtt 'True' -silence_threshold '-25' -max_limit_duration 10000 -min_limit_duration 1000
-
     PROJECT_NAME = "youtube_data_taflowtron"
-    DATA_FOLDER_NAME = "DATA"
-    
-    directory_of_script = os.path.dirname(os.path.realpath(__file__))
-    directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
-    directory_of_data = os.path.join(directory_of_script,DATA_FOLDER_NAME,PROJECT_NAME)
-    os.makedirs(directory_of_results,exist_ok=True)
-    os.makedirs(directory_of_data,exist_ok=True)
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-tts_model", help="Which model to use to adapt data", required=True, choices=["flowtron", "tacotron2"] ,nargs='?')
-    parser.add_argument("-path_list_url", help="Path of a file containing Youtube urls", required=True, nargs='?')
-    parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
-    parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
-    parser.add_argument("-path_youtube_cleaner", help="Path of a tsv file containing regex substitution", required=True, nargs='?')
-    parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", required=True, nargs='?')
-    parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=False, nargs='?')
-    parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=False, nargs='?')
-    parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
-    parser.add_argument("-converter", help="Convert or not the audio downliaded from youtube", required=True, nargs='?')
-    parser.add_argument("-generated_subtitle", help="Use generated or no generated subtitle", required=False, nargs='?')
-    parser.add_argument("-concatenate_vtt", help="Concatenate subtitles/sentences to avoid small or cut audio subtitles/sentences", required=True, nargs='?')
-    parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
-    parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
-    parser.add_argument("-noise", help="Remove noise", required=True,nargs='?')
-    parser.add_argument("-audio_normalization", help="Boost quiet audio", required=True,nargs='?')
-    parser.add_argument("-max_limit_duration", help="Maximum length authorized of an audion in millisecond", required=False, default=10000, type=int, nargs='?')
-    parser.add_argument("-min_limit_duration", help="Minimum length authorized of an audion in millisecond", required=False, default=1000, type=int, nargs='?')
-    parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, type=int, nargs='?')
-    parser.add_argument("-name_train_param_config", help="Name of the experimentation of the training parameters configuration", required=True, nargs='?')
-    parser.add_argument("-name_data_config", help="Name of the experimentation of the training data configuration", required=True, nargs='?')
-    parser.add_argument("-warmstart_model", help="Name of the model to use for warmstart", required=True, choices=["flowtron_ljs.pt", "flowtron_libritts2p3k.pt", "tacotron2_statedict.pt"], nargs='?')   
-    
-    
+    parser.add_argument('-c', '--config', type=str, help='JSON file for configuration')
+    parser.add_argument('-p', '--params', nargs='+', default=[])
     args = parser.parse_args()
+    args.rank = 0
     
-    main(args)    
+    with open(args.config) as f:
+        data = f.read()
+    
+    args_config = json.loads(data)[PROJECT_NAME]
+    args_config = Method().update_params(args_config, args.params)
+    
+    main(args=args_config, project_name=PROJECT_NAME)

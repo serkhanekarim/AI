@@ -4,12 +4,34 @@
 import os
 import shutil
 from tqdm import tqdm
+import ast
 
 class Method:
     '''
     Class used to store general method
     '''
     
+    def update_params(self, config, params):
+        for param in params:
+            print(param)
+            k, v = param.split("=")
+            try:
+                v = ast.literal_eval(v)
+            except:
+                print("{}:{} was not parsed".format(k, v))
+                pass
+    
+            k_split = k.split('.')
+            if len(k_split) > 1:
+                parent_k = k_split[0]
+                cur_param = ['.'.join(k_split[1:])+"="+str(v)]
+                update_params(config[parent_k], cur_param)
+            elif k in config and len(k_split) == 1:
+                config[k] = v
+            else:
+                print("{}, {} params not updated".format(k, v))
+        return config
+        
     def call_func(self, dispatcher, func):
         '''
         Call a function by using a string

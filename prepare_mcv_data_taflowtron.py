@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import json
+
 import os
 import argparse
 import pandas as pd
@@ -19,7 +21,7 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 from multiprocessing import Pool
 
-def main(args):
+def main(args, project_name):
     '''
     Prepare Mozilla common voice data for Tacotron2 and Flowtron
     
@@ -58,26 +60,35 @@ def main(args):
     PATH_COLUMN = "path"
     ELEMENT_COLUMN = "sentence"
     OPTION_COLUMN = 'gender'
+    DATA_FOLDER_NAME = "DATA"
     
-    tts_model = args.tts_model
-    directory_file_audio_info = args.directory_file_audio_info
-    data_directory = args.data_directory
-    language = args.language.lower()
-    gender = args.gender
-    nb_speaker = args.nb_speaker
-    path_mcv_cleaner = args.path_mcv_cleaner
-    directory_taflowtron_filelist = args.directory_taflowtron_filelist
-    path_hparam_file = args.path_hparam_file
-    path_symbols_file = args.path_symbols_file
-    path_speaker_whitelist = args.path_speaker_whitelist
-    silence = args.silence.lower()
-    noise = args.noise.lower() == "true"
-    audio_normalization = args.audio_normalization.lower() == "true"
-    name_train_param_config = args.name_train_param_config
-    name_data_config = args.name_data_config
-    warmstart_model = args.warmstart_model
-    batch_size = args.batch_size
-    silence_threshold = args.silence_threshold
+    directory_of_script = os.path.dirname(os.path.realpath(__file__))
+    directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
+    directory_of_data = os.path.join(directory_of_script,DATA_FOLDER_NAME,PROJECT_NAME)
+    os.makedirs(directory_of_results,exist_ok=True)
+    os.makedirs(directory_of_data,exist_ok=True)
+    
+    name_train_param_config = args["name_train_param_config"]
+    name_data_config = args["name_data_config"]
+    language = args["language"].lower()
+    gender = args["gender"]
+    data_directory = args["data_directory"]
+    directory_file_audio_info = args["directory_file_audio_info"]
+    path_mcv_cleaner = args["path_mcv_cleaner"]
+    directory_taflowtron_filelist = args["directory_taflowtron_filelist"]
+    path_hparam_file = args["path_hparam_file"]
+    path_symbols_file = args["path_symbols_file"]
+    path_speaker_whitelist = args["path_speaker_whitelist"]
+    silence = args["silence"]
+    silence_threshold = args["silence_threshold"]
+    remove_noise = args["remove_noise"]
+    audio_normalization = args["audio_normalization"]
+    tts_model = args["tts_model"]
+    warmstart_model = args["warmstart_model"]
+    batch_size = args["batch_size"]
+    nb_speaker = args["nb_speaker"]
+    
+    if data_directory is None: data_directory = directory_of_data
     
     dir_tts_model = os.path.join('models','tts',tts_model)
     dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME,PROJECT_NAME)
@@ -91,6 +102,11 @@ def main(args):
     dir_audio_data_files_preprocessing = os.path.join(data_directory,language,'clips_preprocessing')
     os.makedirs(dir_audio_data_files_preprocessed,exist_ok=True)
     os.makedirs(dir_audio_data_files_preprocessing,exist_ok=True)
+    
+    # print(data_directory)
+    # print(dir_cluster_data)
+    # print(os.path.join(data_directory,"test","test.txt").replace(data_directory,dir_cluster_data))
+    # exit()
     
     '''
     Aggregation of test, train and validation data file
@@ -113,20 +129,19 @@ def main(args):
         speaker_whitelist = [re.sub('\\n','',element) for element in speaker_whitelist]
     else:
         speaker_whitelist = None
-    data_info_mcv, data_info_user, nb_speaker, dir_to_create, list_audio_path_original = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN,
-                                                                                                                                                    path_column=PATH_COLUMN, 
-                                                                                                                                                    element_column=ELEMENT_COLUMN,
-                                                                                                                                                    data_directory=dir_audio_data_files,
-                                                                                                                                                    data_directory_preprocessed=dir_audio_data_files_preprocessed,
-                                                                                                                                                    cleaner=cleaner_mcv,
-                                                                                                                                                    tts=tts_model,
-                                                                                                                                                    option_column=OPTION_COLUMN,
-                                                                                                                                                    option_value=gender,
-                                                                                                                                                    speaker_whitelist=speaker_whitelist)
-    list_audio_path = [line.split('|')[0] for line in list(data_info_mcv)]
+    list_audio_path, list_subtitle, list_speaker_id, data_info_user, nb_speaker, dir_to_create, list_audio_path_original = DataPreprocessor(data_info).convert_data_mcv_to_taflowtron(user_column=USER_COLUMN,
+                                                                                                                                                                                        path_column=PATH_COLUMN, 
+                                                                                                                                                                                        element_column=ELEMENT_COLUMN,
+                                                                                                                                                                                        data_directory=dir_audio_data_files,
+                                                                                                                                                                                        data_directory_preprocessed=dir_audio_data_files_preprocessed,
+                                                                                                                                                                                        cleaner=cleaner_mcv,
+                                                                                                                                                                                        tts=tts_model,
+                                                                                                                                                                                        option_column=OPTION_COLUMN,
+                                                                                                                                                                                        option_value=gender,
+                                                                                                                                                                                        speaker_whitelist=speaker_whitelist)
+
     list_audio_path_preprocessing = [os.path.join(dir_audio_data_files_preprocessing,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_original]
-    list_subtitle = [line.split('|')[1] for line in list(data_info_mcv)]
-    list_speaker_id = [line.split('|')[2] for line in list(data_info_mcv)]
+
     
     #Fix number of max parallelized process
     nb_max_parallelized_process = min(len(list_audio_path_original), os.cpu_count())
@@ -147,7 +162,7 @@ def main(args):
     '''
     Remove Noise
     '''
-    if noise:
+    if remove_noise:
         print("Revoming noise...")
         list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
         with Pool(processes=nb_max_parallelized_process) as pool:
@@ -201,38 +216,24 @@ def main(args):
     Get ITN symbols from subtitles
     '''
     print("Getting ITN symbols from data...")
-    ITN_symbols += DataPreprocessor().get_ITN_data(data_text=list_subtitle, data_option=list_audio_path)
+    ITN_symbols = DataPreprocessor().get_ITN_data(data_text=list_subtitle, data_option=list_audio_path)
     
     '''
     Update audio path for cluster
     '''
-    list_audio_path = [audio_path.replace(directory_of_data,dir_cluster_data) for audio_path in list_audio_path]
+    list_audio_path = [audio_path.replace(data_directory,dir_cluster_data) for audio_path in list_audio_path]
 
     '''
-    Create taflowtron filelist and data information
+    Create taflowtron filelist
     '''
-    #list_duration = [(time[1]-time[0])/1000 for time in list_time]
-    #list_average_duration = [sum(list_duration)/len(list_duration)]*len(list_duration)
-    #list_total_video_extraction = [sum(list_duration)/3600]*len(list_duration)
-    #total_set_audio_length += sum(list_duration)
-    #mem_info = pd.DataFrame({"Audio Path":list_trimmed_audio_path,
-    #                          "Text":list_subtitle,
-    #                          "Speaker ID":voice_id,
-    #                          "Duration (seconds)":list_duration,
-    #                          "Average Duration (seconds)":list_average_duration,
-    #                          "Total Video Extraction Duration (hours)":list_total_video_extraction},
-    #                         columns=["Audio Path","Text","Speaker ID", "Duration (seconds)", "Average Duration (seconds)", "Total Video Extraction Duration (hours)"])
-    
-    # data_information = data_information.append(mem_info)
-    
-    data_filelist += [list_audio_path[index] + "|" + list_subtitle[index] + "|" + list_speaker_id[index] for index in range(len(list_subtitle))]
+    data_filelist = [list_audio_path[index] + "|" + list_subtitle[index] + "|" + list_speaker_id[index] for index in range(len(list_subtitle))]
     
     '''
     Train, test, validation splitting
     '''
     
     # In the first step we will split the data in training and remaining dataset
-    X_train, X_valid = train_test_split(data_info_mcv,train_size=0.8, random_state=SEED)
+    X_train, X_valid = train_test_split(data_filelist,train_size=0.8, random_state=SEED)
 
     # Now since we want the valid and test size to be equal (10% each of overall data). 
     # we have to define valid_size=0.5 (that is 50% of remaining data)
@@ -283,7 +284,7 @@ def main(args):
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "warmstart_checkpoint_path": ', value = '"' + warmstart_checkpoint_path + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_cluster_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_cluster_valid_filelist + '",\n')
-        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = ' ' + str(nb_speaker) + ',\n')
+        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
 
     # if path_hparam_file is not None:
     #     '''
@@ -317,44 +318,18 @@ def main(args):
 
 if __name__ == "__main__":
     
-# 	'''
-#     ./model_taflowtron_train.py -directory_file_audio_info '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -language 'kab' 
-#     -gender 'female' -directory_taflowtron_filelist '/home/serkhane/Repositories/tacotron2/filelists' -data_directory 
-#     -data_directory '/home/serkhane/Repositories/marketing-analysis/DATA/cv-corpus-7.0-2021-07-21' -converter 'False' -file_lister 'False' 
-#     -path_hparam_file '/home/serkhane/Repositories/tacotron2/hparams.py' -path_symbols_file '/home/serkhane/Repositories/tacotron2/text/symbols.py' 
-#     -batch_size 8 -user_informations 'True'
-# 	'''
-    
     PROJECT_NAME = "mcv_data_taflowtron"
-    DATA_FOLDER_NAME = "DATA"
     
-    directory_of_script = os.path.dirname(os.path.realpath(__file__))
-    directory_of_results = os.path.join(directory_of_script,"results",PROJECT_NAME)
-    directory_of_data = os.path.join(directory_of_script,DATA_FOLDER_NAME,PROJECT_NAME)
-    os.makedirs(directory_of_results,exist_ok=True)
-    os.makedirs(directory_of_data,exist_ok=True)
-    
-    parser = argparse.ArgumentParser()    
-    parser.add_argument("-tts_model", help="Which model to use to adapt data", required=True, choices=["flowtron", "tacotron2"] ,nargs='?')
-    parser.add_argument("-language", help="Language to select for subtitle", required=True, nargs='?')
-    parser.add_argument("-gender", help="Specify gender to use", required=False, nargs='?')
-    parser.add_argument("-data_directory", help="Directory of location of the data for training", required=False, default=directory_of_data, nargs='?')
-    parser.add_argument("-directory_file_audio_info", help="Directory of the file containing information of user voice", required=True, nargs='?')
-    parser.add_argument("-path_mcv_cleaner", help="Path of a tsv file containing regex substitution", required=True, nargs='?')
-    parser.add_argument("-directory_taflowtron_filelist", help="Directory of the file containing information of user voice splitted for Taflowtron training", required=True, nargs='?')
-    parser.add_argument("-path_hparam_file", help="Path of the file containing the training paramaters", required=False, nargs='?')
-    parser.add_argument("-path_symbols_file", help="Path of the file containing the symbols", required=False, nargs='?')
-    parser.add_argument("-path_speaker_whitelist", help="Path of the file containing list of authoriozed speaker ID to use", required=False, nargs='?')
-    parser.add_argument("-batch_size", help="Number of batch size", required=False, type=int, nargs='?')
-    parser.add_argument("-silence", help="add or remove silence", required=True, choices=['add', 'remove'],nargs='?')
-    parser.add_argument("-silence_threshold", type=int, help="For silence padding, silence threshold in ms and for silence removing, silence threshold in dFBS,lower the value is, les it'll remove the silence", required=False, nargs='?')
-    parser.add_argument("-noise", help="Remove noise", required=True,nargs='?')
-    parser.add_argument("-audio_normalization", help="Boost quiet audio", required=True,nargs='?')
-    parser.add_argument("-nb_speaker", help="Number of speaker", required=False, default=0, type=int, nargs='?')
-    parser.add_argument("-name_train_param_config", help="Name of the experimentation of the training parameters configuration", required=True, nargs='?')
-    parser.add_argument("-name_data_config", help="Name of the experimentation of the training data configuration", required=True, nargs='?')
-    parser.add_argument("-warmstart_model", help="Name of the model to use for warmstart", required=True, choices=["flowtron_ljs.pt", "flowtron_libritts2p3k.pt", "tacotron2_statedict.pt"], nargs='?')
-    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--config', type=str, help='JSON file for configuration')
+    parser.add_argument('-p', '--params', nargs='+', default=[])
     args = parser.parse_args()
+    args.rank = 0
     
-    main(args)    
+    with open(args.config) as f:
+        data = f.read()
+    
+    args_config = json.loads(data)[PROJECT_NAME]
+    args_config = Method().update_params(args_config, args.params)
+    
+    main(args=args_config, project_name=PROJECT_NAME)
