@@ -25,8 +25,6 @@ import ast
 
 from flowtron import FlowtronLoss
 from flowtron import Flowtron
-Data = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "Data")
-DataCollate = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "DataCollate")
 from flowtron_logger import FlowtronLogger
 from radam import RAdam
 
@@ -403,6 +401,9 @@ if __name__ == "__main__":
     dist_config = config["dist_config"]
     global model_config
     model_config = config["model_config"]
+    
+    Data = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "Data")
+    DataCollate = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "DataCollate")
 
     # Make sure the launcher sets `RANK` and `WORLD_SIZE`.
     rank = int(os.getenv('RANK', '0'))
