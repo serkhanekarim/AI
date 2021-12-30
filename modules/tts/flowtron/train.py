@@ -14,6 +14,7 @@
 #  limitations under the License.
 #
 ###########################################################################
+import importlib
 import argparse
 import json
 import os
@@ -24,7 +25,8 @@ import ast
 
 from flowtron import FlowtronLoss
 from flowtron import Flowtron
-from data import Data, DataCollate
+Data = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "Data")
+DataCollate = importlib.import_module("data.data" + "_" + data_config["language"] + "." + "DataCollate")
 from flowtron_logger import FlowtronLogger
 from radam import RAdam
 

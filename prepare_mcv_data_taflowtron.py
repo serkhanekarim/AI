@@ -283,23 +283,9 @@ def main(args, project_name):
         if batch_size is not None: data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "batch_size": ', value = ' ' + str(batch_size) + ',\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "warmstart_checkpoint_path": ', value = '"' + warmstart_checkpoint_path + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_cluster_train_filelist + '",\n')
-        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_cluster_valid_filelist + '",\n')
+        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
+        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + path_cluster_valid_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
-
-    # if path_hparam_file is not None:
-    #     '''
-    #     Update hparams with filelist and batch size
-    #     '''
-    #     data_haparams = DataReader(path_hparam_file).read_data_file()
-    #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        training_files=', value = "'" + path_train_filelist + "',\n")
-    #     data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        validation_files=', value = "'" + path_valid_filelist + "',\n")
-    #     if language == 'en':
-    #         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['english_cleaners'],\n")
-    #     else:
-    #         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        text_cleaners=', value = "['basic_cleaners'],\n")
-        
-    #     if batch_size is not None:
-    #         data_haparams = DataWriter(data_haparams, path_hparam_file).write_edit_data(key='        batch_size=', value = batch_size + ",\n")
 
     if path_symbols_file is not None:
         '''
