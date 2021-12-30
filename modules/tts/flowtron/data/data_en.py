@@ -25,7 +25,7 @@ import torch.utils.data
 from scipy.io.wavfile import read
 from scipy.stats import betabinom
 from audio_processing import TacotronSTFT
-from ..text_en import text_to_sequence, cmudict, _clean_text, get_arpabet
+from ..text.text_en import text_to_sequence, cmudict, _clean_text, get_arpabet
 
 
 def beta_binomial_prior_distribution(phoneme_count, mel_count,
