@@ -64,5 +64,8 @@
         "dummy_speaker_embedding": false,
         "use_gate_layer": true,
         "use_cumm_attention": false
+    },
+    "language_config": {
+        "language": "ar"
     }
 }
