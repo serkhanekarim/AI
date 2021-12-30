@@ -11,7 +11,7 @@ _math = '#%&*+-/[]()'
 _special = '_@©°½—₩€$'
 _accented = 'áçéêëñöøćž'
 _numbers = '0123456789'
-_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+_letters = 'XNTtrيٍكسJ؛تGشyُoxِفضٌإءّqچذYMۛcInﻻهEwًظlvKCj“ْۘۗھQW؟ـغاؤل☭ئUآSRagڨأVمsو«uحث”Hصىdخطةۖقbi،َDۚعزfP…ٰ»eدOAبجBpکmhنLkیرﺃF'
 
 # Prepend "@" to ARPAbet symbols to ensure uniqueness (some are the same as uppercase letters):
 _arpabet = ['@' + s for s in cmudict.valid_symbols]

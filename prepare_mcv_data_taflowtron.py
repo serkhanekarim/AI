@@ -185,8 +185,8 @@ def main(args, project_name):
         dir_audio_data_files_trimmed = os.path.join(data_directory,language,'_temp_clips_trimmed')
         os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
         list_arg = [(audio_path,
-                     os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
-                     True) for audio_path in list_audio_path_preprocessing]
+                      os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
+                      True) for audio_path in list_audio_path_preprocessing]
         with Pool(processes=nb_max_parallelized_process) as pool:
             pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
         shutil.rmtree(dir_audio_data_files_trimmed)
@@ -283,24 +283,40 @@ def main(args, project_name):
         if batch_size is not None: data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "batch_size": ', value = ' ' + str(batch_size) + ',\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "warmstart_checkpoint_path": ', value = '"' + warmstart_checkpoint_path + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_cluster_train_filelist + '",\n')
-        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
-        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + path_cluster_valid_filelist + '",\n')
+        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_cluster_valid_filelist + '",\n')
+        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
 
     if path_symbols_file is not None:
         '''
         Update symbols
         '''
-        data_symbols = DataReader(path_symbols_file).read_data_file()
-        pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
-        punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
-        special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
-        
-        unique_char = set("".join(data_info[ELEMENT_COLUMN]))
-        unique_char = "".join([char for char in unique_char if char not in pad + punctuation + special])
-        unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
-        
-        DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
+        if tts_model == "tacotron2":
+            data_symbols = DataReader(path_symbols_file).read_data_file()
+            pad = DataReader(path_symbols_file).read_data_value(key="_pad        = ")[1:-1]
+            punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
+            special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
+            not_letter = pad + punctuation + special
+            
+            unique_char = set("".join(data_info[ELEMENT_COLUMN]))
+            unique_char = "".join([char for char in unique_char if char not in not_letter])
+            unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
+            
+            DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
+        if tts_model == "flowtron":
+            data_symbols = DataReader(path_symbols_file).read_data_file()
+            punctuation = DataReader(path_symbols_file).read_data_value(key="_punctuation = ")[1:-1]
+            math = DataReader(path_symbols_file).read_data_value(key="_math = ")[1:-1]
+            special = DataReader(path_symbols_file).read_data_value(key="_special = ")[1:-1]
+            accented = DataReader(path_symbols_file).read_data_value(key="_accented = ")[1:-1]
+            numbers = DataReader(path_symbols_file).read_data_value(key="_numbers = ")[1:-1]
+            not_letter = punctuation + math + special + accented + numbers
+            
+            unique_char = set("".join(data_info[ELEMENT_COLUMN]))
+            unique_char = "".join([char for char in unique_char if char not in not_letter])
+            unique_char = "".join(set(unique_char.lower() + unique_char.upper()))
+            
+            DataWriter(data_symbols, path_symbols_file).write_edit_data(key='_letters = ', value = "'" + unique_char + "'\n")
 
 if __name__ == "__main__":
     

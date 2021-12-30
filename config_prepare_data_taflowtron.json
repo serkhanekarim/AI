@@ -1,7 +1,7 @@
 {
 	"mcv_data_taflowtron": {
-		"name_train_param_config": "exp_24_v7_4_mcv_en_0_1_0_removesilence_libri",
-		"name_data_config": "v1_mcv_en_0_1_0_removesilence",
+		"name_train_param_config": "exp_25_v7_5_mcv_ar_0_1_0_removesilence_libri",
+		"name_data_config": "v1_mcv_ar_0_1_0_removesilence",
 		"language": "ar",
 		"gender": null,
 		
@@ -10,7 +10,7 @@
 		"path_mcv_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/mcv/en/mcv_cleaner_flowtron.tsv",
 		"directory_taflowtron_filelist": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists",
 		"path_hparam_file": "/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json",
-		"path_symbols_file": null,
+		"path_symbols_file": "/home/serkhane/Repositories/AI/modules/tts/flowtron/text/text_ar/symbols.py",
 		"path_speaker_whitelist": "/home/serkhane/Repositories/AI/modules/scraping/sources/mcv/ar/speaker_whitelist_0.1.0.txt",
 		
 		"silence": "remove",
