@@ -285,7 +285,7 @@ def main(args, project_name):
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "language": ', value = '"' + language + '",\n')        
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_cluster_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_cluster_valid_filelist + '",\n')
-        data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
+        # data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
 
     if path_symbols_file is not None:

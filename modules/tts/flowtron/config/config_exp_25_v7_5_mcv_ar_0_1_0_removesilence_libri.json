@@ -28,7 +28,7 @@
         "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/ar/v1_mcv_ar_0_1_0_removesilence/mcv_audio_text_valid_filelist_ar_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
-        "cmudict_path": "data/data_ar/cmudict_dictionary",
+        "cmudict_path": "data/cmudict_dictionary",
         "sampling_rate": 22050,
         "filter_length": 1024,
         "hop_length": 256,
