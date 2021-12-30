@@ -402,7 +402,7 @@ if __name__ == "__main__":
     model_config = config["model_config"]
     
     exec("from data" + "_" + data_config["language"] + " import Data")
-    exec("from data" + "_" + data_config["language"] + " import DataCollacte")
+    exec("from data" + "_" + data_config["language"] + " import DataCollate")
 
     # Make sure the launcher sets `RANK` and `WORLD_SIZE`.
     rank = int(os.getenv('RANK', '0'))
