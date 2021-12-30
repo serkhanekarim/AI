@@ -14,7 +14,6 @@
 #  limitations under the License.
 #
 ###########################################################################
-import importlib
 import argparse
 import json
 import os
@@ -25,6 +24,8 @@ import ast
 
 from flowtron import FlowtronLoss
 from flowtron import Flowtron
+exec("from data" + "_" + data_config["language"] + "import Data")
+exec("from data" + "_" + data_config["language"] + "import DataCollactet")
 from flowtron_logger import FlowtronLogger
 from radam import RAdam
 
@@ -401,9 +402,6 @@ if __name__ == "__main__":
     dist_config = config["dist_config"]
     global model_config
     model_config = config["model_config"]
-    
-    Data = importlib.import_module("data" + "_" + data_config["language"] + "." + "Data")
-    DataCollate = importlib.import_module("data" + "_" + data_config["language"] + "." + "DataCollate")
 
     # Make sure the launcher sets `RANK` and `WORLD_SIZE`.
     rank = int(os.getenv('RANK', '0'))
