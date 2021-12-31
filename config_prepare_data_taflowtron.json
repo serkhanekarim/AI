@@ -1,7 +1,7 @@
 {
 	"mcv_data_taflowtron": {
-		"name_train_param_config": "exp_25_v7_5_mcv_ar_0_1_0_removesilence_libri",
-		"name_data_config": "v1_mcv_ar_0_1_0_removesilence",
+		"name_train_param_config": "exp_26_v7_6_mcv_ar_0_1_0_removesilence_libri",
+		"name_data_config": "v2_mcv_ar_0_1_0_removesilence",
 		"language": "ar",
 		"gender": null,
 		

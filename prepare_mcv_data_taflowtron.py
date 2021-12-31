@@ -91,7 +91,7 @@ def main(args, project_name):
     if data_directory is None: data_directory = directory_of_data
     
     dir_tts_model = os.path.join('models','tts',tts_model)
-    dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME,PROJECT_NAME)
+    dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME)
     #data_information = pd.DataFrame()
     data_filelist = []
     ITN_symbols = []
@@ -102,11 +102,6 @@ def main(args, project_name):
     dir_audio_data_files_preprocessing = os.path.join(data_directory,language,'clips_preprocessing')
     os.makedirs(dir_audio_data_files_preprocessed,exist_ok=True)
     os.makedirs(dir_audio_data_files_preprocessing,exist_ok=True)
-    
-    # print(data_directory)
-    # print(dir_cluster_data)
-    # print(os.path.join(data_directory,"test","test.txt").replace(data_directory,dir_cluster_data))
-    # exit()
     
     '''
     Aggregation of test, train and validation data file
