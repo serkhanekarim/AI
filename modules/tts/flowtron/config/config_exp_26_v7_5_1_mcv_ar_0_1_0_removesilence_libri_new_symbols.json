@@ -1,4 +1,7 @@
 {
+    "language_config": {
+        "language": "ar"
+    },
     "train_config": {
         "output_directory": "/home/ks1/models/tts/flowtron/exp_26_v7_5_1_mcv_ar_0_1_0_removesilence_libri_new_symbols/outdir",
         "epochs": 10000000,
@@ -63,8 +66,5 @@
         "dummy_speaker_embedding": false,
         "use_gate_layer": true,
         "use_cumm_attention": false
-    },
-    "language_config": {
-        "language": "ar"
     }
 }

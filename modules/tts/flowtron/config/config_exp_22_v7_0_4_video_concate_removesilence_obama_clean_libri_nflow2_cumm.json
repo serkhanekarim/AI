@@ -1,4 +1,7 @@
 {
+    "language_config": {
+        "language": "en"
+    },
     "train_config": {
         "output_directory": "/home/ks1/models/tts/flowtron/exp_22_v7_0_4_video_concate_removesilence_obama_clean_libri_nflow2_cumm/outdir",
         "epochs": 10000000,

@@ -1,4 +1,7 @@
 {
+    "language_config": {
+        "language": "en"
+    },
     "train_config": {
         "output_directory": "/home/ks1/models/tts/flowtron/exp_24_v7_4_mcv_en_0_1_0_removesilence_libri/outdir",
         "epochs": 10000000,
