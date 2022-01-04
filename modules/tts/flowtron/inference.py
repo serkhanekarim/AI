@@ -25,10 +25,35 @@ import sys
 import numpy as np
 import torch
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--config', type=str,
+                        help='JSON file for configuration')
+    parser.add_argument('-p', '--params', nargs='+', default=[])
+    parser.add_argument('-f', '--flowtron_path',
+                        help='Path to flowtron state dict', type=str)
+    parser.add_argument('-w', '--waveglow_path',
+                        help='Path to waveglow state dict', type=str)
+    parser.add_argument('-t', '--text', help='Text to synthesize', type=str)
+    parser.add_argument('-i', '--id', help='Speaker id', type=int)
+    parser.add_argument('-n', '--n_frames', help='Number of frames',
+                        default=400, type=int)
+    parser.add_argument('-o', "--output_dir", default="results/inferences")
+    parser.add_argument("-s", "--sigma", default=0.5, type=float)
+    parser.add_argument("-g", "--gate", default=0.5, type=float)
+    parser.add_argument("--seed", default=1234, type=int)
+    return parser.parse_args()
+
+args = parse_args()
+with open(args.config) as f:
+    data = f.read()
+global config
+config = json.loads(data)
+language_config = config["language_config"]
 
 from flowtron import Flowtron
 from torch.utils.data import DataLoader
-from data import Data
+exec("from data" + "_" + language_config["language"] + " import Data")
 from train import update_params
 
 sys.path.insert(0, "tacotron2")
@@ -95,30 +120,7 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str,
-                        help='JSON file for configuration')
-    parser.add_argument('-p', '--params', nargs='+', default=[])
-    parser.add_argument('-f', '--flowtron_path',
-                        help='Path to flowtron state dict', type=str)
-    parser.add_argument('-w', '--waveglow_path',
-                        help='Path to waveglow state dict', type=str)
-    parser.add_argument('-t', '--text', help='Text to synthesize', type=str)
-    parser.add_argument('-i', '--id', help='Speaker id', type=int)
-    parser.add_argument('-n', '--n_frames', help='Number of frames',
-                        default=400, type=int)
-    parser.add_argument('-o', "--output_dir", default="results/inferences")
-    parser.add_argument("-s", "--sigma", default=0.5, type=float)
-    parser.add_argument("-g", "--gate", default=0.5, type=float)
-    parser.add_argument("--seed", default=1234, type=int)
-    args = parser.parse_args()
 
-    # Parse configs.  Globals nicer in this case
-    with open(args.config) as f:
-        data = f.read()
-
-    global config
-    config = json.loads(data)
     update_params(config, args.params)
 
     data_config = config["data_config"]
