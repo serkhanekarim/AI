@@ -15,19 +15,19 @@
 
 import os
 
-from nemo_text_processing.inverse_text_normalization.en.taggers.cardinal import CardinalFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.date import DateFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.decimal import DecimalFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.electronic import ElectronicFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.measure import MeasureFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.money import MoneyFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.ordinal import OrdinalFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.punctuation import PunctuationFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.telephone import TelephoneFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.time import TimeFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.whitelist import WhiteListFst
-from nemo_text_processing.inverse_text_normalization.en.taggers.word import WordFst
-from nemo_text_processing.text_normalization.en.graph_utils import (
+from nemo_text_processing.inverse_text_normalization.ar.taggers.cardinal import CardinalFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.date import DateFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.decimal import DecimalFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.electronic import ElectronicFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.measure import MeasureFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.money import MoneyFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.ordinal import OrdinalFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.punctuation import PunctuationFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.telephone import TelephoneFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.time import TimeFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.whitelist import WhiteListFst
+from nemo_text_processing.inverse_text_normalization.ar.taggers.word import WordFst
+from nemo_text_processing.text_normalization.ar.graph_utils import (
     GraphFst,
     delete_extra_space,
     delete_space,
@@ -62,7 +62,7 @@ class ClassifyFst(GraphFst):
         far_file = None
         if cache_dir is not None and cache_dir != "None":
             os.makedirs(cache_dir, exist_ok=True)
-            far_file = os.path.join(cache_dir, "_en_itn.far")
+            far_file = os.path.join(cache_dir, "_ar_itn.far")
         if not overwrite_cache and far_file and os.path.exists(far_file):
             self.fst = pynini.Far(far_file, mode="r")["tokenize_and_classify"]
             logging.info(f"ClassifyFst.fst was restored from {far_file}.")
