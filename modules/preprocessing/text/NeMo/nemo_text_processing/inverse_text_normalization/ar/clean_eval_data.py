@@ -327,7 +327,7 @@ def filter_loaded_data(data: List[Instance], verbose: bool = False) -> List[Inst
 
 def parse_args():
     parser = ArgumentParser()
-    parser.add_argument("--input", help="input file path", type=str, default='./en_with_types/output-00001-of-00100')
+    parser.add_argument("--input", help="input file path", type=str, default='./ar_with_types/output-00001-of-00100')
     parser.add_argument("--verbose", help="print filtered instances", action='store_true')
     return parser.parse_args()
 

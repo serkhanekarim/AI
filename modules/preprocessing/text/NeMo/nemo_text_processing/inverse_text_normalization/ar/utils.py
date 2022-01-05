@@ -15,9 +15,7 @@
 import os
 from typing import Union
 
-import inflect
-
-_inflect = inflect.engine()
+from num2words import num2words
 
 
 def num_to_word(x: Union[str, int]):
@@ -29,10 +27,7 @@ def num_to_word(x: Union[str, int]):
 
     Returns: spoken representation 
     """
-    if isinstance(x, int):
-        x = str(x)
-        x = _inflect.number_to_words(str(x)).replace("-", " ").replace(",", "")
-    return x
+    return num2words(x, lang='ar')
 
 
 def get_abs_path(rel_path):
