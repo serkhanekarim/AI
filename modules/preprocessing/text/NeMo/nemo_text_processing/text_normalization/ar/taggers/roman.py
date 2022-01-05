@@ -14,9 +14,9 @@
 # limitations under the License.
 
 
-from nemo_text_processing.text_normalization.en.graph_utils import GraphFst, insert_space
-from nemo_text_processing.text_normalization.en.taggers.cardinal import CardinalFst
-from nemo_text_processing.text_normalization.en.utils import get_abs_path, load_labels
+from nemo_text_processing.text_normalization.ar.graph_utils import GraphFst, insert_space
+from nemo_text_processing.text_normalization.ar.taggers.cardinal import CardinalFst
+from nemo_text_processing.text_normalization.ar.utils import get_abs_path, load_labels
 
 try:
     import pynini

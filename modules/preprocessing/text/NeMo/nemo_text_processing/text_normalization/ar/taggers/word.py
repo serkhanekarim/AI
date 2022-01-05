@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from nemo_text_processing.text_normalization.en.graph_utils import NEMO_DIGIT, NEMO_NOT_SPACE, GraphFst
-from nemo_text_processing.text_normalization.en.taggers.punctuation import PunctuationFst
+from nemo_text_processing.text_normalization.ar.graph_utils import NEMO_DIGIT, NEMO_NOT_SPACE, GraphFst
+from nemo_text_processing.text_normalization.ar.taggers.punctuation import PunctuationFst
 
 try:
     import pynini

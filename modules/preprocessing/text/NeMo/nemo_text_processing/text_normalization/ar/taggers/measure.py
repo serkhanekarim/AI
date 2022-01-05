@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from nemo_text_processing.text_normalization.en.graph_utils import (
+from nemo_text_processing.text_normalization.ar.graph_utils import (
     NEMO_ALPHA,
     NEMO_DIGIT,
     NEMO_NON_BREAKING_SPACE,
@@ -25,9 +25,9 @@ from nemo_text_processing.text_normalization.en.graph_utils import (
     convert_space,
     delete_space,
 )
-from nemo_text_processing.text_normalization.en.taggers.ordinal import OrdinalFst as OrdinalTagger
-from nemo_text_processing.text_normalization.en.utils import get_abs_path
-from nemo_text_processing.text_normalization.en.verbalizers.ordinal import OrdinalFst as OrdinalVerbalizer
+from nemo_text_processing.text_normalization.ar.taggers.ordinal import OrdinalFst as OrdinalTagger
+from nemo_text_processing.text_normalization.ar.utils import get_abs_path
+from nemo_text_processing.text_normalization.ar.verbalizers.ordinal import OrdinalFst as OrdinalVerbalizer
 
 try:
     import pynini

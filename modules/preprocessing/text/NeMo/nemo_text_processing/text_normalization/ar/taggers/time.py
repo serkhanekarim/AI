@@ -14,14 +14,14 @@
 # limitations under the License.
 
 
-from nemo_text_processing.text_normalization.en.graph_utils import (
+from nemo_text_processing.text_normalization.ar.graph_utils import (
     NEMO_DIGIT,
     GraphFst,
     convert_space,
     delete_space,
     insert_space,
 )
-from nemo_text_processing.text_normalization.en.utils import get_abs_path
+from nemo_text_processing.text_normalization.ar.utils import get_abs_path
 
 try:
     import pynini

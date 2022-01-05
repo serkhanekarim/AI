@@ -15,28 +15,28 @@
 
 import os
 
-from nemo_text_processing.text_normalization.en.graph_utils import (
+from nemo_text_processing.text_normalization.ar.graph_utils import (
     NEMO_WHITE_SPACE,
     GraphFst,
     delete_extra_space,
     delete_space,
     generator_main,
 )
-from nemo_text_processing.text_normalization.en.taggers.abbreviation import AbbreviationFst
-from nemo_text_processing.text_normalization.en.taggers.cardinal import CardinalFst
-from nemo_text_processing.text_normalization.en.taggers.date import DateFst
-from nemo_text_processing.text_normalization.en.taggers.decimal import DecimalFst
-from nemo_text_processing.text_normalization.en.taggers.electronic import ElectronicFst
-from nemo_text_processing.text_normalization.en.taggers.fraction import FractionFst
-from nemo_text_processing.text_normalization.en.taggers.measure import MeasureFst
-from nemo_text_processing.text_normalization.en.taggers.money import MoneyFst
-from nemo_text_processing.text_normalization.en.taggers.ordinal import OrdinalFst
-from nemo_text_processing.text_normalization.en.taggers.punctuation import PunctuationFst
-from nemo_text_processing.text_normalization.en.taggers.roman import RomanFst
-from nemo_text_processing.text_normalization.en.taggers.telephone import TelephoneFst
-from nemo_text_processing.text_normalization.en.taggers.time import TimeFst
-from nemo_text_processing.text_normalization.en.taggers.whitelist import WhiteListFst
-from nemo_text_processing.text_normalization.en.taggers.word import WordFst
+from nemo_text_processing.text_normalization.ar.taggers.abbreviation import AbbreviationFst
+from nemo_text_processing.text_normalization.ar.taggers.cardinal import CardinalFst
+from nemo_text_processing.text_normalization.ar.taggers.date import DateFst
+from nemo_text_processing.text_normalization.ar.taggers.decimal import DecimalFst
+from nemo_text_processing.text_normalization.ar.taggers.electronic import ElectronicFst
+from nemo_text_processing.text_normalization.ar.taggers.fraction import FractionFst
+from nemo_text_processing.text_normalization.ar.taggers.measure import MeasureFst
+from nemo_text_processing.text_normalization.ar.taggers.money import MoneyFst
+from nemo_text_processing.text_normalization.ar.taggers.ordinal import OrdinalFst
+from nemo_text_processing.text_normalization.ar.taggers.punctuation import PunctuationFst
+from nemo_text_processing.text_normalization.ar.taggers.roman import RomanFst
+from nemo_text_processing.text_normalization.ar.taggers.telephone import TelephoneFst
+from nemo_text_processing.text_normalization.ar.taggers.time import TimeFst
+from nemo_text_processing.text_normalization.ar.taggers.whitelist import WhiteListFst
+from nemo_text_processing.text_normalization.ar.taggers.word import WordFst
 
 from nemo.utils import logging
 
@@ -79,7 +79,7 @@ class ClassifyFst(GraphFst):
             os.makedirs(cache_dir, exist_ok=True)
             whitelist_file = os.path.basename(whitelist) if whitelist else ""
             far_file = os.path.join(
-                cache_dir, f"_{input_case}_en_tn_{deterministic}_deterministic{whitelist_file}.far"
+                cache_dir, f"_{input_case}_ar_tn_{deterministic}_deterministic{whitelist_file}.far"
             )
         if not overwrite_cache and far_file and os.path.exists(far_file):
             self.fst = pynini.Far(far_file, mode="r")["tokenize_and_classify"]
