@@ -14,6 +14,92 @@
 # limitations under the License.
 
 
+import pynini
+# from pynini import Far
+# from pynini.export import export
+# from pynini.examples import plurals
+# from pynini.lib import byte, pynutil, utf8
+# import string
+
+from nemo_text_processing.inverse_text_normalization.ar.utils import get_abs_path
+
+# from nemo_text_processing.text_normalization.ar.graph_utils import NEMO_ALPHA
+# from nemo_text_processing.text_normalization.ar.graph_utils import NEMO_DIGIT
+from nemo_text_processing.text_normalization.ar.graph_utils import NEMO_SIGMA
+from nemo_text_processing.text_normalization.ar.graph_utils import NEMO_SPACE
+from nemo_text_processing.text_normalization.ar.graph_utils import GraphFst
+from nemo_text_processing.text_normalization.ar.graph_utils import delete_space
+
+class CardinalFst(GraphFst):
+    """
+    Finite state transducer for classifying cardinals
+        e.g. minus twenty three -> cardinal { integer: "23" negative: "-" } }
+    Numbers below thirteen are not converted. 
+    """
+    def __init__(self):
+        super().__init__(name="cardinal", kind="classify")
+        
+        left_context = pynini.union("[BOS]",NEMO_SPACE)
+        right_context = pynini.union(NEMO_SPACE,"[EOS]")
+        
+        tr_zero = pynini.string_file(get_abs_path("data/numbers/zero.tsv"))
+        tr_digit = pynini.string_file(get_abs_path("data/numbers/digit.tsv"))
+        tr_ties = pynini.string_file(get_abs_path("data/numbers/ties.tsv"))
+        tr_teen = pynini.string_file(get_abs_path("data/numbers/teen.tsv"))
+        
+        tr_one_to_two_digit
+        
+        tr_remove_hundred = pynini.cross("hundred", "")
+        
+        tr_hundred = tr_digit + delete_space + tr_remove_hundred 
+
+        tr_number = pynini.union(tr_zero,
+                                 tr_digit,
+                                 tr_ties,
+                                 tr_teen)
+        
+        graph = pynini.cdrewrite(tr_number, left_context, right_context, NEMO_SIGMA)
+        
+        labels_exception = [num_to_word(x) for x in range(0, 13)]
+        graph_exception = pynini.union(*labels_exception)
+        
+        self.graph = (pynini.project(graph, "input") - graph_exception.arcsort()) @ graph
+        
+        
+        
+        self.graph_hundred_component_at_least_one_none_zero_digit = ""
+        self.graph_no_exception = rw_number
+        self.fst = rw_number.optimize()
+        
+        
+        
+        
+        
+        
+        labels_exception = [num_to_word(x) for x in range(0, 13)]
+        graph_exception = pynini.union(*labels_exception)
+
+        graph = (
+            pynini.cdrewrite(pynutil.delete("and"), NEMO_SPACE, NEMO_SPACE, NEMO_SIGMA)
+            @ (NEMO_ALPHA + NEMO_SIGMA)
+            @ graph
+        )
+
+        self.graph_no_exception = graph
+
+        self.graph = (pynini.project(graph, "input") - graph_exception.arcsort()) @ graph
+
+        optional_minus_graph = pynini.closure(
+            pynutil.insert("negative: ") + pynini.cross("minus", "\"-\"") + NEMO_SPACE, 0, 1
+        )
+
+        final_graph = optional_minus_graph + pynutil.insert("integer: \"") + self.graph + pynutil.insert("\"")
+
+        final_graph = self.add_tokens(final_graph)
+        self.fst = final_graph.optimize()
+        
+
+
 from nemo_text_processing.inverse_text_normalization.ar.utils import get_abs_path, num_to_word
 from nemo_text_processing.text_normalization.ar.graph_utils import (
     NEMO_ALPHA,

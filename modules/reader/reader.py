@@ -84,7 +84,7 @@ class DataReader:
         
         return self._extension_to_filetype(self.path_file.split(".")[-1])
     
-    def _extension_filetype_to_reader(self, filetype, separator, **kwargs):
+    def _extension_filetype_to_reader(self, filetype, separator, keep_line_break=True, **kwargs):
         '''
         Read data file from a related data file extension and type
         
@@ -94,6 +94,8 @@ class DataReader:
             File extension of a data file
         separator : string
             File extension of a data file
+        keep_line_break : string
+            keep or not line break
                 
         Returns
         -------
@@ -106,7 +108,10 @@ class DataReader:
             return pd.read_excel(io=self.path_file)
         else:
             with open(self.path_file,'r') as FileObj:
-                return FileObj.readlines()
+                if keep_line_break:
+                    return FileObj.readlines()
+                else:
+                    return [line[:-1] for line in FileObj.readlines()]
             
     def read_data_file(self, **kwargs):        
         '''

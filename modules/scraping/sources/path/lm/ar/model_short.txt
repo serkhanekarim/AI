@@ -1,0 +1,6 @@
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_Tatoeba_ar/OPUS_Tatoeba_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_opensubtitles_ar/OPUS_opensubtitles_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_GlobalVoices_ar/OPUS_GlobalVoices_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_wiki_ar/OPUS_wiki_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_TED_ar/OPUS_TED_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_newscommentary_ar/OPUS_newscommentary_ar.txt

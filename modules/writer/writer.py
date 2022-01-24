@@ -153,11 +153,9 @@ class DataWriter:
         
         '''
         
-        print("Writing files...: " + self.path_file)        
         self.filetype = self.filetype or self._filetype_finder()
-        self.separator = self.separator or self._separator_finder() 
-        print("Writing files - DONE") 
-        
+        self.separator = self.separator or self._separator_finder()
+        print("Writing files...: " + self.path_file) 
         return self._extension_filetype_to_writer(filetype=self.filetype,separator=self.separator,newline=newline)
     
     def write_edit_data(self, key, value, newline=False):

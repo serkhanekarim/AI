@@ -49,5 +49,20 @@
 		"warmstart_model": "flowtron_libritts2p3k.pt",
 		"batch_size": null,
 		"nb_speaker": null
+	},
+	"collect_news_data":{
+		"data_directory": null,
+		"path_list_url": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/news/bbc.txt"
+	},
+	"prepare_language_model":{
+		"language": "ar",
+		"data_directory": null,
+		
+		"clean_data": true,
+		"path_list_training_data": "/home/serkhane/Repositories/AI/modules/scraping/sources/path/lm/ar/model_1.txt",
+		"path_list_training_data_cleaned": "/home/serkhane/Repositories/AI/results/prepare_language_model/list_training_data_cleaned.txt",
+		"perplexity": false,
+		"path_validation_data": "/home/serkhane/Repositories/AI/DATA/prepare_language_model/validation/ar/bbc_news.txt",
+		"path_language_model": "/home/serkhane/Repositories/AI/modules/asr/lm/kenlm/build/text.binary"
 	}
 }

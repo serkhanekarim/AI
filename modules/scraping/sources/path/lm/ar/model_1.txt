@@ -1,0 +1,2 @@
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_wikimedia_ar/OPUS_wikimedia_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_MultiUN_ar/OPUS_MultiUN_ar.txt
