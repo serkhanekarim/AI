@@ -4,3 +4,4 @@
 /home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_wiki_ar/OPUS_wiki_ar.txt
 /home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_TED_ar/OPUS_TED_ar.txt
 /home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_newscommentary_ar/OPUS_newscommentary_ar.txt
+/home/serkhane/Repositories/AI/DATA/arabic_text/OPUS_wikimedia_ar/OPUS_wikimedia_ar.txt

@@ -84,7 +84,7 @@ class DataReader:
         
         return self._extension_to_filetype(self.path_file.split(".")[-1])
     
-    def _extension_filetype_to_reader(self, filetype, separator, keep_line_break=True, **kwargs):
+    def _extension_filetype_to_reader(self, filetype, separator, keep_line_break, **kwargs):
         '''
         Read data file from a related data file extension and type
         
@@ -113,7 +113,7 @@ class DataReader:
                 else:
                     return [line[:-1] for line in FileObj.readlines()]
             
-    def read_data_file(self, **kwargs):        
+    def read_data_file(self, keep_line_break=True, **kwargs):        
         '''
         Return dataframe from data file data
         
@@ -132,7 +132,7 @@ class DataReader:
         self.separator = self.separator or self._separator_finder()
         print("Reading files - DONE") 
         
-        return self._extension_filetype_to_reader(filetype=self.filetype, separator=self.separator, **kwargs)
+        return self._extension_filetype_to_reader(filetype=self.filetype, separator=self.separator, keep_line_break=keep_line_break, **kwargs)
     
     def read_data_value(self, key):
         '''

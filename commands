@@ -25,3 +25,11 @@ python inference.py -c '/home/serkhane/Repositories/AI/modules/tts/flowtron/conf
 
 singularity exec --nv /home/ks1/containers/singularity/tts/flowtron/flowtron_p18.sif python inference.py -c /home/ks1/Repositories/AI/modules/tts/flowtron/config/config_exp_20_v7_0_2_video_concate_removesilence_obama_clean_libri_nflow2.json -f /home/ks1/models/tts/flowtron/exp_20_v7_0_2_video_concate_removesilence_obama_clean_libri_nflow2/outdir/model_126000 -w /home/ks1/models/tts/waveglow/waveglow_256channels_universal_v5.pt -t 'It is well know that deep generative models have a rich latent space!' -i 0
 
+
+bin/lmplz -o 3 --text '/home/serkhane/Repositories/AI/results/prepare_language_model/ar/total_cleaned_text_rm_duplicated.txt' > model_short.arpa
+bin/build_binary '/home/serkhane/Downloads/arb_lm_3g.arpa' arb_lm_3g.binary
+#bin/query model_short.binary < '/home/serkhane/Repositories/AI/DATA/prepare_language_model/validation/ar/bbc_news.txt'
+bin/query '/home/serkhane/Downloads/arb_lm_3g.arpa' < '/home/serkhane/Repositories/AI/DATA/prepare_language_model/validation/ar/bbc_news.txt' > '/home/serkhane/Repositories/AI/results/prepare_language_model/ar/perplexity/prod_bbc_news.perplexity'
+
+bin/query 'model_short.binary' < '/home/serkhane/Repositories/AI/DATA/prepare_language_model/validation/ar/bbc_news.txt' > '/home/serkhane/Repositories/AI/results/prepare_language_model/ar/perplexity/model_short_bbc_news.perplexity'
+

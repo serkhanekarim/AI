@@ -108,8 +108,8 @@ def main(args, project_name):
     '''
     list_path_audio_files = [os.path.join(directory_file_audio_info,language,file) for file in LIST_AUDIO_FILES]
     data_info = pd.DataFrame()
+    obj = {'na_filter':False, 'quoting':csv.QUOTE_NONE}
     for path_file_audio_info in list_path_audio_files:
-        obj = {'na_filter':False, 'quoting':csv.QUOTE_NONE}
         data_read = DataReader(path_file_audio_info).read_data_file(**obj)
         data_info = data_info.append(data_read, ignore_index = True)
     

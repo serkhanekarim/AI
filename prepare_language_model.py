@@ -80,11 +80,14 @@ def main(args, project_name):
     
     print("Concatening cleaned data...")
     total_filename = "total_cleaned_text.txt"
+    total_filename_rm_duplicated = "total_cleaned_text_rm_duplicated.txt"
     path_total_filename = os.path.join(dir_text,total_filename)
+    path_total_filename_rm_duplicated = os.path.join(dir_text,total_filename_rm_duplicated)
     os.system("rm -rf " + path_total_filename)
-    (os.system("cat " + path_text_cleaned + " >> " + path_total_filename) for path_text_cleaned in tqdm(list_path_training_text_cleaned))
+    [os.system("cat " + path_text_cleaned + " >> " + path_total_filename) for path_text_cleaned in tqdm(list_path_training_text_cleaned)]
     print("Removing duplicated line...")
-    os.system("sort " + path_total_filename + " | uniq -u > " + path_total_filename)
+    os.system("sort " + path_total_filename + " | uniq -u > " + path_total_filename_rm_duplicated)
+    os.system("rm -rf " + path_total_filename)
     
     if perplexity:
         print("Compute LM perplexity of validation data...")

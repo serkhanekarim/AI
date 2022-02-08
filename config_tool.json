@@ -24,8 +24,8 @@
 		"nb_speaker": null
 	},
 	"youtube_data_taflowtron": {
-		"name_train_param_config": "exp_17_v7_0_video_concate_removesilence_obama_clean_libri",
-		"name_data_config": "v2_obama_clean_concate_removesilence_obama_clean",
+		"name_train_param_config": "youtube_trimming",
+		"name_data_config": "TEDx",
 		"language": "en",
 		
 		"data_directory": null,
@@ -35,12 +35,12 @@
 		"path_list_url": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/en/obama_clean.txt",
 		"path_youtube_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/en/youtube_subtitle_cleaner_flowtron.tsv",
 		
-		"converter": false,
-		"silence": "remove",
+		"converter": true,
+		"silence": "",
 		"silence_threshold": null,
 		"remove_noise": false,
-		"audio_normalization": true,
-		"generated_subtitle": true,
+		"audio_normalization": false,
+		"generated_subtitle": false,
 		"concatenate_vtt": true,
 		"max_limit_duration": 10000,
 		"min_limit_duration": 1000,
@@ -58,7 +58,7 @@
 		"language": "ar",
 		"data_directory": null,
 		
-		"clean_data": true,
+		"clean_data": false,
 		"path_list_training_data": "/home/serkhane/Repositories/AI/modules/scraping/sources/path/lm/ar/model_1.txt",
 		"path_list_training_data_cleaned": "/home/serkhane/Repositories/AI/results/prepare_language_model/list_training_data_cleaned.txt",
 		"perplexity": false,
