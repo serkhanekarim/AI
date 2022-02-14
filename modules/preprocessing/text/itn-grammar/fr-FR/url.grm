@@ -1,0 +1,202 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+star = Optimize[bytelib.kBytes*];
+
+a_z = Optimize[bytelib.kLower];
+digit = Optimize[bytelib.kDigit];
+space = Optimize[" "];
+
+lb = Optimize["[BOS]" | space | chars.Punc];
+rb = Optimize["[EOS]" | space | chars.Punc];
+
+six = Optimize["six" | "6"];
+hyphen = Optimize["-" | ("tiret" "s"?)];
+hyphen_extended = Optimize["tiret" "s"? (space|" du ") ("haut"|six)];
+point = Optimize[("point" | "dot")"s"?];
+       
+deux = Optimize["2" | "deux" | "double" "s"?];
+trois = Optimize["3" | "trois" | "triple" "s"?];
+sound_v = Optimize["vé" | "vais" | "v"];
+#sound_e = "é" | "er" | "és" | "ée" | "ées" | "ai" | "ais" | "ait" | "aient" | "ez";
+#sound_t = "t'es" | "t'ai" | "tes" | "tais" | "t";
+#sound_h = "h" | ("hache" "s?") | "hachent";
+#sound_p = "p" | "paie";
+#sound_s = "s" | "est-ce";
+w = Optimize["w"];
+
+deter_apostrophe = ("l" | "d")"'";
+
+#http = ((sound_h space? sound_t)|("achet" sound_e)) space? sound_t space? sound_p;
+#https = ((sound_h space? sound_t)|("achet" sound_e)) space? sound_t space? sound_p space? sound_s;
+#colons = deux (space|hyphen) point;
+#slash = (("anti" (space|hyphen)?)? "slash" "e"? "s"?) | ("barre" "s?" (space "rémanent" "e"? "s"?)? (space "vertical" "e"? "s"?)? (space "oblique" "s"?)? (space "penché" "s"?)? (space "entaillé" "s"?)?) | ("rémanent" "e"? "s"?) | ("entaille" "s"?);
+subdomain_www = Optimize[(trois space ((deux space sound_v)|w)) | (deux space sound_v){3} | (w space? w space? w)];
+
+symb_apostrophe = Optimize["'"];
+symb_point = Optimize["."];
+symb_hyphen = Optimize["-"];
+#symb_colons = ":";
+#symb_slash = "/";
+#symb_double_slash = "//";
+
+tag = Optimize["%;%"];
+tag_optional = Optimize["%:%"];
+tag_forbidden = Optimize["%!%"];
+
+tag_symb_point = Optimize[tag symb_point tag];
+tag_symb_hyphen = Optimize[tag symb_hyphen tag];
+#tag_symb_colons = tag symb_colons tag;
+#tag_symb_slash = tag symb_slash tag;
+#tag_symb_double_slash = tag symb_double_slash tag;
+
+two_letters_words = Optimize["ai" | "as" | "an" | "au" | "bu" | "ce" | "de" | "du" | "es" | "et" | "eu" | "il" | "je" | "la" | "le" | "li" | "lu" | "ma" | "me" | "ne" | "nu" | "on" | "or" | "os" | "ou" | "pu" | "sa" | "se" | "si" | "su" | "ta" | "te" | "tu" | "un" | "va" | "vu"]; 
+
+#special_chars = Optimize["à"|"ä"|"â"|"é"|"è"|"ë"|"ê"|"ï"|"î"|"ô"|"ö"|"ù"|"û"|"ü"|"ÿ"|"ŷ"|"ç"|"œ"|"æ"];
+
+remove_apostrophe = Optimize[(symb_apostrophe : "")];
+#remove_apostrophe_context = Optimize[((a_z|special_chars) - "d") remove_apostrophe];
+remove_accent_a = Optimize[(("À"|"à"|"ä"|"Ä"|"â"|"Â") : "a")];
+remove_accent_e = Optimize[(("Ë"|"Ê"|"È"|"É"|"é"|"è"|"ë"|"ê") : "e")];
+remove_accent_i = Optimize[(("Ï"|"Î"|"ï"|"î") : "i")];
+remove_accent_o = Optimize[(("Ô"|"Ö"|"ô"|"ö") : "o")];
+remove_accent_u = Optimize[(("Ù"|"Û"|"Ü"|"ù"|"û"|"ü") : "u")];
+remove_accent_y = Optimize[(("Ÿ"|"ÿ"|"ŷ") : "y")];
+remove_accent_c = Optimize[(("Ç"|"ç") : "c")];
+remove_accent_oe = Optimize[(("Œ"|"œ") : "oe")];
+remove_accent_ae = Optimize[(("Æ"|"æ") : "ae")];
+
+lowercase = Optimize[(("A":"a")|("B":"b")|("C":"c")|("D":"d")|("E":"e")|("F":"f")|("G":"g")|("H":"h")|("I":"i")|("J":"j")|("K":"k")|("L":"l")|("M":"m")|("N":"n")|("O":"o")|("P":"p")|("Q":"q")|("R":"r")|("S":"s")|("T":"t")|("U":"u")|("V":"v")|("W":"w")|("X":"x")|("Y":"y")|("Z":"z"))];
+
+tr_remove_special_char = Optimize[(remove_accent_ae|remove_accent_oe|lowercase|remove_apostrophe|remove_accent_a|remove_accent_e|remove_accent_i|remove_accent_o|remove_accent_u|remove_accent_y|remove_accent_c)];
+tr_remove_special_char_input = Optimize[Project[tr_remove_special_char, 'input']];
+
+tr_remove_special_char_without_apostrophe = Optimize[(remove_accent_ae|remove_accent_oe|lowercase|remove_accent_a|remove_accent_e|remove_accent_i|remove_accent_o|remove_accent_u|remove_accent_y|remove_accent_c)];
+
+sound_er = Optimize["é"|"ée"|"ées"|"és"|"er"|"ez"|"ai"|"ait"|"ais"|"aient"|"aies"|"aie"];
+#on = Optimize["sur"|"dans"];
+#go = Optimize["va"|("all" sound_er)];
+
+add_tag_forbidden = Optimize["" : tag_forbidden];
+tr_forbidden_words = Optimize[(("fichier" "s"?)|("extension" "s"?)) add_tag_forbidden];
+#Optimize[(remove_special_char|domain_second_level_separators_without_context|0_9|a_z)+];
+
+domain_second_level_separators = Optimize[tag_symb_point | tag_symb_hyphen | symb_hyphen | tag_forbidden];
+authorized_char_url = Optimize[(tr_remove_special_char|domain_second_level_separators|digit|a_z)+];
+
+###### avoid "connais-tu karim@hotmail.fr" to be "connais-tukarim@hotmail.fr" ######
+domain_second_level_separators_without_context = Optimize[tag_symb_point | tag_symb_hyphen];
+authorized_char_url_without_context = Optimize[(tr_remove_special_char_without_apostrophe|domain_second_level_separators_without_context|digit|a_z)+];
+####################################################################################
+
+any_url_context_right = Optimize[((a_z|digit|symb_hyphen|tr_remove_special_char_input|tag_symb_point|tag_symb_hyphen)+ space)+];
+
+#left_url_context_before = Optimize[go space on];
+medium_left_url_context_before = Optimize[("lien" "s"?) | ("site" "s"?) | (deter_apostrophe? "url" "s"?) | (deter_apostrophe? "adresse" "s"?) | ("page" (" internet" "s"?)?)];
+
+add_tag_optional = Optimize["" : tag_optional];
+tr_context_2 = Optimize[(medium_left_url_context_before space ((("de" space "la"?)|("du" space)|("des" space)|("d'")) add_tag_optional))];
+tr_context_1 = Optimize[(medium_left_url_context_before space add_tag_optional)];
+
+########################################## Transducer ##########################################
+
+tr_point = Optimize[point : tag_symb_point];
+add_point = Optimize["" : tag_symb_point];
+tr_hyphen = Optimize[hyphen : tag_symb_hyphen];
+tr_hyphen_extended = Optimize[hyphen_extended : tag_symb_hyphen];
+#tr_http = Optimize[http : "http"];
+#tr_https = Optimize[https : "https"];
+#tr_colons = Optimize[colons : tag_symb_colons];
+#tr_slash = Optimize[slash : tag_symb_slash];
+#tr_double_slash = Optimize[deux space slash : tag_symb_double_slash];
+del_space = Optimize[space : ""];
+
+#tr_url_protocol = Optimize[((tr_http|tr_https) tag_symb_colons tag_symb_double_slash)];
+tr_url_subdomain = Optimize[(subdomain_www : "www")];
+
+
+tr_top_level_domain_4 = Optimize[(("a r p a":"arpa")|("g o u v":"gouv"))];
+tr_top_level_domain_4_output = Optimize[Project[tr_top_level_domain_4, 'output']];
+
+tr_top_level_domain_3 = Optimize[(("c o m":"com")|("o r g":"org")|("n e t":"net")|("e d u":"edu")|("g o v":"gov")|("m i l":"mil"))];
+tr_top_level_domain_3_output = Optimize[Project[tr_top_level_domain_3, 'output']];
+
+tr_top_level_domain_2 = Optimize[a_z del_space a_z];
+tr_top_level_domain_2_output = Optimize[a_z{2}];
+tr_top_level_domain_2_output_restricted = Optimize[a_z{2} - two_letters_words];
+
+tr_end_url_4 = Optimize[tr_point del_space (tr_top_level_domain_4|tr_top_level_domain_4_output)];
+tr_end_url_3 = Optimize[tr_point del_space (tr_top_level_domain_3|tr_top_level_domain_3_output)];
+tr_end_url_2 = Optimize[tr_point del_space (tr_top_level_domain_2|tr_top_level_domain_2_output)];
+tr_end_url_2_restricted = Optimize[tr_point del_space (tr_top_level_domain_2|tr_top_level_domain_2_output_restricted)];
+
+
+#(tag_symb_point|symb_point) and not only tag_symb_point because tag_symb_point is used in a previous grammar (mail)
+right_url_context = Optimize[(tag_symb_point|symb_point) (tr_top_level_domain_4_output|tr_top_level_domain_3_output|tr_top_level_domain_2_output)];
+
+
+tr_url_optional = Optimize[tr_url_subdomain ((del_space tr_point)|(add_point)) ((del_space add_tag_optional)|"[EOS]")];
+
+
+tr_url_domain_second_level = Optimize[(authorized_char_url del_space)+];
+tr_url_without_context_1 = Optimize[domain_second_level_separators_without_context (authorized_char_url del_space)+];
+tr_url_without_context_2 = Optimize[authorized_char_url_without_context del_space];
+
+tr_remove_tag = Optimize[(tag|tag_optional|tag_forbidden) : ""];
+
+################################################################################################
+
+
+
+########################################### Rewrite ############################################
+
+rw_forbidden_words = Optimize[CDRewrite[tr_forbidden_words, lb, rb, star]];
+
+rw_context_2 = Optimize[CDRewrite[Optimize[(tr_context_2|tr_url_optional)], (lb|tag_optional), "", star]];
+rw_context_1 = Optimize[CDRewrite[tr_context_1, (lb|tag_optional), "", star]];
+
+rw_end_url_4 = Optimize[CDRewrite[tr_end_url_4, lb, rb, star]];
+rw_end_url_3 = Optimize[CDRewrite[tr_end_url_3, lb, rb, star]];
+####### any_url_context_right is used instead of any_url_context_left because (www.) delspace XXXX
+rw_end_url_2 = Optimize[CDRewrite[tr_end_url_2, tag_optional any_url_context_right, rb, star]];
+#######
+rw_end_url_2_eos = Optimize[CDRewrite[tr_end_url_2, lb, "[EOS]", star]];
+rw_end_url_2_restricted = Optimize[CDRewrite[tr_end_url_2_restricted, lb, rb, star]];
+
+
+rw_point = Optimize[CDRewrite[del_space tr_point del_space, "", any_url_context_right right_url_context rb, star]];
+rw_hyphen_extended = Optimize[CDRewrite[del_space tr_hyphen_extended del_space, "", any_url_context_right right_url_context rb, star]];
+rw_hyphen = Optimize[CDRewrite[del_space tr_hyphen del_space, "", any_url_context_right right_url_context rb, star]];
+
+rw_url_context = Optimize[CDRewrite[tr_url_domain_second_level, tag_optional, right_url_context rb, star]];
+rw_url_without_context_1 = Optimize[CDRewrite[tr_url_without_context_1, "", right_url_context rb, star]];
+rw_url_without_context_2 = Optimize[CDRewrite[tr_url_without_context_2, lb, right_url_context rb, star]];
+
+rw_remove_tag = Optimize[CDRewrite[tr_remove_tag, "", "", star]];
+
+################################################################################################
+
+
+
+############################################ Export ############################################
+
+export MAIN = Optimize[rw_forbidden_words
+		                     @ rw_context_2
+		                     @ rw_context_1
+		                     @ rw_end_url_4
+		                     @ rw_end_url_3
+		                     @ rw_end_url_2
+		                     @ rw_end_url_2_eos
+		                     @ rw_end_url_2_restricted
+		                     @ rw_point
+		                     @ rw_hyphen_extended
+		                     @ rw_hyphen
+		                     @ rw_url_context
+		                     @ rw_url_without_context_1
+		                     @ rw_url_without_context_2
+		                     @ rw_remove_tag
+		                     ];
+
+################################################################################################
+
+

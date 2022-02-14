@@ -1,0 +1,173 @@
+#MAIN|montre-moi des tweets de arobase le petit prince fr|montre-moi des tweets de @lepetitprincefr
+#MAIN|montre-moi des tweets de at le petit prince fr|montre-moi des tweets de @lepetitprincefr
+
+MAIN|jean arobase yahoo point fr|jean@yahoo.fr
+MAIN|jean 123 arobase yahoo point fr|jean123@yahoo.fr
+
+MAIN|karim underscores serkhane arobase hotmail points f r|karim_serkhane@hotmail.fr
+MAIN|karim tirets du 8 serkhane arobase hotmail points f r|karim_serkhane@hotmail.fr
+MAIN|karim tirets du 6 serkhane arobase hotmail points f r|karim-serkhane@hotmail.fr
+MAIN|karim tirets serkhane arobase hotmail points f r|karim-serkhane@hotmail.fr
+MAIN|karim underscore serkhane arobase hotmail points f r|karim_serkhane@hotmail.fr
+MAIN|karim tiret du 8 serkhane arobase hotmail points f r|karim_serkhane@hotmail.fr
+MAIN|karim tiret du 6 serkhane arobase hotmail points f r|karim-serkhane@hotmail.fr
+MAIN|karim tiret serkhane arobase hotmail points f r|karim-serkhane@hotmail.fr
+MAIN|connais-tu karim underscore serkhane arobase hotmail points f r|connais-tu karim_serkhane@hotmail.fr
+MAIN|connais-tu karim tiret du 8 serkhane arobase hotmail points f r|connais-tu karim_serkhane@hotmail.fr
+MAIN|connais-tu karim tiret du 6 serkhane arobase hotmail points f r|connais-tu karim-serkhane@hotmail.fr
+MAIN|connais-tu karim tiret serkhane arobase hotmail points f r|connais-tu karim-serkhane@hotmail.fr
+MAIN|tu connais karim underscore serkhane arobase hotmail points f r|tu connais karim_serkhane@hotmail.fr
+MAIN|tu connais karim tiret du 8 serkhane arobase hotmail points f r|tu connais karim_serkhane@hotmail.fr
+MAIN|tu connais karim tiret du 6 serkhane arobase hotmail points f r|tu connais karim-serkhane@hotmail.fr
+MAIN|tu connais karim tiret serkhane arobase hotmail points f r|tu connais karim-serkhane@hotmail.fr
+MAIN|connais-tu laur tirets du huit 75 d'armiento du 93 arobase hotmail points f r|connais-tu laur_75darmientodu93@hotmail.fr
+MAIN|connais-tu karim underscore serkhane arobase hotmail points f r|connais-tu karim_serkhane@hotmail.fr
+
+MAIN|peux-tu envoyer un mail à laur tirets du huit 75 d'armiento du 93 arobase hotmail points f r|peux-tu envoyer un mail à laur_75darmientodu93@hotmail.fr
+#MAIN|connais-tu pierre-alain laur tirets du huit 75 d'armiento du 93 arobase hotmail points f r|connais-tu pierre-alainlaur_75darmientodu93@hotmail.fr
+#MAIN|connais-tu pierre-alain laur arobase hotmail points f r|connais-tu pierre-alainlaur@hotmail.fr
+
+MAIN|envoie un mail à jean 123 arobase yahoo point fr|envoie un mail à jean123@yahoo.fr
+MAIN|envoie un mail à karim underscores serkhane arobase hotmail points f r|envoie un mail à karim_serkhane@hotmail.fr
+MAIN|envoie un mail à karim tirets du 8 serkhane arobase hotmail points f r|envoie un mail à karim_serkhane@hotmail.fr
+MAIN|envoie un mail à karim tirets du 6 serkhane arobase hotmail points f r|envoie un mail à karim-serkhane@hotmail.fr
+MAIN|envoie un mail à karim tirets serkhane arobase hotmail points f r|envoie un mail à karim-serkhane@hotmail.fr
+MAIN|envoie un mail à karim underscore serkhane arobase hotmail points f r|envoie un mail à karim_serkhane@hotmail.fr
+MAIN|envoie un mail à karim tiret du 8 serkhane arobase hotmail points f r|envoie un mail à karim_serkhane@hotmail.fr
+MAIN|envoie un mail à karim tiret du 6 serkhane arobase hotmail points f r|envoie un mail à karim-serkhane@hotmail.fr
+MAIN|envoie un mail à karim tiret serkhane arobase hotmail points f r|envoie un mail à karim-serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim underscores serkhane arobase hotmail points f r|lis le dernier mail de karim_serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tirets du 8 serkhane arobase hotmail points f r|lis le dernier mail de karim_serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tirets du 6 serkhane arobase hotmail points f r|lis le dernier mail de karim-serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tirets serkhane arobase hotmail points f r|lis le dernier mail de karim-serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim underscore serkhane arobase hotmail points f r|lis le dernier mail de karim_serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tiret du 8 serkhane arobase hotmail points f r|lis le dernier mail de karim_serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tiret du 6 serkhane arobase hotmail points f r|lis le dernier mail de karim-serkhane@hotmail.fr
+MAIN|lis le dernier mail de karim tiret serkhane arobase hotmail points f r|lis le dernier mail de karim-serkhane@hotmail.fr
+MAIN|envoi un email à re point sba arobase samsung point com|envoi un email à re.sba@samsung.com
+MAIN|envoi un email à re point sba arobase samsung points com|envoi un email à re.sba@samsung.com
+MAIN|envoi un email à re points sba arobase samsung points com|envoi un email à re.sba@samsung.com
+MAIN|envoi un email à re points sba arobase samsung point com|envoi un email à re.sba@samsung.com
+MAIN|lis le dernier mail de karim tiret serkhane du 38 arobase hotmail points f r|lis le dernier mail de karim-serkhanedu38@hotmail.fr
+MAIN|c'est qui karim tiret serkhane du 38 arobase hotmail points f r|c'est qui karim-serkhanedu38@hotmail.fr
+MAIN|affiche les mails non lus de karim serkhane arobase hotmail point fr|affiche les mails non lus de karimserkhane@hotmail.fr
+MAIN|affiche le mail reçu à l'instant de karim tirets du 8 serkhane arobase gmail points com|affiche le mail reçu à l'instant de karim_serkhane@gmail.com
+MAIN|envoi un email à re sba du 38 arobase samsung point com|envoi un email à resbadu38@samsung.com
+MAIN|affiche les mails non lus|affiche les mails non lus
+MAIN|affiche le mail reçu à l'instant|affiche le mail reçu à l'instant
+MAIN|affiche les mails sur des réductions|affiche les mails sur des réductions
+MAIN|affiche les mails reçus aujourd'hui|affiche les mails reçus aujourd'hui
+MAIN|cherche les mails avec pièce jointe|cherche les mails avec pièce jointe
+MAIN|lis les mails marqués importants|lis les mails marqués importants
+MAIN|lis les mails non lus|lis les mails non lus
+MAIN|lis le mail reçu à l'instant|lis le mail reçu à l'instant
+MAIN|lis les mails sur des réductions|lis les mails sur des réductions
+MAIN|lis les mails reçus aujourd'hui|lis les mails reçus aujourd'hui
+MAIN|envoie un mail à jean|envoie un mail à jean
+MAIN|envoie un mail intitulé salut à jean|envoie un mail intitulé salut à jean
+MAIN|efface le mail reçu à l'instant|efface le mail reçu à l'instant
+MAIN|supprime les mails reçus aujourd'hui|supprime les mails reçus aujourd'hui
+MAIN|supprime tous les mails de julie|supprime tous les mails de julie
+MAIN|lis les mails récents|lis les mails récents
+MAIN|lis les mails reçus de samsung|lis les mails reçus de samsung
+MAIN|avec gmail, envoie un mail à antoine|avec gmail, envoie un mail à antoine
+MAIN|utilise gmail pour envoyer un mail à françoise|utilise gmail pour envoyer un mail à françoise
+MAIN|demande à gmail d'envoyer un mail à bruno|demande à gmail d'envoyer un mail à bruno
+MAIN|sur gmail, envoie un email à quentin|sur gmail, envoie un email à quentin
+MAIN|sur gmail, écris un mail à annie|sur gmail, écris un mail à annie
+MAIN|utilise gmail pour envoyer un mail à papa et maman qui dit je vous adore|utilise gmail pour envoyer un mail à papa et maman qui dit je vous adore
+MAIN|avec gmail, envoie  un email à alain et sylviane avec en contenu vous me manquez|avec gmail, envoie  un email à alain et sylviane avec en contenu vous me manquez
+MAIN|sur gmail, envoie un email à camille qui dit j'adore bixby|sur gmail, envoie un email à camille qui dit j'adore bixby
+MAIN|dans gmail, écris un email à jean pour lui dire qu'on va déjeuner ensemble vendredi|dans gmail, écris un email à jean pour lui dire qu'on va déjeuner ensemble vendredi
+MAIN|demande à gmail d'envoyer un email à ambre avec en objet appelle-moi|demande à gmail d'envoyer un email à ambre avec en objet appelle-moi
+MAIN|dans gmail, envoie un email à raphaël avec en objet salut et en contenu est-ce que tu vas bien|dans gmail, envoie un email à raphaël avec en objet salut et en contenu est-ce que tu vas bien
+MAIN|demander à gmail d'écrire un mail à nathalie qui dit qu'est-ce que tu fais ce week-end|demander à gmail d'écrire un mail à nathalie qui dit qu'est-ce que tu fais ce week-end
+MAIN|dans gmail, envoie un email à jean avec gmail pour lui dire on déjeune ensemble demain|dans gmail, envoie un email à jean avec gmail pour lui dire on déjeune ensemble demain
+MAIN|demande à gmail d'écrire à thomas un mail|demande à gmail d'écrire à thomas un mail
+MAIN|affiche tous les mails reçus du bon coin|affiche tous les mails reçus du bon coin
+MAIN|affiche les mails de trivago|affiche les mails de trivago
+MAIN|montre-moi les mails que j'ai reçu de govoyages|montre-moi les mails que j'ai reçu de govoyages
+MAIN|montre-moi les mails non lus|montre-moi les mails non lus
+MAIN|montre-moi le mail reçu à l'instant|montre-moi le mail reçu à l'instant
+MAIN|affiche le mail que je viens de recevoir|affiche le mail que je viens de recevoir
+MAIN|affiche le nouveau mail|affiche le nouveau mail
+MAIN|cherche les mails sur mon voyage en turquie|cherche les mails sur mon voyage en turquie
+MAIN|cherche les mails avec le mot facture|cherche les mails avec le mot facture
+MAIN|cherche réduction dans mes mails|cherche réduction dans mes mails
+MAIN|montre-moi les mails reçus avant-hier|montre-moi les mails reçus avant-hier
+MAIN|cherche si j'ai des mails du 15|cherche si j'ai des mails du 15
+MAIN|affiche les mails de cette semaine|affiche les mails de cette semaine
+MAIN|affiche les mails marqués important|affiche les mails marqués important
+MAIN|montre-moi les mails vip|montre-moi les mails vip
+MAIN|cherche les mails favoris|cherche les mails favoris
+MAIN|supprime tous les mails|supprime tous les mails
+MAIN|efface tout|efface tout
+MAIN|lire le deuxième email|lire le deuxième email
+MAIN|tu peux me lire le premier mail|tu peux me lire le premier mail
+MAIN|lis les mails reçus d'arthur|lis les mails reçus d'arthur
+MAIN|cherche les mails reçus de twitter puis lis-les|cherche les mails reçus de twitter puis lis-les
+MAIN|lis les mails que j'ai reçu d'amazon|lis les mails que j'ai reçu d'amazon
+MAIN|lis les mails favoris|lis les mails favoris
+MAIN|lis les mails avec pièce jointe|lis les mails avec pièce jointe
+MAIN|lis les mails favoris|lis les mails favoris
+MAIN|lis le mail que je viens de recevoir|lis le mail que je viens de recevoir
+MAIN|lis le dernier mail reçu|lis le dernier mail reçu
+MAIN|lis les mails récents|lis les mails récents
+MAIN|lis les mails sur le festival rock en seine|lis les mails sur le festival rock en seine
+MAIN|lis les mails avec le mot facture|lis les mails avec le mot facture
+MAIN|lis les mails contenant le mot réservation|lis les mails contenant le mot réservation
+MAIN|lis le mail reçu hier|lis le mail reçu hier
+MAIN|lis les mails reçus le 11 novembre|lis les mails reçus le 11 novembre
+MAIN|supprime tous les mails|supprime tous les mails
+MAIN|efface tout|efface tout
+MAIN|je veux répondre à ce mail|je veux répondre à ce mail
+MAIN|ecris une réponse|ecris une réponse
+MAIN|lire le deuxième email|lire le deuxième email
+MAIN|tu peux me lire le premier mail|tu peux me lire le premier mail
+MAIN|ecris un mail avec marc comme destinataire|ecris un mail avec marc comme destinataire
+MAIN|envoie un mail à thomas intitulé à propos de la réunion et avec pour contenu la réunion est repoussée à 15h|envoie un mail à thomas intitulé à propos de la réunion et avec pour contenu la réunion est repoussée à 15h
+MAIN|envoie un mail à marie rendez-vous demain à 10h|envoie un mail à marie rendez-vous demain à 10h
+MAIN|ecris un mail qui dit comment ça va ? et envoie le à catherine|ecris un mail qui dit comment ça va ? et envoie le à catherine
+MAIN|efface tous les mails avec thomas comme expéditeur|efface tous les mails avec thomas comme expéditeur
+MAIN|supprime uniquement les mails de microsoft|supprime uniquement les mails de microsoft
+MAIN|efface les mails récents|efface les mails récents
+MAIN|supprime le mail que je viens de recevoir|supprime le mail que je viens de recevoir
+MAIN|efface tous les mails reçus hier|efface tous les mails reçus hier
+MAIN|efface les mails du 11 novembre|efface les mails du 11 novembre
+MAIN|utilise gmail pour envoyer un email|utilise gmail pour envoyer un email
+MAIN|demande à gmail d'écrire un mail|demande à gmail d'écrire un mail
+MAIN|avec gmail, écris un email|avec gmail, écris un email
+MAIN|utilise gmail pour écrire un mail à antoine|utilise gmail pour écrire un mail à antoine
+MAIN|dans gmail, envoie un courriel à anthony|dans gmail, envoie un courriel à anthony
+MAIN|sur gmail, écris un mail à pierre qui dit j'aimerai qu'on se voit samedi|sur gmail, écris un mail à pierre qui dit j'aimerai qu'on se voit samedi
+MAIN|sur gmail, écris un email avec comme contenu comment ça va|sur gmail, écris un email avec comme contenu comment ça va
+MAIN|avec gmail, écris un mail à papa pour lui dire que j'arrive demain|avec gmail, écris un mail à papa pour lui dire que j'arrive demain
+MAIN|demande à gmail d'écrire un mail avec bonjour en objet|demande à gmail d'écrire un mail avec bonjour en objet
+MAIN|sur gmail, écris à maxime|sur gmail, écris à maxime
+MAIN|utilise gmail pour envoyer un email à jean et antoine|utilise gmail pour envoyer un email à jean et antoine
+MAIN|avec gmail, écris un mail à thomas et laure qui dit planning de ce week-end|avec gmail, écris un mail à thomas et laure qui dit planning de ce week-end
+MAIN|sur gmail, écris à sabine et antoine pour leur dire que je ne serais pas là demain|sur gmail, écris à sabine et antoine pour leur dire que je ne serais pas là demain
+MAIN|dans gmail, écris à maxime un  email avec comme sujet matériel et comme message on a besoin d'un canapé|dans gmail, écris à maxime un  email avec comme sujet matériel et comme message on a besoin d'un canapé
+MAIN|dans gmail envoie un courriel à sabine avec en objet salut et en contenu ça va ou bien|dans gmail envoie un courriel à sabine avec en objet salut et en contenu ça va ou bien
+
+MAIN|trouve tous les fichiers point a v i dans mon téléphone|trouve tous les fichiers .av i dans mon téléphone
+MAIN|affiche tous les mails reçus d'hotels point com|affiche tous les mails reçus d'hotels .com
+MAIN|affiche les mails blabla de karim serkhane arobase hotmail point fr|affiche les mails blabla de karimserkhane@hotmail.fr
+MAIN|lis le dernier fichier de karim tirets serkhane arobase fichier points f r|lis le dernier fichier de karim-serkhane@fichier.fr
+MAIN|lis le dernier fichier karim tirets serkhane arobase fichier points f r|lis le dernier fichier karim-serkhane@fichier.fr
+
+MAIN|envoie un courriel à r e point s b a arobase samsung point com|envoie un courriel à re.sba@samsung.com
+MAIN|envoie un mail à re sba arobase samsung point com|envoie un mail à resba@samsung.com
+MAIN|envoie un mail à re point sba arobase samsung point com|envoie un mail à re.sba@samsung.com
+
+MAIN|calcule 5 plus 5 et envoie à 11h un mail à p a point laur arobase harman point com et dis lui de me donner 1000 EUR pour le 15/09/2019 via le 0617204607 et sur le site de le bon coin point f r et sur le tweet de @pierrealainlaur|calcule 5 plus 5 et envoie à 11h un mail à pa.laur@harman.com et dis lui de me donner 1000 EUR pour le 15/09/2019 via le 0617204607 et sur le site de le bon coin .fr et sur le tweet de @pierrealainlaur
+
+MAIN|envoie un courriel à Re point Sba arobase samsung point com|envoie un courriel à re.sba@samsung.com
+MAIN|envoie un courrier électronique à Re point Sba arobase samsung point com|envoie un courrier électronique à re.sba@samsung.com
+MAIN|envoie des courriers électroniques à Re point Sba arobase samsung point com|envoie des courriers électroniques à re.sba@samsung.com
+MAIN|envoie des courrier électroniques à Re point Sba arobase samsung point com|envoie des courrier électroniques à re.sba@samsung.com
+MAIN|envoie des courriers électronique à Re point Sba arobase samsung point com|envoie des courriers électronique à re.sba@samsung.com
+MAIN|les courriers électronique henri tiret du 75 Re point Sba arobase samsung point com|les courriers électronique henri-du75re.sba@samsung.com
+MAIN|3 janvier 2022|3 janvier 2022
+
+MAIN|cherche sophie arobase gmail point com dans les contacts|cherche sophie@gmail.com dans les contacts

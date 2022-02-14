@@ -1,0 +1,16 @@
+MAIN|montre-moi des tweets de arobase le petit prince fr|montre-moi des tweets de @lepetitprincefr
+MAIN|montre-moi des tweets de at le petit prince fr|montre-moi des tweets de @lepetitprincefr
+MAIN|montre-moi le tweet de arobase le petit prince fr|montre-moi le tweet de @lepetitprincefr
+MAIN|montre-moi le tweet de at le petit prince fr|montre-moi le tweet de @lepetitprincefr
+MAIN|montre-moi le twitter de arobase le petit prince fr|montre-moi le twitter de @lepetitprincefr
+MAIN|montre-moi le twitter de at le petit prince fr|montre-moi le twitter de @lepetitprincefr
+MAIN|montre-moi des tweets à arobase le petit prince fr|montre-moi des tweets à @lepetitprincefr
+MAIN|montre-moi des tweets à at le petit prince fr|montre-moi des tweets à @lepetitprincefr
+MAIN|montre-moi le tweet à arobase le petit prince fr|montre-moi le tweet à @lepetitprincefr
+MAIN|montre-moi le tweet à at le petit prince fr|montre-moi le tweet à @lepetitprincefr
+MAIN|montre-moi le twitter à arobase le petit prince fr|montre-moi le twitter à @lepetitprincefr
+MAIN|montre-moi le twitter à at le petit prince fr|montre-moi le twitter à @lepetitprincefr
+
+MAIN|montre-moi des tweets de arobase underscore le petit princ'e underscores tirets du bas fr|montre-moi des tweets de @_lepetitprince__fr
+MAIN|montre-moi des tweets de arobase underscore le petit princ'e underscores tirets du 8 fr|montre-moi des tweets de @_lepetitprince__fr
+MAIN|3 janvier 2022|3 janvier 2022

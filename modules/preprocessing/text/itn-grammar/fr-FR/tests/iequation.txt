@@ -1,0 +1,385 @@
+################################################################# HARD TEST #################################################################
+
+############################################################## Main_1 & Main_2 ##############################################################
+
+MAIN_1|calcule-moi moins un moins moins le carré de moins un pi plus moins un divisé par moins la factorielle de moins 2 pi moins un multiplié par moins le cube de pi fois un sommé par moins le carré de 2 plus 5 divisé par la factorielle de 2 multiplié par moins le cube de pi|calcule-moi moins un moins moins (−1 × π)^(2) plus moins un divisé par moins (−2 × π)! moins un multiplié par moins π^(3) fois un sommé par moins 2^(2) plus 5 divisé par 2! multiplié par moins π^(3)
+MAIN_2|calcule-moi moins un moins moins (−1 × π)^(2) plus moins un divisé par moins (−2 × π)! moins un multiplié par moins π^(3) fois un sommé par moins 2^(2) plus 5 divisé par 2! multiplié par moins π^(3)|calcule-moi −1 − −(−1 × π)^(2) + −1 ÷ −(−2 × π)! − 1 × −π^(3) × 1 + −2^(2) + 5 ÷ 2! × −π^(3)
+MAIN_3|calcule-moi −1 − −(−1 × π)^(2) + −1 ÷ −(−2 × π)! − 1 × −π^(3) × 1 + −2^(2) + 5 ÷ 2! × −π^(3)|calcule-moi −1 − −(−1 × π)^(2) + −1 ÷ −(−2 × π)! − 1 × −π^(3) × 1 + −2^(2) + 5 ÷ 2! × −π^(3)
+MAIN_4|calcule-moi −1 − −(−1 × π)^(2) + −1 ÷ −(−2 × π)! − 1 × −π^(3) × 1 + −2^(2) + 5 ÷ 2! × −π^(3)|calcule-moi −1 − −(−1 × π)^(2) + −1 ÷ −(−2 × π)! − 1 × −π^(3) × 1 + −2^(2) + 5 ÷ 2! × −π^(3)
+
+
+MAIN_1|calcule-moi moins un moins moins pi à la puissance moins un fois pi puis moins un moins moins pi à la puissance moins un pi puis moins 5 moins 5 à la puissance moins 5 fois pi|calcule-moi moins un moins moins π^(−1) fois pi puis moins un moins moins π^(−1 × π) puis moins 5 moins 5^(−5) fois pi
+MAIN_2|calcule-moi moins un moins moins π^(−1) fois pi puis moins un moins moins π^(−1 × π) puis moins 5 moins 5^(−5) fois pi|calcule-moi −1 − −π^(−1) × π puis −1 − −π^(−1 × π) puis −5 − 5^(−5) × π
+MAIN_3|calcule-moi −1 − −π^(−1) × π puis −1 − −π^(−1 × π) puis −5 − 5^(−5) × π|calcule-moi −1 − −π^(−1) × π puis −1 − −π^(−1 × π) puis −5 − 5^(−5) × π
+MAIN_4|calcule-moi −1 − −π^(−1) × π puis −1 − −π^(−1 × π) puis −5 − 5^(−5) × π|calcule-moi −1 − −π^(−1) × π puis −1 − −π^(−1 × π) puis −5 − 5^(−5) × π
+
+
+MAIN_1|calcule-moi moins un moins moins 5 au carré ainsi que moins un pi moins moins 5 pi au cube ainsi que moins un fois pi moins moins 5 fois pi factorielle|calcule-moi moins un moins moins 5^(2) ainsi que moins un pi moins moins 5 × π^(3) ainsi que moins un fois pi moins moins 5 fois π!
+MAIN_2|calcule-moi moins un moins moins 5^(2) ainsi que moins un pi moins moins 5 × π^(3) ainsi que moins un fois pi moins moins 5 fois π!|calcule-moi −1 − −5^(2) ainsi que −1 × π − −5 × π^(3) ainsi que −1 × π − −5 × π!
+MAIN_3|calcule-moi −1 − −5^(2) ainsi que −1 × π − −5 × π^(3) ainsi que −1 × π − −5 × π!|calcule-moi −1 − −5^(2) ainsi que −1 × π − −5 × π^(3) ainsi que −1 × π − −5 × π!
+MAIN_4|calcule-moi −1 − −5^(2) ainsi que −1 × π − −5 × π^(3) ainsi que −1 × π − −5 × π!|calcule-moi −1 − −5^(2) ainsi que −1 × π − −5 × π^(3) ainsi que −1 × π − −5 × π!
+
+############################################################## Main_3 & Main_4 ##############################################################
+
+MAIN_1|calcule-moi moins un moins moins intégrale quadruple du carré de moins un pi plus moins un divisé par moins l'intégrale quadruple de la factorielle de moins 2 pi moins un multiplié par moins l'intégrale quadruple du cube de pi fois un sommé par moins l'intégrale quadruple du carré de 2 plus 5 divisé par l'intégrale quadruple de la factorielle de 2 multiplié par moins l'intégrale quadruple du cube de pi|calcule-moi moins un moins moins intégrale quadruple (−1 × π)^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) fois un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)
+MAIN_2|calcule-moi moins un moins moins intégrale quadruple (−1 × π)^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) fois un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)|calcule-moi −1 − −intégrale quadruple (−1 × π)^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) × 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)
+MAIN_3|calcule-moi −1 − −intégrale quadruple (−1 × π)^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) × 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)|calcule-moi −1 − −⨌((−1 × π)^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) × 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))
+MAIN_4|calcule-moi −1 − −⨌((−1 × π)^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) × 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))|calcule-moi −1 − −⨌((−1 × π)^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) × 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))
+
+
+MAIN_1|est-ce que tu peux diviser moins un moins moins intégrale quadruple du carré de un pi plus moins un divisé par moins l'intégrale quadruple de la factorielle de moins 2 pi moins un multiplié par moins l'intégrale quadruple du cube de pi par un sommé par moins l'intégrale quadruple du carré de 2 plus 5 divisé par l'intégrale quadruple de la factorielle de 2 multiplié par moins l'intégrale quadruple du cube de pi|est-ce que tu peux diviser moins un moins moins intégrale quadruple 1 × π^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) par un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)
+MAIN_2|est-ce que tu peux diviser moins un moins moins intégrale quadruple 1 × π^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) par un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)|est-ce que tu peux diviser −1 − −intégrale quadruple 1 × π^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) par 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)
+MAIN_3|est-ce que tu peux diviser −1 − −intégrale quadruple 1 × π^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) par 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)|est-ce que tu peux diviser −1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) par 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))
+MAIN_4|est-ce que tu peux diviser −1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) par 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))|est-ce que tu peux (−1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3))) ÷ (1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3)))
+
+
+MAIN_1|est-ce que tu peux diviser moins un moins moins intégrale quadruple du carré de un pi plus moins un divisé par moins l'intégrale quadruple de la factorielle de moins 2 pi moins un multiplié par moins l'intégrale quadruple du cube de pi par un sommé par moins l'intégrale quadruple du carré de 2 plus 5 divisé par l'intégrale quadruple de la factorielle de 2 multiplié par moins l'intégrale quadruple du cube de pi|est-ce que tu peux diviser moins un moins moins intégrale quadruple 1 × π^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) par un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)
+MAIN_2|est-ce que tu peux diviser moins un moins moins intégrale quadruple 1 × π^(2) plus moins un divisé par moins l'intégrale quadruple (−2 × π)! moins un multiplié par moins l'intégrale quadruple π^(3) par un sommé par moins l'intégrale quadruple 2^(2) plus 5 divisé par l'intégrale quadruple 2! multiplié par moins l'intégrale quadruple π^(3)|est-ce que tu peux diviser −1 − −intégrale quadruple 1 × π^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) par 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)
+MAIN_3|est-ce que tu peux diviser −1 − −intégrale quadruple 1 × π^(2) + −1 ÷ −l'intégrale quadruple (−2 × π)! − 1 × −l'intégrale quadruple π^(3) par 1 + −l'intégrale quadruple 2^(2) + 5 ÷ l'intégrale quadruple 2! × −l'intégrale quadruple π^(3)|est-ce que tu peux diviser −1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) par 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))
+MAIN_4|est-ce que tu peux diviser −1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3)) par 1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3))|est-ce que tu peux (−1 − −⨌(1 × π^(2)) + −1 ÷ −⨌((−2 × π)!) − 1 × −⨌(π^(3))) ÷ (1 + −⨌(2^(2)) + 5 ÷ ⨌(2!) × −⨌(π^(3)))
+
+################################################################# SOFT TEST #################################################################
+
+MAIN_1|Je veux voir la police 2 fois plus petite|Je veux voir la police 2 fois plus petite
+MAIN_2|Je veux voir la police 2 fois plus petite|Je veux voir la police 2 fois plus petite
+MAIN_3|Je veux voir la police 2 fois plus petite|Je veux voir la police 2 fois plus petite
+MAIN_4|Je veux voir la police 2 fois plus petite|Je veux voir la police 2 fois plus petite
+
+MAIN_1|Mets 3 fois plus de volume|Mets 3 fois plus de volume
+MAIN_2|Mets 3 fois plus de volume|Mets 3 fois plus de volume
+MAIN_3|Mets 3 fois plus de volume|Mets 3 fois plus de volume
+MAIN_4|Mets 3 fois plus de volume|Mets 3 fois plus de volume
+
+MAIN_1|cosinus de moins un|cosinus de moins un
+MAIN_2|cosinus de moins un|cosinus de −1
+MAIN_3|cosinus de −1|cos(−1)
+MAIN_4|cos(−1)|cos(−1)
+
+MAIN_1|cosinus de moins un tiers|cosinus de moins un tiers
+MAIN_2|cosinus de moins un tiers|cosinus de −1/3
+MAIN_3|cosinus de −1/3|cos(−1/3)
+MAIN_4|cos(−1/3)|cos(−1/3)
+
+MAIN_1|le carré de moins un 5e|(−1/5)^(2)
+MAIN_2|(−1/5)^(2)|(−1/5)^(2)
+MAIN_3|(−1/5)^(2)|(−1/5)^(2)
+MAIN_4|(−1/5)^(2)|(−1/5)^(2)
+
+MAIN_1|le carré de moins 7 5e|(−7/5)^(2)
+MAIN_2|(−7/5)^(2)|(−7/5)^(2)
+MAIN_3|(−7/5)^(2)|(−7/5)^(2)
+MAIN_4|(−7/5)^(2)|(−7/5)^(2)
+
+MAIN_1|le carré de moins pi quarts|(−π/4)^(2)
+MAIN_2|(−π/4)^(2)|(−π/4)^(2)
+MAIN_3|(−π/4)^(2)|(−π/4)^(2)
+MAIN_4|(−π/4)^(2)|(−π/4)^(2)
+
+MAIN_1|le carré de moins pi 7e|(−π/7)^(2)
+MAIN_2|(−π/7)^(2)|(−π/7)^(2)
+MAIN_3|(−π/7)^(2)|(−π/7)^(2)
+MAIN_4|(−π/7)^(2)|(−π/7)^(2)
+
+MAIN_1|cosinus de moins un 5e|cosinus de moins un 5e
+MAIN_2|cosinus de moins un 5e|cosinus de −1/5
+MAIN_3|cosinus de −1/5|cos(−1/5)
+MAIN_4|cos(−1/5)|cos(−1/5)
+
+MAIN_1|cosinus de moins 7 5e|cosinus de moins 7 5e
+MAIN_2|cosinus de moins 7 5e|cosinus de −7/5
+MAIN_3|cosinus de −7/5|cos(−7/5)
+MAIN_4|cos(−7/5)|cos(−7/5)
+
+MAIN_1|cosinus un|cosinus un
+MAIN_2|cosinus un|cosinus 1
+MAIN_3|cosinus 1|cos(1)
+MAIN_4|cos(1)|cos(1)
+
+MAIN_1|5 fois un|5 fois un
+MAIN_2|5 fois un|5 × 1
+MAIN_3|5 × 1|5 × 1
+MAIN_4|5 × 1|5 × 1
+
+MAIN_1|combien ça fait l n de 125|combien ça fait l n de 125
+MAIN_2|combien ça fait l n de 125|combien ça fait l n de 125
+MAIN_3|combien ça fait l n de 125|combien ça fait ln(125)
+MAIN_4|combien ça fait ln(125)|combien ça fait ln(125)
+
+MAIN_1|calcule la racine carrée de 7 à la puissance 12|calcule la racine carrée de 7^(12)
+MAIN_2|calcule la racine carrée de 7^(12)|calcule la racine carrée de 7^(12)
+MAIN_3|calcule la racine carrée de 7^(12)|calcule √(7^(12))
+MAIN_4|calcule √(7^(12))|calcule √(7^(12))
+
+MAIN_1|un pourcent plus 2 pourcent|1% plus 2%
+MAIN_2|1% plus 2%|1% + 2%
+MAIN_3|1% + 2%|1% + 2%
+MAIN_4|1% + 2%|1% + 2%
+
+MAIN_1|calcul-moi 5 pi l'arc cotangente hyperbolique du carré de moins un 5e|calcul-moi 5 pi l'arc cotangente hyperbolique (−1/5)^(2)
+MAIN_2|calcul-moi 5 pi l'arc cotangente hyperbolique (−1/5)^(2)|calcul-moi 5 × π l'arc cotangente hyperbolique (−1/5)^(2)
+MAIN_3|calcul-moi 5 × π l'arc cotangente hyperbolique (−1/5)^(2)|calcul-moi 5 × π × argcoth((−1/5)^(2))
+MAIN_4|calcul-moi 5 × π × argcoth((−1/5)^(2))|calcul-moi 5 × π × argcoth((−1/5)^(2))
+
+MAIN_1|2 moins 4 5e|2 moins 4 5e
+MAIN_2|2 moins 4 5e|2 − 4/5
+MAIN_3|2 − 4/5|2 − 4/5
+MAIN_4|2 − 4/5|2 − 4/5
+
+MAIN_1|un moins un 5e|un moins un 5e
+MAIN_2|un moins un 5e|1 − 1/5
+MAIN_3|1 − 1/5|1 − 1/5
+MAIN_4|1 − 1/5|1 − 1/5
+
+MAIN_1|4 5e|4 5e
+MAIN_2|4 5e|4/5
+MAIN_3|4/5|4/5
+MAIN_4|4/5|4/5
+
+MAIN_1|combien a eu fifa 19 sur 20|combien a eu fifa 19 sur 20
+MAIN_2|combien a eu fifa 19 sur 20|combien a eu fifa 19 sur 20
+MAIN_3|combien a eu fifa 19 sur 20|combien a eu fifa 19 sur 20
+MAIN_4|combien a eu fifa 19 sur 20|combien a eu fifa 19 sur 20
+
+MAIN_1|un tiers de pi|un tiers de pi
+MAIN_2|un tiers de pi|1/3 × π
+MAIN_3|1/3 × π|1/3 × π
+MAIN_4|1/3 × π|1/3 × π
+
+MAIN_1|un tiers|un tiers
+MAIN_2|un tiers|1/3
+MAIN_3|1/3|1/3
+MAIN_4|1/3|1/3
+
+MAIN_1|5 tiers|5 tiers
+MAIN_2|5 tiers|5/3
+MAIN_3|5/3|5/3
+MAIN_4|5/3|5/3
+
+MAIN_1|5 quarts|5 quarts
+MAIN_2|5 quarts|5/4
+MAIN_3|5/4|5/4
+MAIN_4|5/4|5/4
+
+MAIN_1|un sur un|un sur un
+MAIN_2|un sur un|1 / 1
+MAIN_3|1 / 1|1 / 1
+MAIN_4|1 / 1|1 / 1
+
+MAIN_1|un sur pi|un sur pi
+MAIN_2|un sur pi|1 / π
+MAIN_3|1 / π|1 / π
+MAIN_4|1 / π|1 / π
+
+MAIN_1|5 sur pi|5 sur pi
+MAIN_2|5 sur pi|5 / π
+MAIN_3|5 / π|5 / π
+MAIN_4|5 / π|5 / π
+
+MAIN_1|5 sur 5|5 sur 5
+MAIN_2|5 sur 5|5 / 5
+MAIN_3|5 / 5|5 / 5
+MAIN_4|5 / 5|5 / 5
+
+MAIN_1|un 9e|un 9e
+MAIN_2|un 9e|1/9
+MAIN_3|1/9|1/9
+MAIN_4|1/9|1/9
+
+MAIN_1|une point un pi|une point un pi
+MAIN_2|une point un pi|1.1 × π
+MAIN_3|1.1 × π|1.1 × π
+MAIN_4|1.1 × π|1.1 × π
+MAIN_5|1.1 × π|1.1 × π
+
+
+
+MAIN_1|une point un plus pi|une point un plus pi
+MAIN_2|une point un plus pi|1.1 + π
+MAIN_3|1.1 + π|1.1 + π
+MAIN_4|1.1 + π|1.1 + π
+MAIN_5|1.1 + π|1.1 + π
+
+MAIN_1|pi plus une point un|pi plus une point un
+MAIN_2|pi plus une point un|π + 1.1
+MAIN_3|π + 1.1|π + 1.1
+MAIN_4|π + 1.1|π + 1.1
+MAIN_5|π + 1.1|π + 1.1
+
+MAIN_1|une point un plus une point un plus pi|une point un plus une point un plus pi
+MAIN_2|1.1 + 1.1|1.1 + 1.1
+MAIN_3|1.1 + 1.1|1.1 + 1.1
+MAIN_4|1.1 + 1.1|1.1 + 1.1
+MAIN_5|1.1 + 1.1|1.1 + 1.1
+
+
+
+MAIN_1|une virgule un plus pi|une virgule un plus pi
+MAIN_2|une virgule un plus pi|1,1 + π
+MAIN_3|1,1 + π|1,1 + π
+MAIN_4|1,1 + π|1,1 + π
+MAIN_5|1,1 + π|1,1 + π
+
+MAIN_1|pi plus une virgule un|pi plus une virgule un
+MAIN_2|pi plus une virgule un|π + 1,1
+MAIN_3|π + 1,1|π + 1,1
+MAIN_4|π + 1,1|π + 1,1
+MAIN_5|π + 1,1|π + 1,1
+
+MAIN_1|une virgule un plus une virgule un plus pi|une virgule un plus une virgule un plus pi
+MAIN_2|1,1 + 1,1|1,1 + 1,1
+MAIN_3|1,1 + 1,1|1,1 + 1,1
+MAIN_4|1,1 + 1,1|1,1 + 1,1
+MAIN_5|1,1 + 1,1|1,1 + 1,1
+
+
+
+MAIN_1|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_2|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_3|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_4|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+
+MAIN_1|régler le format de l'image sur un 9e|régler le format de l'image sur un 9e
+MAIN_2|régler le format de l'image sur un 9e|régler le format de l'image sur un 9e
+MAIN_3|régler le format de l'image sur un 9e|régler le format de l'image sur un 9e
+MAIN_4|régler le format de l'image sur un 9e|régler le format de l'image sur un 9e
+
+MAIN_1|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_2|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_3|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_4|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+
+MAIN_1|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_2|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_3|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+MAIN_4|régler le format de l'image sur 16 9e|régler le format de l'image sur 16 9e
+
+MAIN_1|une point une|une point une
+MAIN_1|une point un|une point un
+MAIN_1|un point une|un point une
+MAIN_1|un point un|un point un
+MAIN_1|une points une|une points une
+MAIN_1|une points un|une points un
+MAIN_1|un points une|un points une
+MAIN_1|un points un|un points un
+MAIN_1|une virgule une|une virgule une
+MAIN_1|une virgule un|une virgule un
+MAIN_1|un virgule une|un virgule une
+MAIN_1|un virgule un|un virgule un
+MAIN_1|une virgules une|une virgules une
+MAIN_1|une virgules un|une virgules un
+MAIN_1|un virgules une|un virgules une
+MAIN_1|un virgules un|un virgules un
+
+MAIN_2|une point une|une point une
+MAIN_2|une point un|une point un
+MAIN_2|un point une|un point une
+MAIN_2|un point un|un point un
+MAIN_2|une points une|une points une
+MAIN_2|une points un|une points un
+MAIN_2|un points une|un points une
+MAIN_2|un points un|un points un
+MAIN_2|une virgule une|une virgule une
+MAIN_2|une virgule un|une virgule un
+MAIN_2|un virgule une|un virgule une
+MAIN_2|un virgule un|un virgule un
+MAIN_2|une virgules une|une virgules une
+MAIN_2|une virgules un|une virgules un
+MAIN_2|un virgules une|un virgules une
+MAIN_2|un virgules un|un virgules un
+
+MAIN_3|une point une|une point une
+MAIN_3|une point un|une point un
+MAIN_3|un point une|un point une
+MAIN_3|un point un|un point un
+MAIN_3|une points une|une points une
+MAIN_3|une points un|une points un
+MAIN_3|un points une|un points une
+MAIN_3|un points un|un points un
+MAIN_3|une virgule une|une virgule une
+MAIN_3|une virgule un|une virgule un
+MAIN_3|un virgule une|un virgule une
+MAIN_3|un virgule un|un virgule un
+MAIN_3|une virgules une|une virgules une
+MAIN_3|une virgules un|une virgules un
+MAIN_3|un virgules une|un virgules une
+MAIN_3|un virgules un|un virgules un
+
+MAIN_4|une point une|une point une
+MAIN_4|une point un|une point un
+MAIN_4|un point une|un point une
+MAIN_4|un point un|un point un
+MAIN_4|une points une|une points une
+MAIN_4|une points un|une points un
+MAIN_4|un points une|un points une
+MAIN_4|un points un|un points un
+MAIN_4|une virgule une|une virgule une
+MAIN_4|une virgule un|une virgule un
+MAIN_4|un virgule une|un virgule une
+MAIN_4|un virgule un|un virgule un
+MAIN_4|une virgules une|une virgules une
+MAIN_4|une virgules un|une virgules un
+MAIN_4|un virgules une|un virgules une
+MAIN_4|un virgules un|un virgules un
+
+MAIN_5|une point une|une point une
+MAIN_5|une point un|une point un
+MAIN_5|un point une|un point une
+MAIN_5|un point un|un point un
+MAIN_5|une points une|une points une
+MAIN_5|une points un|une points un
+MAIN_5|un points une|un points une
+MAIN_5|un points un|un points un
+MAIN_5|une virgule une|une virgule une
+MAIN_5|une virgule un|une virgule un
+MAIN_5|un virgule une|un virgule une
+MAIN_5|un virgule un|un virgule un
+MAIN_5|une virgules une|une virgules une
+MAIN_5|une virgules un|une virgules un
+MAIN_5|un virgules une|un virgules une
+MAIN_5|un virgules un|un virgules un
+
+MAIN_5|quelle est la définition de pi|quelle est la définition de pi
+MAIN_5|épelle-moi le mot pi|épelle-moi le mot pi
+MAIN_5|épelle-moi le nombre pi|épelle-moi le nombre pi
+MAIN_5|calcule-moi le nombre pi|calcule-moi le nombre π
+MAIN_5|ça vaut quoi pi|ça vaut quoi π
+MAIN_5|épelle-moi la valeur du nombre pi|épelle-moi la valeur du nombre π
+MAIN_5|quelle est la valeur de pi|quelle est la valeur de π
+
+MAIN_1|c'était moins une|c'était moins une
+MAIN_2|c'était moins une|c'était moins une
+MAIN_3|c'était moins une|c'était moins une
+MAIN_4|c'était moins une|c'était moins une
+MAIN_5|c'était moins une|c'était moins une
+
+MAIN_1|le carré de un 5e|1/5^(2)
+MAIN_1|le carré de 7 5e|7/5^(2)
+MAIN_1|le carré de pi quarts|π/4^(2)
+MAIN_1|le carré de pi 7e|π/7^(2)
+
+MAIN_1|le carré de moins un 5e|(−1/5)^(2)
+MAIN_1|le carré de moins 7 5e|(−7/5)^(2)
+MAIN_1|le carré de moins pi quarts|(−π/4)^(2)
+MAIN_1|le carré de moins pi 7e|(−π/7)^(2)
+
+MAIN_1|03/01/2022|03/01/2022
+MAIN_2|03/01/2022|03/01/2022
+MAIN_3|03/01/2022|03/01/2022
+MAIN_4|03/01/2022|03/01/2022
+MAIN_5|03/01/2022|03/01/2022
+
+MAIN_1|un rubik's cube 4 fois 4|un rubik's cube 4 fois 4
+MAIN_2|un rubik's cube 4 fois 4|un rubik's cube 4 × 4
+MAIN_3|un rubik's cube 4 × 4|un rubik's cube 4 × 4
+MAIN_4|un rubik's cube 4 × 4|un rubik's cube 4 × 4
+MAIN_5|un rubik's cube 4 × 4|un rubik's cube 4 × 4
+
+MAIN_1|calcul-moi 50 000 pi l'arc cotangente hyperbolique du carré de moins un 5 000e|calcul-moi 50 000 pi l'arc cotangente hyperbolique (−1/5 000)^(2)
+MAIN_2|calcul-moi 50 000 pi l'arc cotangente hyperbolique (−1/5 000)^(2)|calcul-moi 50 000 × π l'arc cotangente hyperbolique (−1/5 000)^(2)
+MAIN_3|calcul-moi 50 000 × π l'arc cotangente hyperbolique (−1/5 000)^(2)|calcul-moi 50 000 × π × argcoth((−1/5 000)^(2))
+MAIN_4|calcul-moi 50 000 × π × argcoth((−1/5 000)^(2))|calcul-moi 50 000 × π × argcoth((−1/5 000)^(2))
+
+MAIN_1|calcul-moi 50 000 pi l'arc cotangente hyperbolique du carré de moins 7 5 000e|calcul-moi 50 000 pi l'arc cotangente hyperbolique (−7/5 000)^(2)
+MAIN_2|calcul-moi 50 000 pi l'arc cotangente hyperbolique (−7/5 000)^(2)|calcul-moi 50 000 × π l'arc cotangente hyperbolique (−7/5 000)^(2)
+MAIN_3|calcul-moi 50 000 × π l'arc cotangente hyperbolique (−7/5 000)^(2)|calcul-moi 50 000 × π × argcoth((−7/5 000)^(2))
+MAIN_4|calcul-moi 50 000 × π × argcoth((−7/5 000)^(2))|calcul-moi 50 000 × π × argcoth((−7/5 000)^(2))

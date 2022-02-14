@@ -1,0 +1,18 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+import '../../fst-thrax-grammars/fr-FR/chars.grm' as Chars;
+
+digit = Optimize[bytelib.kDigit];
+star = Optimize[bytelib.kBytes*];
+space = Optimize[" "];
+
+lb = Optimize["[BOS]" | chars.Punc | space];
+rb = Optimize["[EOS]" | chars.Punc | space];
+
+lb_nopunc = Optimize["[BOS]" | space];
+rb_nopunc = Optimize["[EOS]" | space];
+
+export MAIN = Optimize[
+    CDRewrite[" ":":", lb_nopunc digit{1,2}, digit{1,2}"e""s"? rb_nopunc, star]
+    @ CDRewrite["e""s"?:"", digit{1,2}":"digit{1,2}, rb_nopunc, star]
+];

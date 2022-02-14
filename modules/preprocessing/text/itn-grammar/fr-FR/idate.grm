@@ -1,0 +1,101 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+star = Optimize[bytelib.kBytes*];
+
+digit = Optimize[bytelib.kDigit];
+not_digit = Optimize[bytelib.kBytes - bytelib.kDigit];
+not_zero = Optimize[bytelib.kDigit - "0"];
+
+space = Optimize[" "];
+
+and = Optimize["et"];
+
+lbnd = Optimize[(not_digit space) | "[BOS]"];
+rbnd = Optimize[(space not_digit) | "[EOS]"];
+
+lb_short = Optimize["[BOS]" | " "];
+rb_short = Optimize["[EOS]" | " "];
+
+########################################## Transducer ##########################################
+
+zero = Optimize["0"];
+one = Optimize["1"];
+two = Optimize["2"];
+trois = Optimize["3"];
+nine = Optimize["9"];
+
+first = Optimize["premier"];
+tr_premier = Optimize[(first : (zero one))];
+
+to = Optimize["au"];
+
+inszero = Optimize["" : zero];
+insyear = Optimize["" : one nine];
+slash = Optimize["/"];
+space_to_slash = Optimize[space : slash];
+remove_space = Optimize[space : ""];
+remove_one = Optimize[one : ""];
+
+
+#En dix-neuf cent quarante-cinq : En 19 145 ---> En 1945
+context_year_old_format_converter_left = Optimize["en"|"de"|"l'"?"année""s"?|"l'"?"an""s"?|"date""s"?];
+tr_year_old_format_converter = Optimize[one not_zero remove_space remove_one digit digit];
+
+#En deux mille vingt-et-un : En 2 021 ---> En 2021
+context_year_new_format_converter_left = Optimize["en"|"l'"?"année""s"?|"l'"?"an""s"?|"date""s"?];
+context_year_new_format_converter_left_extrem = Optimize["de"];
+tr_year_new_format_converter = Optimize[(one remove_space? digit|two remove_space? zero|two remove_space? one) digit{2}];
+
+
+day = Optimize[ (zero remove_space? not_zero) | ((one|two) digit) | (trois (zero|one)) | tr_premier];
+months = Optimize[(zero remove_space? not_zero)|(one (zero|one|two))];
+year = Optimize[((one remove_space? digit|two remove_space? zero|two remove_space? one)? digit{2})|digit remove_space digit];
+full_year = Optimize[(one remove_space? digit|two remove_space? zero|two remove_space? one) digit{2}];
+
+tr_months = Optimize[StringFile['dictionaries/date/months.dict', byte]];
+
+tr_date = Optimize[
+
+#"23 janvier 45" = 23/01/45 ou "1 janvier 2152" = 01/01/2152
+	( (day|(inszero not_zero)) space_to_slash tr_months space_to_slash year) |
+#"23 4 2015" = 23/04/2015 ou "23 0 ?4 2015" = 23/04/2015 ou "23 12 2015" = 23/12/2015 ou "0 3 0 7 1992" = 03/07/1992
+	(day space_to_slash (inszero not_zero|months) space_to_slash full_year)
+
+];
+
+normalized_date = Optimize[digit{2} slash digit{2} slash digit{2} (digit{2})?];
+
+#du 1 6 au 18/07/67 = du 01/06 au 18/07/67
+#du 12 juin au 18/07/67 = du 12/06 au 18/07/67
+#du 12 0 6 au 18/07/67 = du 12/06 au 18/07/67
+tr_date_period = Optimize[(day|(inszero not_zero)) space_to_slash (inszero not_zero|months|tr_months) space to space normalized_date];
+
+################################################################################################
+
+
+
+########################################### Rewrite ############################################
+
+rw_year_old_format_converter = Optimize[CDRewrite[tr_year_old_format_converter, lb_short context_year_old_format_converter_left space, rbnd, star]];
+rw_year_new_format_converter = Optimize[CDRewrite[tr_year_new_format_converter, lb_short context_year_new_format_converter_left space, rbnd, star]];
+rw_year_new_format_converter_extrem = Optimize[CDRewrite[tr_year_new_format_converter, lb_short context_year_new_format_converter_left_extrem space, "[EOS]", star]];
+
+rw_date = Optimize[CDRewrite[tr_date, lbnd, rbnd, star]];
+rw_date_period = Optimize[CDRewrite[tr_date_period, lbnd, rbnd, star]];
+
+################################################################################################
+
+
+
+############################################ Export ############################################
+
+export MAIN = Optimize[rw_year_old_format_converter
+		     @ rw_year_new_format_converter
+		     @ rw_year_new_format_converter_extrem
+		     @ rw_date
+		     @ rw_date_period];
+
+################################################################################################
+
+

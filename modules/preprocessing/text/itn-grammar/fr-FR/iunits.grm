@@ -1,0 +1,189 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+digit = bytelib.kDigit;
+star = Optimize[bytelib.kBytes*];
+space = Optimize[" "];
+
+lb = "[BOS]" | space | chars.Punc;
+rb = "[EOS]" | space | chars.Punc;
+lb_short = "[BOS]" | space;
+rb_short = "[EOS]" | space;
+
+and = space "et" space;
+aftercomma = space | and;
+
+preposition_suffix = "à la";
+
+separator_unit_preposition_by = (space "par" space) | (space "à l'") | (space "à la" space);
+separator_unit_preposition_not_by = space;
+
+one = "un" | "une";
+one_symb = "1";
+slash_symb = "/";
+dot_symb = "·";
+minus = "moins";
+minus_power_symb = "⁻";
+power = "puissance""s"?;
+plural = "s";
+
+############## Context Normalization for one ############
+
+special_chars = Optimize[("à"|"ä"|"â")|("é"|"è"|"ë"|"ê")|("ï"|"î")|("ô"|"ö")|("ù"|"û"|"ü")|("ÿ"|"ŷ")|("ç")|("œ")|("æ")];
+a_z0_9 = Optimize[bytelib.kLower|bytelib.kDigit];
+symb_apostrophe = Optimize["'"];
+symb_hyphen = Optimize["-"];
+word = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_z0_9)+];
+
+authorized_word_left = Optimize[word];
+any_word_context_left = Optimize[(authorized_word_left space)*];
+authorized_word_right = Optimize[word];
+any_word_context_right = Optimize[(space authorized_word_right)*];
+
+strict_authorized_word_left = Optimize[StringFile['dictionaries/units/one_normalization_context_left.cont', byte]];
+strict_authorized_word_right = Optimize[StringFile['dictionaries/units/one_normalization_context_right.cont', byte]];
+
+context_left_one_normalization = Optimize[lb_short any_word_context_left strict_authorized_word_left space];
+context_right_one_normalization = Optimize[any_word_context_right space strict_authorized_word_right rb_short];
+
+
+########################################## Functions ##########################################
+
+func unit_merger[unit] {
+
+	digit = Optimize[bytelib.kDigit];
+	star = Optimize[bytelib.kBytes*];
+	space = Optimize[" "];
+
+	lb_short = Optimize["[BOS]"|space];
+	rb_short = Optimize["[EOS]" | space];
+		
+	############## Context Normalization ############
+
+	special_chars = Optimize[("à"|"ä"|"â")|("é"|"è"|"ë"|"ê")|("ï"|"î")|("ô"|"ö")|("ù"|"û"|"ü")|("ÿ"|"ŷ")|("ç")|("œ")|("æ")];
+	a_z0_9 = Optimize[bytelib.kLower|bytelib.kDigit];
+	symb_apostrophe = Optimize["'"];
+	symb_hyphen = Optimize["-"];
+	word = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_z0_9)+];
+
+	authorized_word_right = Optimize[word];
+	any_word_context_right = Optimize[(space authorized_word_right)*];
+	strict_authorized_word_right = Optimize[StringFile['dictionaries/units/one_normalization_context_right.cont', byte]];
+	### Use convert context to avoid to normalize : 5 tonnes 8 voiture ---> 5,8 tonnes voiture
+	context_right_one_normalization = Optimize[any_word_context_right space strict_authorized_word_right rb_short];
+	
+
+	unit_optimized = Optimize[unit];
+	comma = Optimize[","];
+
+	merge_unit_0 = Optimize[(space unit_optimized space : comma)];
+	merge_unit_00 = Optimize[(space unit_optimized space : ",0")];
+	add_unit = Optimize[("" : space unit_optimized)];
+
+	#normalize digit unit digit (16 mètres 5$ = 16,05 mètres$):
+
+	tr_unit_alone_1_decimals = Optimize[(merge_unit_00 digit add_unit)|(merge_unit_0 digit digit+ add_unit)];
+
+	rw_unit_alone_1_decimals = CDRewrite[tr_unit_alone_1_decimals, lb_short digit+, context_right_one_normalization|"[EOS]", star];
+
+
+	return Optimize[rw_unit_alone_1_decimals];
+
+}
+
+
+########################################## Transducer ##########################################
+
+one_to_digit = Optimize[one : one_symb];
+
+del_space = Optimize[space : ""];
+
+tr_separator_unit = Optimize[(separator_unit_preposition_by : slash_symb) | (separator_unit_preposition_not_by : dot_symb)];
+
+minus_power_to_symb = Optimize[minus : minus_power_symb];
+tr_preposition_suffix = Optimize[((space preposition_suffix)? space power space) : ""];
+
+
+
+tr_prefix = Optimize[StringFile['dictionaries/units/prefix.dict', byte]];
+tr_prefix_computer = Optimize[StringFile['dictionaries/units/prefix_computer.dict', byte]];
+tr_power = Optimize[StringFile['dictionaries/units/power.dict', byte]];
+tr_digit_power = Optimize[StringFile['dictionaries/units/digit_power.dict', byte]];
+
+tr_units = Optimize[StringFile['dictionaries/units/units.dict', byte]];
+tr_units_computer = Optimize[StringFile['dictionaries/units/units_computer.dict', byte]];
+
+tr_units_alone = Optimize[StringFile['dictionaries/units/units_alone.dict', byte]];
+tr_units_prior = Optimize[StringFile['dictionaries/units/units_prior.dict', byte]];
+tr_units_time = Optimize[StringFile['dictionaries/units/units_time.dict', byte]];
+tr_units_without_space = Optimize[StringFile['dictionaries/units/units_without_space.dict', byte]];
+
+
+
+tr_suffix =  Optimize[(del_space tr_power)|(tr_preposition_suffix (minus_power_to_symb del_space)? tr_digit_power+)|(del_space minus_power_to_symb del_space tr_digit_power+)];
+
+tr_entire_units_prior = Optimize[tr_prefix? tr_units_prior tr_suffix?];
+tr_entire_units_before_separator = Optimize[(tr_prefix tr_units_time tr_suffix?) | (tr_prefix? tr_units_time tr_suffix) | (tr_prefix? tr_units tr_suffix?) | ((tr_prefix_computer|tr_prefix)? tr_units_computer tr_suffix?)];
+
+tr_entire_units_without_space_before_separator = Optimize[(tr_prefix tr_units_without_space tr_suffix)|(tr_units_without_space tr_suffix)|(tr_prefix tr_units_without_space)];
+
+tr_entire_units_after_separator = Optimize[(tr_prefix? (tr_units|tr_units_time|tr_units_without_space) tr_suffix?)|((tr_prefix_computer|tr_prefix)? tr_units_computer tr_suffix?)];
+
+tr_units_final_prior_1 = Optimize[tr_entire_units_prior (tr_separator_unit tr_entire_units_prior)*];
+tr_units_final_prior_2 = Optimize[(tr_entire_units_before_separator|tr_entire_units_without_space_before_separator) (tr_separator_unit tr_entire_units_prior)+];
+tr_units_final_prior_3 = Optimize[tr_entire_units_prior (tr_separator_unit tr_entire_units_after_separator)+];
+
+tr_units_final = Optimize[(tr_entire_units_before_separator|tr_entire_units_without_space_before_separator) (tr_separator_unit tr_entire_units_after_separator)*];
+
+
+
+
+################################################################################################
+
+
+
+
+
+########################################### Rewrite ############################################
+
+rw_one_to_digit_alone = Optimize[CDRewrite[one_to_digit (space tr_units_final_prior_1|space tr_units_final_prior_2|space tr_units_final_prior_3|space tr_units_final|del_space tr_units_without_space|space tr_units_alone), "[BOS]",  digit* "[EOS]", star, 'rtl', 'obl']];
+rw_one_to_digit_left = Optimize[CDRewrite[one_to_digit, context_left_one_normalization, rb_short, star]];
+rw_one_to_digit_right = Optimize[CDRewrite[one_to_digit, lb_short, context_right_one_normalization, star]];
+
+merge_units = Optimize[unit_merger["mètre" plural?]
+				     @ unit_merger["centimètre" plural?]
+				     @ unit_merger["kilomètre" plural?]
+				     @ unit_merger["litre" plural?]
+				     @ unit_merger["tonne" plural?]
+				     @ unit_merger["gramme" plural?]
+				     @ unit_merger["kilogramme"plural?]];
+				     
+rw_unit_final_prior_1 = Optimize[CDRewrite[tr_units_final_prior_1, digit space, rb_short, star, 'rtl', 'obl']];
+rw_unit_final_prior_2 = Optimize[CDRewrite[tr_units_final_prior_2, digit space, rb_short, star, 'rtl', 'obl']];
+rw_unit_final_prior_3 = Optimize[CDRewrite[tr_units_final_prior_3, digit space, rb_short, star, 'rtl', 'obl']];
+
+rw_unit_final = Optimize[CDRewrite[tr_units_final, digit space, rb_short, star, 'rtl', 'obl']];
+rw_unit_without_space = Optimize[CDRewrite[del_space tr_units_without_space, digit, rb_short, star, 'rtl', 'obl']];
+rw_unit_alone = Optimize[CDRewrite[tr_units_alone, digit space, rb_short, star, 'rtl', 'obl']];				     
+
+################################################################################################
+
+
+
+############################################ Export ############################################
+
+export MAIN = Optimize[rw_one_to_digit_alone
+		     @ rw_one_to_digit_left
+		     @ rw_one_to_digit_right
+		     @ merge_units
+		     @ rw_unit_final_prior_1
+		     @ rw_unit_final_prior_2
+		     @ rw_unit_final_prior_3
+		     @ rw_unit_final
+		     @ rw_unit_without_space
+		     @ rw_unit_alone];
+
+################################################################################################
+
+
+

@@ -1,0 +1,345 @@
+dix	10
+onze	11
+douze	12
+treize	13
+quatorze	14
+quinze	15
+seize	16
+dix-sept	17
+dix-huit	18
+dix-neuf	19
+vingt	20
+vingt et un	21
+vingt et une	21
+vingt-et-un	21
+vingt-et-une	21
+vingt et uns	21
+vingt et unes	21
+vingt-et-uns	21
+vingt-et-unes	21
+vingt-deux	22
+vingt-trois	23
+vingt-quatre	24
+vingt-cinq	25
+vingt-six	26
+vingt-sept	27
+vingt-huit	28
+vingt-neuf	29
+trente	30
+trente et un	31
+trente et une	31
+trente-et-un	31
+trente-et-une	31
+trente et uns	31
+trente et unes	31
+trente-et-uns	31
+trente-et-unes	31
+trente-deux	32
+trente-trois	33
+trente-quatre	34
+trente-cinq	35
+trente-six	36
+trente-sept	37
+trente-huit	38
+trente-neuf	39
+quarante	40
+quarante et un	41
+quarante et une	41
+quarante-et-un	41
+quarante-et-une	41
+quarante et uns	41
+quarante et unes	41
+quarante-et-uns	41
+quarante-et-unes	41
+quarante-deux	42
+quarante-trois	43
+quarante-quatre	44
+quarante-cinq	45
+quarante-six	46
+quarante-sept	47
+quarante-huit	48
+quarante-neuf	49
+cinquante	50
+cinquante et un	51
+cinquante et une	51
+cinquante-et-un	51
+cinquante-et-une	51
+cinquante et uns	51
+cinquante et unes	51
+cinquante-et-uns	51
+cinquante-et-unes	51
+cinquante-deux	52
+cinquante-trois	53
+cinquante-quatre	54
+cinquante-cinq	55
+cinquante-six	56
+cinquante-sept	57
+cinquante-huit	58
+cinquante-neuf	59
+soixante	60
+soixante et un	61
+soixante et une	61
+soixante-et-un	61
+soixante-et-une	61
+soixante et uns	61
+soixante et unes	61
+soixante-et-uns	61
+soixante-et-unes	61
+soixante-deux	62
+soixante-trois	63
+soixante-quatre	64
+soixante-cinq	65
+soixante-six	66
+soixante-sept	67
+soixante-huit	68
+soixante-neuf	69
+soixante-dix	70
+soixante et onze	71
+soixante-et-onze	71
+soixante-douze	72
+soixante-treize	73
+soixante-quatorze	74
+soixante-quinze	75
+soixante-seize	76
+soixante-dix-sept	77
+soixante-dix-huit	78
+soixante-dix-neuf	79
+quatre-vingts	80
+quatre-vingt-un	81
+quatre-vingt-une	81
+quatre-vingt-uns	81
+quatre-vingt-unes	81
+quatre-vingt-deux	82
+quatre-vingt-trois	83
+quatre-vingt-quatre	84
+quatre-vingt-cinq	85
+quatre-vingt-six	86
+quatre-vingt-sept	87
+quatre-vingt-huit	88
+quatre-vingt-neuf	89
+quatre-vingt-dix	90
+quatre-vingt-onze	91
+quatre-vingt-douze	92
+quatre-vingt-treize	93
+quatre-vingt-quatorze	94
+quatre-vingt-quinze	95
+quatre-vingt-seize	96
+quatre-vingt-dix-sept	97
+quatre-vingt-dix-huit	98
+quatre-vingt-dix-neuf	99
+septante	70
+septante et un	71
+septante-et-un	71
+septante et une	71
+septante-et-une	71
+septante et uns	71
+septante-et-uns	71
+septante et unes	71
+septante-et-unes	71
+septante-deux	72
+septante-trois	73
+septante-quatre	74
+septante-cinq	75
+septante-six	76
+septante-sept	77
+septante-huit	78
+septante-neuf	79
+octante	80
+octante-et-un	81
+octante et un	81
+octante-et-une	81
+octante et une	81
+octante-et-uns	81
+octante et uns	81
+octante-et-unes	81
+octante et unes	81
+octante-deux	82
+octante-trois	83
+octante-quatre	84
+octante-cinq	85
+octante-six	86
+octante-sept	87
+octante-huit	88
+octante-neuf	89
+huitante	80
+huitante-et-un	81
+huitante et un	81
+huitante-et-une	81
+huitante et une	81
+huitante-et-uns	81
+huitante et uns	81
+huitante-et-unes	81
+huitante et unes	81
+huitante-deux	82
+huitante-trois	83
+huitante-quatre	84
+huitante-cinq	85
+huitante-six	86
+huitante-sept	87
+huitante-huit	88
+huitante-neuf	89
+nonante	90
+nonante-et-un	91
+nonante et un	91
+nonante-et-une	91
+nonante et une	91
+nonante-et-uns	91
+nonante et uns	91
+nonante-et-unes	91
+nonante et unes	91
+nonante-deux	92
+nonante-trois	93
+nonante-quatre	94
+nonante-cinq	95
+nonante-six	96
+nonante-sept	97
+nonante-huit	98
+nonante-neuf	99
+dix sept	17
+dix huit	18
+dix neuf	19
+vingt deux	22
+vingt trois	23
+vingt quatre	24
+vingt cinq	25
+vingt six	26
+vingt sept	27
+vingt huit	28
+vingt neuf	29
+trente deux	32
+trente trois	33
+trente quatre	34
+trente cinq	35
+trente six	36
+trente sept	37
+trente huit	38
+trente neuf	39
+quarante deux	42
+quarante trois	43
+quarante quatre	44
+quarante cinq	45
+quarante six	46
+quarante sept	47
+quarante huit	48
+quarante neuf	49
+cinquante deux	52
+cinquante trois	53
+cinquante quatre	54
+cinquante cinq	55
+cinquante six	56
+cinquante sept	57
+cinquante huit	58
+cinquante neuf	59
+soixante deux	62
+soixante trois	63
+soixante quatre	64
+soixante cinq	65
+soixante six	66
+soixante sept	67
+soixante huit	68
+soixante neuf	69
+soixante douze	72
+soixante treize	73
+soixante quatorze	74
+soixante quinze	75
+soixante seize	76
+soixante dix sept	77
+soixante dix huit	78
+soixante dix neuf	79
+soixante dix-sept	77
+soixante dix-huit	78
+soixante dix-neuf	79
+soixante-dix sept	77
+soixante-dix huit	78
+soixante-dix neuf	79
+quatre vingts	80
+quatre-vingt un	81
+quatre-vingt une	81
+quatre-vingt uns	81
+quatre-vingt unes	81
+quatre vingt un	81
+quatre vingt une	81
+quatre vingt uns	81
+quatre vingt unes	81
+quatre vingt deux	82
+quatre vingt trois	83
+quatre vingt quatre	84
+quatre vingt cinq	85
+quatre vingt six	86
+quatre vingt sept	87
+quatre vingt huit	88
+quatre vingt neuf	89
+quatre vingt-deux	82
+quatre vingt-trois	83
+quatre vingt-quatre	84
+quatre vingt-cinq	85
+quatre vingt-six	86
+quatre vingt-sept	87
+quatre vingt-huit	88
+quatre vingt-neuf	89
+quatre vingt dix	90
+quatre vingt onze	91
+quatre vingt douze	92
+quatre vingt treize	93
+quatre vingt quatorze	94
+quatre vingt quinze	95
+quatre vingt seize	96
+quatre vingt dix sept	97
+quatre vingt dix huit	98
+quatre vingt dix neuf	99
+quatre vingt dix-sept	97
+quatre vingt dix-huit	98
+quatre vingt dix-neuf	99
+quatre-vingt deux	82
+quatre-vingt trois	83
+quatre-vingt quatre	84
+quatre-vingt cinq	85
+quatre-vingt six	86
+quatre-vingt sept	87
+quatre-vingt huit	88
+quatre-vingt neuf	89
+quatre-vingt dix	90
+quatre-vingt onze	91
+quatre-vingt douze	92
+quatre-vingt treize	93
+quatre-vingt quatorze	94
+quatre-vingt quinze	95
+quatre-vingt seize	96
+quatre-vingt dix sept	97
+quatre-vingt dix huit	98
+quatre-vingt dix neuf	99
+quatre-vingt dix-sept	97
+quatre-vingt dix-huit	98
+quatre-vingt dix-neuf	99
+septante deux	72
+septante trois	73
+septante quatre	74
+septante cinq	75
+septante six	76
+septante sept	77
+septante huit	78
+septante neuf	79
+octante deux	82
+octante trois	83
+octante quatre	84
+octante cinq	85
+octante six	86
+octante sept	87
+octante huit	88
+octante neuf	89
+huitante deux	82
+huitante trois	83
+huitante quatre	84
+huitante cinq	85
+huitante six	86
+huitante sept	87
+huitante huit	88
+huitante neuf	89
+nonante deux	92
+nonante trois	93
+nonante quatre	94
+nonante cinq	95
+nonante six	96
+nonante sept	97
+nonante huit	98
+nonante neuf	99

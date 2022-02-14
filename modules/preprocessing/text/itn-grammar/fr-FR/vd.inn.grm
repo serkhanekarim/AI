@@ -1,0 +1,63 @@
+import '../../fst-thrax-grammars-inv/fr-FR/inumerals.grm' as inumerals;
+import '../../fst-thrax-grammars-inv/fr-FR/idate.grm' as idate;
+import '../../fst-thrax-grammars-inv/fr-FR/imoney.grm' as imoney;
+import '../../fst-thrax-grammars-inv/fr-FR/itime.grm' as itime;
+import '../../fst-thrax-grammars-inv/fr-FR/iphone.grm' as iphone;
+import '../../fst-thrax-grammars-inv/fr-FR/iequation.grm' as iequation;
+import '../../fst-thrax-grammars-inv/fr-FR/screen.grm' as screen;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars-inv/fr-FR/iunits.grm' as iunits;
+import '../../fst-thrax-grammars-inv/fr-FR/tweet.grm' as tweet;
+import '../../fst-thrax-grammars-inv/fr-FR/mail.grm' as mail;
+import '../../fst-thrax-grammars-inv/fr-FR/url.grm' as url;
+
+rb = Optimize[" " | chars.Punc | "[EOS]"];
+digit = Optimize[bytelib.kDigit];
+not_digit = Optimize[bytelib.kBytes - bytelib.kDigit];
+star = Optimize[bytelib.kBytes*];
+and = Optimize["et"];
+lbnd = Optimize[(((bytelib.kBytes{2} not_digit " ") - (" " and " ")) | "[BOS]" | (chars.Punc - ":"))];
+rbnd = Optimize[(((" " not_digit bytelib.kBytes{2}) - (" " and " ")) | "[EOS]" | (chars.Punc - ":"))];
+
+normalize_plus = Optimize[
+    CDRewrite[" plus" : "+","google" | "samsung",
+        rb, star]
+];
+
+normalize_punctuation_vd = Optimize[
+    CDRewrite[(" point" "s"? " un") : ".1", digit, rbnd, star]
+    @ CDRewrite[(" point" "s"? " ") : ".", digit, digit, star]
+];
+
+#export MAIN1 = inumerals.MAINVD; #normalize_numeral;
+#export MAIN2 = idate.MAIN; #normalize_date;
+#export MAIN3 = imoney.MAIN; #normalize_currency;
+#export MAIN4 = itime.MAINVD; #normalize_time;
+#export MAIN5 = iphone.MAIN; #normalize_phone;
+#export MAIN6 = normalize_plus; #normalize_plus;
+#export MAIN7 = screen.MAIN; #normalize_screen_ratio
+#export MAIN8 = iequation.MAIN_1; #normalize_equation_1;
+#export MAIN9 = iequation.MAIN_2; #normalize_equation_2;
+#export MAIN10 = iequation.MAIN_3; #normalize_equation_3;
+#export MAIN11 = iequation.MAIN_4; #normalize_equation_4;
+#export MAIN12 = iequation.MAIN_5; #normalize_equation_5;
+#export MAIN13 = normalize_punctuation_vd; #normalize_punctuation;
+
+export MAIN1 = inumerals.MAINVD; #normalize_numeral
+export MAIN2 = iphone.MAIN; #normalize_phone
+export MAIN3 = normalize_plus; #normalize_plus;
+export MAIN4 = tweet.MAIN; #normalize_tweet
+export MAIN5 = mail.MAIN; #normalize_mail
+export MAIN6 = url.MAIN; #normalize_url
+export MAIN7 = idate.MAIN; #normalize_date
+export MAIN8 = itime.MAIN; #normalize_time
+export MAIN9 = imoney.MAIN; #normalize_currency
+export MAIN10 = iunits.MAIN; #normalize_units
+export MAIN11 = screen.MAIN; #normalize_screen_ratio
+export MAIN12 = iequation.MAIN_1; #normalize_equation_1
+export MAIN13 = iequation.MAIN_2; #normalize_equation_2
+export MAIN14 = iequation.MAIN_3; #normalize_equation_3
+export MAIN15 = iequation.MAIN_4; #normalize_equation_4
+export MAIN16 = iequation.MAIN_5; #normalize_equation_5
+export MAIN17 = normalize_punctuation_vd; #normalize_punctuation;

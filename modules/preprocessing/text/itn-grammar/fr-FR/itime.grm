@@ -1,0 +1,336 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+star = Optimize[bytelib.kBytes*];
+space = Optimize[" "];
+
+digit = Optimize[bytelib.kDigit];
+zero_digit = Optimize["0"];
+one_digit = Optimize["1"];
+not_one = Optimize[digit - one_digit];
+not_zero = Optimize[digit - zero_digit];
+digit_more_than_one = Optimize[(not_zero|not_one)|(not_zero digit+)];
+digit_less_than_one = Optimize[zero_digit|one_digit];
+virgule = Optimize["virgule" "s"?];
+point = Optimize["point" "s"?];
+symb_point = Optimize["."];
+symb_virgule = Optimize[","];
+
+comma = Optimize[symb_virgule|symb_point|(space virgule space)|(space point space)];
+
+special_chars = Optimize["à"|"ä"|"â"|"é"|"è"|"ë"|"ê"|"ï"|"î"|"ô"|"ö"|"ù"|"û"|"ü"|"ÿ"|"ŷ"|"ç"|"œ"|"æ"];
+a_z0_9 = Optimize[bytelib.kLower|bytelib.kDigit];
+symb_apostrophe = Optimize["'"];
+symb_hyphen = Optimize["-"];
+word = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_z0_9)+];
+
+
+lb = Optimize[space | "[BOS]" | chars.Punc];
+rb = Optimize[space | "[EOS]" | chars.Punc];
+lb_short = Optimize["[BOS]" | space];
+rb_short = Optimize["[EOS]" | space];
+
+one = Optimize["un"|"une"];
+
+d_apostrophe = Optimize["d'"];
+of = Optimize["de"];
+
+hours = Optimize["heure" "s"?];
+d_hours = Optimize[d_apostrophe? "heure" "s"?];
+minutes = Optimize["minute" "s"?];
+seconds = Optimize["seconde" "s"?];
+
+quart = Optimize["quart" "s"?];
+demi = Optimize["demi" "e"? "s"?];
+demi_heure = Optimize[demi symb_hyphen hours];
+demi_minute = Optimize[demi symb_hyphen minutes];
+
+and = Optimize[(space "et" space)|space];
+
+midday = Optimize["midi"];
+midnight = Optimize["minuit"];
+
+weekday = Optimize[StringFile['dictionaries/time/weekdays.dict', byte]];
+month = Optimize[StringFile['dictionaries/time/months.dict', byte]];
+
+one_time_context_left = Optimize[(midday|midnight|hours|minutes) (space ("moins"))?];
+one_time_context_right = Optimize[hours|minutes|seconds|demi|demi_heure|demi_minute|quart];
+
+normalization_context_left =  Optimize[weekday|month|StringFile['dictionaries/time/normalization_context_left.cont', byte]];
+
+forbidden_verb_left = Optimize[StringFile['dictionaries/time/forbidden_verb_left.dict', byte]];
+forbidden_noun_left = Optimize[StringFile['dictionaries/time/forbidden_noun_left.dict', byte]];
+forbidden_word_left = Optimize[forbidden_verb_left|forbidden_noun_left];
+authorized_word_left = Optimize[word - forbidden_word_left];
+
+forbidden_word_right = Optimize[StringFile['dictionaries/time/forbidden_noun_right.dict', byte]];
+authorized_word_right = Optimize[word - forbidden_word_right];
+
+last_forbidden_word = Optimize[StringFile['dictionaries/time/last_forbidden_word.dict', byte]];
+last_authorized_word = Optimize[authorized_word_left - last_forbidden_word];
+
+forbidden_sentence_left = Optimize[(forbidden_verb_left space "de")|StringFile['dictionaries/time/forbidden_sentence_left.sent', byte]];
+forbidden_sentence_right = Optimize[StringFile['dictionaries/time/forbidden_sentence_right.sent', byte]];
+
+context_forbidden_sentence_left = Optimize[(authorized_word_left space)* forbidden_sentence_left space];
+context_forbidden_sentence_right = Optimize[(space authorized_word_right)* space forbidden_sentence_right];
+
+any_word_context_left = Optimize[(authorized_word_left space)+ - context_forbidden_sentence_left];
+any_word_context_right = Optimize[(space authorized_word_right)+ - context_forbidden_sentence_right];
+
+
+
+context_time_normalization_left = Optimize[("[BOS]" any_word_context_left? normalization_context_left space (any_word_context_left? last_authorized_word space)?)|"[BOS]"];
+context_time_normalization_right = Optimize[any_word_context_right rb_short];
+
+
+########################################## Transducer ##########################################
+
+del_space = Optimize[(space : "")];
+ins_space = Optimize[("" : space)];
+del_zero = Optimize[(zero_digit : "")];
+ins_zero = Optimize[("" : zero_digit)];
+del_comma = Optimize[(comma : "")];
+tr_point = Optimize[(space point space) : symb_point];
+tr_virgule = Optimize[(space virgule space) : symb_virgule];
+
+quart_hour = Optimize[quart (space (d_hours|(of space one_digit space hours)))?];
+half_hour = Optimize[demi ((space|symb_hyphen) (d_hours|(of space one_digit space hours)))?];
+quart_minute = Optimize[quart (space (of space minutes|(of space one_digit space minutes)))?];
+half_minute = Optimize[demi ((space|symb_hyphen) (minutes|(of space one_digit space minutes)))?];
+
+quart_hour_alone = Optimize[quart (space (d_hours|(of space one_digit space hours)))];
+half_hour_alone = Optimize[demi ((space|symb_hyphen) (d_hours|(of space one_digit space hours)))];
+quart_minute_alone = Optimize[quart (space (of space minutes|(of space one_digit space minutes)))];
+half_minute_alone = Optimize[demi ((space|symb_hyphen) (minutes|(of space one_digit space minutes)))];
+
+tr_one_to_digit = Optimize[one : one_digit];
+tr_d_one_to_digit = Optimize[d_apostrophe one : "de 1"];
+tr_one_comma_one = Optimize[(digit|tr_one_to_digit) (tr_point|tr_virgule) (digit|tr_one_to_digit)];
+
+digits_minutes = Optimize[zero_digit del_space not_zero | ("0" | "1" | "2" | "3" | "4" | "5") digit];
+digits_seconds = Optimize[zero_digit del_space not_zero | ("0" | "1" | "2" | "3" | "4" | "5") digit];
+
+del_double_zero = Optimize[del_zero del_space? del_zero];
+double_zero = Optimize[zero_digit del_space zero_digit];
+
+digit_hour = digit_less_than_one;
+digit_hours = Optimize[(digit_less_than_one?  digit) | ("2" ("0" | "1" | "2" | "3"))];
+digit_minutes = Optimize[(("0" | "1" | "2" | "3" | "4" | "5") space?)? digit];
+digit_seconds = Optimize[(("0" | "1" | "2" | "3" | "4" | "5") space?)? digit];
+
+between_digit_minutes = Optimize[digits_minutes | (ins_zero digit)];
+between_digit_seconds = Optimize[digits_seconds | (ins_zero digit)];
+
+tr_normalize_midday = Optimize[(midday : "12 heures")];
+tr_normalize_midnight = Optimize[(midnight : "0 heure") ((and|" moins ") digit_minutes (space minutes)?|and "1 "? demi|and ("1 "|"2 "|"3 ")? quart)]; 
+tr_normalize_midnight_insert = Optimize[(midnight : "0 heure 0")];
+
+tr_hours_and_quarter_half = Optimize[digit_hours space hours (((and "1 "? quart_hour) : " 15")
+								| ((and "1 "? half_hour) : " 30") | ((and "2 " quart_hour) : " 30")
+								| ((and "3 " quart_hour) : " 45"))];
+
+
+tr_moins_quart_demi = Optimize[("moins" (" et"|" le"|" 1")? space quart : "45")
+                | ("moins" (" la"|" 1")? space demi : "30") | ("moins 2 " quart : "30")
+                | ("moins 3 " quart : "15")
+                | ("moins 4 " quart : "0 0") | ("moins 2 " demi : "0 0")];
+
+tr_moins_minutes = Optimize[("moins 1" : "59") | ("moins 2" : "58")
+                | ("moins 3" : "57") | ("moins 4" : "56") | ("moins 5" : "55")
+                | ("moins 6" : "54") | ("moins 7" : "53") | ("moins 8" : "52")
+                | ("moins 9" : "51") | ("moins 0 1" : "59") | ("moins 0 2" : "58")
+                | ("moins 0 3" : "57") | ("moins 0 4" : "56") | ("moins 0 5" : "55")
+                | ("moins 0 6" : "54") | ("moins 0 7" : "53") | ("moins 0 8" : "52")
+                | ("moins 0 9" : "51") 
+                | ("moins 10" : "50") | ("moins 11" : "49")
+                | ("moins 12" : "48") | ("moins 13" : "47") | ("moins 14" : "46")
+                | ("moins 15" : "45")  | ("moins 16" : "44") | ("moins 17" : "43")
+                | ("moins 18" : "42") | ("moins 19" : "41") | ("moins 20" : "40")
+                | ("moins 21" : "39") | ("moins 22" : "38") | ("moins 23" : "37")
+                | ("moins 24" : "36") | ("moins 25" : "35") | ("moins 26" : "34")
+                | ("moins 27" : "33") | ("moins 28" : "32")  | ("moins 29" : "31")
+                | ("moins 30" : "30") | ("moins 31" : "29") | ("moins 32" : "28")
+                | ("moins 33" : "27") | ("moins 34" : "26") | ("moins 35" : "25") 
+                | ("moins 36" : "24") | ("moins 37" : "23") | ("moins 38" : "22") 
+                | ("moins 39" : "21") | ("moins 40" : "20") | ("moins 41" : "19")
+                | ("moins 42" : "18") | ("moins 43" : "17") | ("moins 44" : "16")
+                | ("moins 45" : "15") | ("moins 46" : "14") | ("moins 47" : "13")
+                | ("moins 48" : "12") | ("moins 49" : "11") | ("moins 50" : "10")
+                | ("moins 51" : "09") | ("moins 52" : "08") | ("moins 53" : "07")
+                | ("moins 54" : "06") | ("moins 55" : "05") | ("moins 56" : "04")
+                | ("moins 57" : "03") | ("moins 58" : "02") | ("moins 59" : "01")];
+
+tr_moins_hours = Optimize[("1 " hours space : "0 heure ") | ("2 " hours space : "1 heure ")
+                   | ("3 " hours space : "2 heures ") | ("4 " hours space : "3 heures ")
+                   | ("5 " hours space : "4 heures ") | ("6 " hours space : "5 heures ")
+                   | ("7 " hours space : "6 heures ") | ("8 " hours space : "7 heures ")
+                   | ("9 " hours space : "8 heures ") | ("10 " hours space : "9 heures ")
+                   | ("11 " hours space : "10 heures ") | ("12 " hours space : "11 heures ")
+                   | ("13 " hours space : "12 heures ") | ("14 " hours space : "13 heures ")
+                   | ("15 " hours space : "14 heures ") | ("16 " hours space : "15 heures ")
+                   | ("17 " hours space : "16 heures ") | ("18 " hours space : "17 heures ")
+                   | ("19 " hours space : "18 heures ") | ("20 " hours space : "19 heures ")
+                   | ("21 " hours space : "20 heures ") | ("22 " hours space : "21 heures ")
+                   | ("23 " hours space : "22 heures ") | (("24 "|"0 ") hours space : "23 heures ")];
+
+tr_evening = Optimize[(("5 " hours : "17 heures")
+                   | ("6 " hours : "18 heures") | ("7 " hours : "19 heures")
+                   | ("8 " hours : "20 heures") | ("9 " hours : "21 heures")
+                   | ("10 " hours : "22 heures") | ("11 " hours : "23 heures")
+                   | ("12 " hours : "0 heure")) (space digit_minutes)? (" du soir" : "")];
+
+tr_afternoon = Optimize[(("1 " hours : "13 heures")
+                   | ("2 " hours : "14 heures") | ("3 " hours : "15 heures")
+                   | ("4 " hours : "16 heures") | ("5 " hours : "17 heures")
+                   | ("6 " hours : "18 heures") | ("7 " hours : "19 heures")
+                   | ("8 " hours : "20 heures") | ("9 " hours : "21 heures")
+                   | ("10 " hours : "22 heures") | ("11 " hours : "23 heures")
+                   | ("12 " hours : "0 heure")) (space digit_minutes)? ((" de l'après-midi"|" de l'aprèm") : "")];
+
+tr_normalize_hour = Optimize[(space hours : "h")];
+tr_add_normalize_hour = Optimize[("" : " heure")];
+tr_add_normalize_hours = Optimize[("" : " heures")];
+tr_normalize_minutes = Optimize[(space minutes : "min")];
+tr_normalize_del_minutes = Optimize[(space minutes : "")];
+tr_normalize_seconds = Optimize[(space seconds : "s")];
+tr_normalize_del_and = Optimize[(" et " : "")];
+tr_normalize_del_space = Optimize[(space : "")];
+tr_normalize_add_minutes = Optimize[("" : "min")];
+tr_normalize_add_seconds = Optimize[("" : "s")];
+tr_normalize_add_00 = Optimize[("" : zero_digit{2})];
+
+tr_add_hour = Optimize[("":"heure")];
+tr_add_hours = Optimize[("":"heures")];
+tr_add_minute = Optimize[("":"minute")];
+tr_add_minutes = Optimize[("":"minutes")];
+tr_add_second = Optimize[("":"seconde")];
+tr_add_seconds = Optimize[("":"secondes")];
+
+tr_remove_hours = Optimize[(hours:"")];
+tr_remove_minutes = Optimize[(minutes:"")];
+
+tr_duration = Optimize["de" space (((digit_hour|tr_one_to_digit) tr_add_normalize_hour)|(digit_hours tr_add_normalize_hours)) space ("a"|"à") space];
+
+tr_normalize_hours_minutes_seconds = Optimize[digit_hours tr_normalize_hour (tr_normalize_del_and|tr_normalize_del_space) (double_zero|between_digit_minutes) tr_normalize_minutes (tr_normalize_del_and|tr_normalize_del_space) between_digit_seconds (tr_normalize_seconds|tr_normalize_add_seconds)];
+tr_normalize_hours_and_minutes = Optimize[digit_hours tr_normalize_hour (tr_normalize_del_and|tr_normalize_del_space) (del_double_zero|between_digit_minutes) tr_normalize_del_minutes];
+tr_normalize_hours_minutes = Optimize[digit_hours tr_normalize_hour tr_normalize_del_space (del_double_zero|between_digit_minutes)];
+tr_normalize_hours_seconds = Optimize[digit_hours tr_normalize_hour tr_normalize_add_00 tr_normalize_add_minutes (tr_normalize_del_and|tr_normalize_del_space) between_digit_seconds tr_normalize_seconds];
+tr_normalize_hours = Optimize[digit_hours tr_normalize_hour];
+
+
+tr_real_number_to_time = Optimize[("25":"15")|(("5""0"?):"30")|("75":"45")];
+
+tr_real_number_hours_minutes = Optimize[((digit_less_than_one ins_space tr_add_hour|digit_more_than_one ins_space tr_add_hours) del_comma ins_space tr_real_number_to_time del_space tr_remove_hours)|((digit_less_than_one ins_space tr_add_minute|digit_more_than_one ins_space tr_add_minutes) del_comma ins_space tr_real_number_to_time del_space tr_remove_minutes)];
+
+tr_add_minutes_seconds = Optimize[(digit+ space hours space (digit_less_than_one ins_space tr_add_minute|digit_more_than_one ins_space tr_add_minutes))|(digit+ space minutes space (digit_less_than_one ins_space tr_add_second|digit_more_than_one ins_space tr_add_seconds))];
+tr_remove_hours_minutes = Optimize[del_zero del_space ((tr_remove_hours del_space digit+ space minutes)|(tr_remove_minutes del_space digit+ space seconds))];
+
+
+tr_number_quart_alone = Optimize[("1 ":"15 ")|("2 ":"30 ")|("3 ":"45 ")|("4 ":"60 ")|("5 ":"75 ")|("6 ":"90 ")|("7 ":"105 ")|("8 ":"120 ")|("9 ":"135 ")|("10 ":"150 ")|("11 ":"165 ")];
+tr_number_half_alone = Optimize[("1 ":"30 ")|("2 ":"60 ")|("3 ":"90 ")|("4 ":"120 ")|("5 ":"150 ")|("6 ":"180 ")|("7 ":"210 ")|("8 ":"240 ")|("9 ":"270 ")|("10 ":"300 ")|("11 ":"330 ")];
+
+tr_number_quart = Optimize[((""|"1 "):"15 ")|("2 ":"30 ")|("3 ":"45 ")|("4 ":"60 ")|("5 ":"75 ")|("6 ":"90 ")|("7 ":"105 ")|("8 ":"120 ")|("9 ":"135 ")|("10 ":"150 ")|("11 ":"165 ")];
+tr_number_half = Optimize[((""|"1 "):"30 ")|("2 ":"60 ")|("3 ":"90 ")|("4 ":"120 ")|("5 ":"150 ")|("6 ":"180 ")|("7 ":"210 ")|("8 ":"240 ")|("9 ":"270 ")|("10 ":"300 ")|("11 ":"330 ")];
+
+
+tr_remove_quart_hour_alone = Optimize[quart_hour_alone:""];
+tr_remove_half_hour_alone = Optimize[half_hour_alone:""];
+tr_remove_quart_minute_alone = Optimize[quart_minute_alone:""];
+tr_remove_half_minute_alone = Optimize[half_minute_alone:""];
+
+tr_quart_demi_minute_alone = Optimize[((tr_number_quart_alone tr_remove_quart_minute_alone tr_add_seconds)|(tr_number_half_alone tr_remove_half_minute_alone tr_add_seconds))];
+tr_quart_demi_hour_alone = Optimize[((tr_number_quart_alone tr_remove_quart_hour_alone tr_add_minutes)|(tr_number_half_alone tr_remove_half_hour_alone tr_add_minutes))];
+
+
+
+tr_remove_quart_hour = Optimize[quart_hour:""];
+tr_remove_half_hour = Optimize[half_hour:""];
+tr_remove_quart_minute = Optimize[quart_minute:""];
+tr_remove_half_minute = Optimize[half_minute:""];
+
+tr_quart_demi_minute = Optimize[digit+ space minutes and ((tr_number_quart tr_remove_quart_minute tr_add_seconds)|(tr_number_half tr_remove_half_minute tr_add_seconds))];
+tr_quart_demi_hour = Optimize[digit+ space hours and ((tr_number_quart tr_remove_quart_hour tr_add_minutes)|(tr_number_half tr_remove_half_hour tr_add_minutes))];
+
+   
+################################################################################################
+
+
+
+########################################### Rewrite ############################################
+
+rw_one_to_digit_left = Optimize[CDRewrite[tr_one_to_digit, lb one_time_context_left space, ("[EOS]"|space one_time_context_right rb), star]];
+rw_one_to_digit_right = Optimize[CDRewrite[tr_one_to_digit|tr_d_one_to_digit|tr_one_comma_one, lb_short, space one_time_context_right rb, star]];
+
+rw_normalize_midday = Optimize[CDRewrite[tr_normalize_midday, lb, rb, star]];
+rw_normalize_midnight = Optimize[CDRewrite[tr_normalize_midnight, lb, rb, star]];
+rw_normalize_midnight_insert = Optimize[CDRewrite[tr_normalize_midnight_insert, lb, (space word|"[EOS]"), star]];
+
+rw_hours_and_quarter_half = Optimize[CDRewrite[tr_hours_and_quarter_half, lb, rb, star, 'rtl', 'obl']];
+
+rw_moins_quart_demi = Optimize[CDRewrite[tr_moins_hours tr_moins_quart_demi, lb, rb, star]];
+rw_moins_time = Optimize[CDRewrite[tr_moins_hours tr_moins_minutes, lb, rb, star]];
+
+rw_evening = Optimize[CDRewrite[tr_evening, lb, rb, star]];
+rw_afternoon = Optimize[CDRewrite[tr_afternoon, lb, rb, star]];
+
+
+rw_duration = Optimize[CDRewrite[tr_duration, "[BOS]" any_word_context_left?, digit, star]];
+
+rw_normalize_hours_minutes_seconds = Optimize[CDRewrite[tr_normalize_hours_minutes_seconds, context_time_normalization_left, rb, star]];
+rw_normalize_hours_and_minutes = Optimize[CDRewrite[tr_normalize_hours_and_minutes, context_time_normalization_left, rb, star]];
+rw_normalize_hours_minutes = Optimize[CDRewrite[tr_normalize_hours_minutes, context_time_normalization_left, rb, star]];
+rw_normalize_hours_seconds = Optimize[CDRewrite[tr_normalize_hours_seconds, context_time_normalization_left, rb, star]];
+rw_normalize_hours_left = Optimize[CDRewrite[tr_normalize_hours, context_time_normalization_left, rb, star]];
+rw_normalize_hours_right = Optimize[CDRewrite[tr_normalize_hours, context_time_normalization_left, context_time_normalization_right, star]];
+
+
+rw_real_number_hours_minutes = Optimize[CDRewrite[tr_real_number_hours_minutes, lb_short, rb_short, star]];
+rw_add_minutes_seconds = Optimize[CDRewrite[tr_add_minutes_seconds, lb_short, "[EOS]", star]];
+rw_remove_hours_minutes = Optimize[CDRewrite[tr_remove_hours_minutes, lb_short, rb_short, star]];
+
+rw_quart_demi_hour_alone = Optimize[CDRewrite[tr_quart_demi_hour_alone, lb_short, rb_short, star]];
+rw_quart_demi_minute_alone = Optimize[CDRewrite[tr_quart_demi_minute_alone, lb_short, rb_short, star]];
+
+rw_quart_demi_hour = Optimize[CDRewrite[tr_quart_demi_hour, lb_short, "[EOS]", star]];
+rw_quart_demi_minute = Optimize[CDRewrite[tr_quart_demi_minute, lb_short, "[EOS]", star]];
+
+################################################################################################
+
+
+
+############################################ Export ############################################
+
+final_normalization = Optimize[rw_one_to_digit_left
+			@ rw_one_to_digit_right
+			@ rw_normalize_midday
+			@ rw_normalize_midnight
+			@ rw_normalize_midnight_insert
+			@ rw_hours_and_quarter_half
+			@ rw_moins_quart_demi
+			@ rw_moins_time
+			@ rw_evening
+			@ rw_afternoon
+			@ rw_duration
+			@ rw_normalize_hours_minutes_seconds
+			@ rw_normalize_hours_and_minutes
+			@ rw_normalize_hours_minutes
+			@ rw_normalize_hours_seconds
+			@ rw_normalize_hours_left
+			@ rw_normalize_hours_right
+
+			@ rw_real_number_hours_minutes
+			@ rw_add_minutes_seconds
+			@ rw_remove_hours_minutes
+
+			@ rw_quart_demi_hour_alone
+			@ rw_quart_demi_minute_alone
+			@ rw_quart_demi_hour
+			@ rw_quart_demi_minute
+
+			];
+
+export MAIN = final_normalization;
+
+################################################################################################
+

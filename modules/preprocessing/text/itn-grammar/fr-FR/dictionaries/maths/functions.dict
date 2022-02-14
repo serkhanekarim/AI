@@ -1,0 +1,149 @@
+sin	sin
+sinus	sin
+sin cardinal	sinc
+sinus cardinal	sinc
+sinus verse	versin
+cos	cos
+cosinus	cos
+cosinus verse	cvs
+exsecante	exsec
+excosécante	excsc
+tangente	tan
+haversine	hav
+arc cos	arccos
+arccos	arccos
+arc cosinus	arccos
+réciproque du cosinus	arccos
+inverse du cosinus	arccos
+réciproque de cosinus	arccos
+inverse de cosinus	arccos
+arc sin	arcsin
+arcsin	arcsin
+arc sinus	arcsin
+réciproque du sinus	arcsin
+inverse du sinus	arcsin
+réciproque de sinus	arcsin
+inverse de sinus	arcsin
+arc tangente	arctan
+réciproque de la tangente	arctan
+inverse de la tangente	arctan
+réciproque de tangente	arctan
+inverse de tangente	arctan
+cosécante	csc
+arc cosécante	arccsc
+réciproque de la cosécante	arccsc
+inverse de la cosécante	arccsc
+réciproque de cosécante	arccsc
+inverse de cosécante	arccsc
+sécante	sec
+arc sécante	arcsec
+réciproque de la sécante	arcsec
+inverse de la sécante	arcsec
+réciproque de sécante	arcsec
+inverse de sécante	arcsec
+cotangente	cot
+arc cotangente	arccot
+réciproque de la cotangente	arccot
+inverse de la cotangente	arccot
+réciproque de cotangente	arccot
+inverse de cotangente	arccot
+sin h	sinh
+cos h	cosh
+sinus hyperbolique	sinh
+cosinus hyperbolique	cosh
+tangente hyperbolique	tanh
+cotangente hyperbolique	coth
+sécante hyperbolique	sech
+cosécante hyperbolique	csch
+inverse du sinus hyperbolique	arsinh
+inverse du cosinus hyperbolique	arcosh
+inverse de la tangente hyperbolique	artanh
+inverse de sinus hyperbolique	arsinh
+inverse de cosinus hyperbolique	arcosh
+inverse de tangente hyperbolique	artanh
+réciproque du sinus hyperbolique	arsinh
+réciproque de sinus hyperbolique	arsinh
+réciproque du cosinus hyperbolique	arcosh
+réciproque de cosinus hyperbolique	arcosh
+réciproque de tangente hyperbolique	artanh
+réciproque de la tangente hyperbolique	artanh
+arc sinus hyperbolique	arsinh
+arc cosinus hyperbolique	arcosh
+arc tangente hyperbolique	artanh
+argument sinus hyperbolique	arsinh
+argument cosinus hyperbolique	arcosh
+argument tangente hyperbolique	artanh
+argument du sinus hyperbolique	arsinh
+argument du cosinus hyperbolique	arcosh
+argument du tangente hyperbolique	artanh
+argument de sinus hyperbolique	arsinh
+argument de cosinus hyperbolique	arcosh
+argument de tangente hyperbolique	artanh
+arc cotangente hyperbolique	argcoth
+arc sécante hyperbolique	argsech
+arc cosécante hyperbolique	argcsch
+réciproque de cotangente hyperbolique	argcoth
+réciproque de sécante hyperbolique	argsech
+réciproque de cosécante hyperbolique	argcsch
+réciproque de la cotangente hyperbolique	argcoth
+réciproque de la sécante hyperbolique	argsech
+réciproque de la cosécante hyperbolique	argcsch
+inverse de cotangente hyperbolique	argcoth
+inverse de sécante hyperbolique	argsech
+inverse de cosécante hyperbolique	argcsch
+inverse de la cotangente hyperbolique	argcoth
+inverse de la sécante hyperbolique	argsech
+inverse de la cosécante hyperbolique	argcsch
+argument cotangente hyperbolique	argcoth
+argument sécante hyperbolique	argsech
+argument cosécante hyperbolique	argcsch
+argument de cotangente hyperbolique	argcoth
+argument de sécante hyperbolique	argsech
+argument de cosécante hyperbolique	argcsch
+argument de la cotangente hyperbolique	argcoth
+argument de la sécante hyperbolique	argsech
+argument de la cosécante hyperbolique	argcsch
+l n	ln
+logarithme népérien	ln
+logarithme naturel	ln
+logarithme complexe	ln
+logarithme	log
+log	log
+logarithme décimal	log
+logarithme binaire	lb
+valeur absolue	abs
+racine	√
+racine carrée	√
+racine cubique	∛
+racine cubique arabe	؆
+racine quatrième	∜
+racine quatrième arabe	؇
+exponentielle	e^
+intégrale	∫
+rallonge d'intégrale	⎮
+intégrale double	∬
+intégrale triple	∭
+intégrale quadruple	⨌
+intégrale quaternion	⨖
+intégrale de contour	∮
+intégrale de surface	∯
+intégrale de volume	∰
+intégrale à partie finie	⨍
+intégrale à signe intersection	⨙
+intégrale à signe union	⨚
+intégrale à barre souscrite	⨜
+intégrale à deux barres horizontales	⨎
+intégrale en sens positif	⨑
+intégrale à barre en chef	⨛
+intégrale en sens négatif	∱
+intégrale au signe multiplié par	⨘
+intégrale de contour en sens positif	∳
+intégrale de contour en sens négatif	∲
+intégrale de ligne évitant le pôle	⨔
+intégrale autour d'un opérateur point	⨕
+intégrale à crosse fléchée vers la gauche	⨗
+intégrale de ligne à chemin rectangulaire autour du pôle	⨒
+intégrale de ligne à chemin semi-circulaire autour du pôle	⨓
+moitié supérieure d'intégrale	⌠
+moitié inférieure d'intégrale	⌡
+moyenne d'intégrale à barre oblique inversée	⨏

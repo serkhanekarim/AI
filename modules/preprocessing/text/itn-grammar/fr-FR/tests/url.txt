@@ -1,0 +1,208 @@
+MAIN|téléphone sfr|téléphone sfr
+MAIN|ce n'est point comme ça|ce n'est point comme ça
+MAIN|bascule sur un autre point d'accès wifi|bascule sur un autre point d'accès wifi
+MAIN|avoir le coeur net|avoir le coeur net
+MAIN|poids net|poids net
+MAIN|être très net|être très net
+MAIN|s'arrêter net|s'arrêter net
+MAIN|surfer sur le net|surfer sur le net
+MAIN|ad hoc|ad hoc
+MAIN|le nouvel an|le nouvel an
+MAIN|plein aux as|plein aux as
+MAIN|les us et coutumes|les us et coutumes
+MAIN|à tout va|à tout va
+
+MAIN|mais les jeux video point de raison|mais les jeux video point de raison
+MAIN|quand l'équipe point il est quelle heure|quand l'équipe point il est quelle heure
+MAIN|pour l'équipe point il est quelle heure|pour l'équipe point il est quelle heure
+MAIN|mais de l'équipe point de il est quelle heure|mais de l'équipe point de il est quelle heure
+
+MAIN|blabla point jeux vidéo point com|blabla.jeuxvideo.com
+MAIN|miauwww outlook point com|miauwww outlook.com
+MAIN|connais-tu l'équipe point com|connais-tu l'equipe.com
+
+MAIN|ouvre actualité point fr|ouvre actualite.fr
+MAIN|va sur télérama point fr|va sur telerama.fr
+MAIN|ouvre w w w point jeux vidéo point com|ouvre www.jeuxvideo.com
+MAIN|aller sur zalando point fr|aller sur zalando.fr
+MAIN|ouvre lemonde france|ouvre lemonde france
+MAIN|ouvre lemonde point fr|ouvre lemonde.fr
+MAIN|ouvre outlook comment|ouvre outlook comment
+MAIN|ouvre outlook point com|ouvre outlook.com
+MAIN|ouvre trois w point pages jaunes point fr|ouvre www.pagesjaunes.fr
+MAIN|ouvre trois double vé point pages jaunes point fr|ouvre www.pagesjaunes.fr
+MAIN|ouvre trois w point pages jaunes points fr|ouvre www.pagesjaunes.fr
+MAIN|ouvre trois double vé point pages jaunes points fr|ouvre www.pagesjaunes.fr
+MAIN|ouvre www outlook points com|ouvre www.outlook.com
+MAIN|ouvre w w w yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre trois w yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre trois double vé yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre w w w point yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre trois w point yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre trois double vé point yahoo point fr|ouvre www.yahoo.fr
+MAIN|ouvre yahoo point fr|ouvre yahoo.fr
+MAIN|ouvre w w w point yahoo point f r|ouvre www.yahoo.fr
+MAIN|ouvre trois w point yahoo point f r|ouvre www.yahoo.fr
+MAIN|ouvre trois double vé point yahoo point f r|ouvre www.yahoo.fr
+MAIN|ouvre yahoo point f r|ouvre yahoo.fr
+MAIN|ouvre www pagesjaunes point fr|ouvre www.pagesjaunes.fr
+MAIN|ouvre www point com point com|ouvre www.com.com
+MAIN|ouvre www point groupon point com|ouvre www.groupon.com
+MAIN|ouvre www groupon point com|ouvre www.groupon.com
+MAIN|ouvre w w w point last minute point com|ouvre www.lastminute.com
+MAIN|ouvre www point outlook point com|ouvre www.outlook.com
+MAIN|ouvre www point yahoo point fr|ouvre www.yahoo.fr
+MAIN|trouve quelque chose sur youtube point com|trouve quelque chose sur youtube.com
+MAIN|va sur telerama point fr|va sur telerama.fr
+MAIN|va sur change point org|va sur change.org
+MAIN|ouvre w w w point m s n point com|ouvre www.msn.com
+MAIN|va sur facebook points com stp|va sur facebook.com stp
+MAIN|ouvre w w w point m s n point com|ouvre www.msn.com
+MAIN|va sur w w w point jeux tirets du 6 video du 75 point com|va sur www.jeux-videodu75.com
+MAIN|ouvre w w w point point|ouvre www.point
+MAIN|ouvre w w w point|ouvre www.
+MAIN|ouvre w w w point jeux video point de raison|ouvre www.jeuxvideo.de raison
+MAIN|ouvre w w w point jeux video point com|ouvre www.jeuxvideo.com
+MAIN|ouvre trois w point jeux video point com|ouvre www.jeuxvideo.com
+MAIN|va sur w w w point fr points google points dans un|va sur www.fr points google points dans un
+MAIN|ouvre w w w points points point f r|ouvre www.points.fr
+MAIN|va sur w w w point jeux tirets du 6 video du 75 point com|va sur www.jeux-videodu75.com
+MAIN|va sur w w w point fr points google points dans un|va sur www.fr points google points dans un
+MAIN|va sur w w w point fr points google points com|va sur www.fr.google.com
+MAIN|ouvre w w w points points point f r|ouvre www.points.fr
+MAIN|va sur w w w point jeux tirets du 6 video du 75 point com|va sur www.jeux-videodu75.com
+MAIN|va sur w w w point fr points google points dans un|va sur www.fr points google points dans un
+MAIN|va sur w w w point fr points google tirets du 6 d'armiento points com|va sur www.fr.google-darmiento.com
+MAIN|va sur w w w fr points google tirets du 6 d'armiento points com|va sur www.fr.google-darmiento.com
+MAIN|ouvre 3 w angelo d'armiento point com|ouvre www.angelodarmiento.com
+MAIN|ouvre triple double vais l'équipe point com|ouvre www.lequipe.com
+MAIN|ouvre trois double vé points l'équipe point d e|ouvre www.lequipe.de
+MAIN|ouvre trois w points l'équipe point d e il est quelle heure|ouvre www.lequipe.de il est quelle heure
+MAIN|ouvre 3 double vé l'équipe point de il est quelle heure|ouvre www.lequipe.de il est quelle heure
+MAIN|ouvre triple double vé l'équipe point de|ouvre www.lequipe.de
+MAIN|va sur harman tirets du 6 shop point com|va sur harman-shop.com
+MAIN|va sur harman tirets du six shop point d'ours points com|va sur harman-shop.dours.com
+MAIN|va sur harman tirets du haut shop point d'ours points com|va sur harman-shop.dours.com
+
+MAIN|ouvre le site actualité point fr|ouvre le site actualite.fr
+MAIN|va sur le site télérama point fr|va sur le site telerama.fr
+MAIN|ouvre le site jeux vidéo point com|ouvre le site jeuxvideo.com
+MAIN|ouvre le site crédit-agricole point fr|ouvre le site credit-agricole.fr
+MAIN|ouvre le site l'équipe point fr|ouvre le site lequipe.fr
+MAIN|ouvre le site w w w point jeux vidéo point com|ouvre le site www.jeuxvideo.com
+MAIN|va sur le site jeux vidéo point com|va sur le site jeuxvideo.com
+MAIN|ouvre le site jeux vidéo point com|ouvre le site jeuxvideo.com
+MAIN|blabla le site jeux video point com|blabla le site jeuxvideo.com
+MAIN|blabla le site w w w point jeux video point com|blabla le site www.jeuxvideo.com
+MAIN|blabla le site trois w point jeux video point com|blabla le site www.jeuxvideo.com
+MAIN|va sur le site w w w point fr points google points dans un|va sur le site www.fr points google points dans un
+MAIN|ouvre le site jeux video point com|ouvre le site jeuxvideo.com
+MAIN|ouvre le site jeux video point com|ouvre le site jeuxvideo.com
+MAIN|ouvre le site w w w points points point f r|ouvre le site www.points.fr
+MAIN|ouvre le site jeux video point f r|ouvre le site jeuxvideo.fr
+MAIN|va sur le site w w w point jeux tirets du 6 video du 75 point com|va sur le site www.jeux-videodu75.com
+MAIN|va sur le site w w w point fr points google points dans un|va sur le site www.fr points google points dans un
+MAIN|va sur le site w w w point fr points google points com|va sur le site www.fr.google.com
+MAIN|ouvre le site jeux video point com|ouvre le site jeuxvideo.com
+MAIN|ouvre le site jeux video point com|ouvre le site jeuxvideo.com
+MAIN|ouvre le site w w w points points point f r|ouvre le site www.points.fr
+MAIN|ouvre le site jeux video point f r|ouvre le site jeuxvideo.fr
+MAIN|va sur le site w w w point jeux tirets du 6 video du 75 point com|va sur le site www.jeux-videodu75.com
+MAIN|va sur le site w w w point fr points google points dans un|va sur le site www.fr points google points dans un
+MAIN|va sur le site w w w point fr points google tirets du 6 d'armiento points com|va sur le site www.fr.google-darmiento.com
+MAIN|va sur le site w w w fr points google tirets du 6 d'armiento points com|va sur le site www.fr.google-darmiento.com
+MAIN|ouvre le site 3 w angelo d'armiento point com|ouvre le site www.angelodarmiento.com
+MAIN|ouvre le site triple double vais l'équipe point com|ouvre le site www.lequipe.com
+MAIN|ouvre le site trois double vé points l'équipe point d e|ouvre le site www.lequipe.de
+MAIN|ouvre le site trois w points l'équipe point d e il est quelle heure|ouvre le site www.lequipe.de il est quelle heure
+MAIN|ouvre le site 3 double vé l'équipe point de il est quelle heure|ouvre le site www.lequipe.de il est quelle heure
+MAIN|ouvre le site triple double vé l'équipe point de|ouvre le site www.lequipe.de
+MAIN|ouvre le site harman d'india points com|ouvre le site harmandindia.com
+MAIN|ouvre le site angelo d'armiento point com|ouvre le site angelodarmiento.com
+MAIN|ouvre le site l'équipe point com|ouvre le site lequipe.com
+MAIN|ouvre le site l'équipe point d e|ouvre le site lequipe.de
+MAIN|ouvre le site l'équipe point d e il est quelle heure|ouvre le site lequipe.de il est quelle heure
+MAIN|ouvre le site l'équipe point il est quelle heure|ouvre le site lequipe.il est quelle heure
+MAIN|ouvre le site l'équipe point de|ouvre le site lequipe.de
+MAIN|ouvre le site harman d'india points com|ouvre le site harmandindia.com
+MAIN|ouvre le site harman shop point f r|ouvre le site harmanshop.fr
+MAIN|va sur le site harman tirets du 6 shop point com|va sur le site harman-shop.com
+MAIN|va sur le site harman tirets du six shop point d'ours points com|va sur le site harman-shop.dours.com
+MAIN|va sur le site harman tirets du haut shop point d'ours points com|va sur le site harman-shop.dours.com
+
+MAIN|va sur le site de w w w point fr points google points dans un|va sur le site de www.fr points google points dans un
+MAIN|va sur le site de w w w point fr points google points com|va sur le site de www.fr.google.com
+MAIN|ouvre le site de jeux video point com|ouvre le site de jeuxvideo.com
+MAIN|ouvre le site de jeux video point com|ouvre le site de jeuxvideo.com
+MAIN|ouvre le site de jeux w w w points points point f r|ouvre le site de jeux www.points.fr
+MAIN|ouvre le site de jeux video point f r|ouvre le site de jeuxvideo.fr
+MAIN|va sur le site de jeux w w w point jeux tirets du 6 video du 75 point com|va sur le site de jeux www.jeux-videodu75.com
+MAIN|va sur le site d'w w w point fr points google points dans un|va sur le site d'www.fr points google points dans un
+MAIN|va sur le site de w w w point fr points google tirets du 6 d'armiento points com|va sur le site de www.fr.google-darmiento.com
+MAIN|va sur le site de w w w fr points google tirets du 6 d'armiento points com|va sur le site de www.fr.google-darmiento.com
+MAIN|ouvre le site de 3 w angelo d'armiento point com|ouvre le site de www.angelodarmiento.com
+MAIN|ouvre le site de triple double vais l'équipe point com|ouvre le site de www.lequipe.com
+MAIN|ouvre le site de trois double vé points l'équipe point d e|ouvre le site de www.lequipe.de
+MAIN|ouvre le site de trois w points l'équipe point d e il est quelle heure|ouvre le site de www.lequipe.de il est quelle heure
+MAIN|ouvre le site de 3 double vé l'équipe point de il est quelle heure|ouvre le site de www.lequipe.de il est quelle heure
+MAIN|ouvre le site de triple double vé l'équipe point de|ouvre le site de www.lequipe.de
+MAIN|ouvre le site de harman d'india points com|ouvre le site de harmandindia.com
+MAIN|ouvre le site d'angelo d'armiento point com|ouvre le site d'angelodarmiento.com
+MAIN|ouvre le site de l'équipe point com|ouvre le site de lequipe.com
+MAIN|ouvre le site de l'équipe point d e|ouvre le site de lequipe.de
+MAIN|ouvre le site de l'équipe point d e il est quelle heure|ouvre le site de lequipe.de il est quelle heure
+MAIN|ouvre le site de l'équipe point de il est quelle heure|ouvre le site de lequipe.de il est quelle heure
+MAIN|ouvre le site de l'équipe point de|ouvre le site de lequipe.de
+MAIN|ouvre le site d'harman d'india points com|ouvre le site d'harmandindia.com
+MAIN|ouvre le site d'harman shop point f r|ouvre le site d'harmanshop.fr
+MAIN|va sur le site d'harman tirets du 6 shop point com|va sur le site d'harman-shop.com
+MAIN|va sur le site d'harman tirets du six shop point d'ours points com|va sur le site d'harman-shop.dours.com
+MAIN|va sur le site d'harman tirets du haut shop point d'ours points com|va sur le site d'harman-shop.dours.com
+
+MAIN|va sur le site d'voiture point com|va sur le site d'voiture.com
+
+MAIN|trouve tous les fichiers point a v i dans mon téléphone|trouve tous les fichiers .av i dans mon téléphone
+MAIN|trouve tous les fichiers point de raison|trouve tous les fichiers point de raison
+MAIN|va sur le site d'harman tirets du haut shop point d'ours points com|va sur le site d'harman-shop.dours.com
+MAIN|va sur le site de fichiers points com|va sur le site de fichiers.com
+MAIN|affiche tous les mails reçus d'hotels point com|affiche tous les mails reçus d'hotels.com
+MAIN|ouvre tous les mails reçus d'hotels point com|ouvre tous les mails reçus d'hotels.com
+MAIN|va sur le site de voiture point com|va sur le site de voiture.com
+MAIN|ouvre jaunes point fr|ouvre jaunes.fr
+MAIN|ouvres jaunes point fr|ouvres jaunes.fr
+MAIN|va sur le site de jaunes point fr|va sur le site de jaunes.fr
+MAIN|ca vient d'harman tirets du haut shop point d'ours points com|ca vient d'harman-shop.dours.com
+
+MAIN|va sur le site de la ratp point com|va sur le site de la ratp.com
+MAIN|va sur le site de la redoute point f r|va sur le site de la redoute.fr
+MAIN|va sur le site de la redoute .fr|va sur le site de la redoute.fr
+MAIN|va sur le site de impots .gouv|va sur le site de impots.gouv
+MAIN|va sur le site de impots point gouv|va sur le site de impots.gouv
+MAIN|3 janvier 2022|3 janvier 2022
+
+#MAIN|va sur Harman tirets du haut shop point d'OÙrs points com|va sur harman-shop.dours.com
+#MAIN|va sur Harman tirets du haut Œufs shop point d'OÙrs points com|va sur harman-oeufsshop.dours.com
+#MAIN|va sur jeux vidéo points com|va sur jeuxvideo.com
+#MAIN|va sur jeux video du 75 point com|va sur jeuxvideodu75.com
+#MAIN|ouvre l'équipe point fr|ouvre l'équipe.fr
+#MAIN|ouvre harman shop point f r|ouvre harmanshop.fr
+#MAIN|ouvre harman d'india points com|ouvre harmandindia.com
+#MAIN|ouvre angelo d'armiento point com|ouvre angelodarmiento.com
+#MAIN|ouvre l'équipe point com|ouvre lequipe.com
+#MAIN|ouvre l'équipe point d e|ouvre lequipe.de
+#MAIN|ouvre l'équipe point d e il est quelle heure|ouvre lequipe.de il est quelle heure
+#MAIN|ouvre l'équipe point il est quelle heure|ouvre lequipe.il est quelle heure
+#MAIN|ouvre l'équipe point de|ouvre lequipe.de
+#MAIN|ouvre harman d'india points com|ouvre harmandindia.com
+#MAIN|ouvre jeux video point com|ouvre jeuxvideo.com
+#MAIN|ouvre jeux video point f r|ouvre jeuxvideo.fr
+#MAIN|ouvre jeux video point d e|ouvre jeuxvideo.de
+#MAIN|ouvre jeux video point de raison|ouvre jeuxvideo.de raison
+#MAIN|ouvre google plus point com|ouvre googleplus.com
+#MAIN|ouvre le monde point fr|ouvre lemonde.fr
+#MAIN|ouvre le bon coin point fr|ouvre leboncoin.fr
+#MAIN|ouvre c discount point fr|ouvre cdiscount.fr
+#MAIN|ouvre m s n point com|ouvre msn.com
+#MAIN|ouvre le monde point fr|ouvre lemonde.fr
+#MAIN|ouvre pole-emploi point fr|ouvre pole-emploi.fr
+#MAIN|ouvre crédit tirets agricole point fr|ouvre credit-agricole.fr

@@ -1,0 +1,790 @@
+MAIN|à midi|à 12h
+MAIN|midi 30|12h30
+MAIN|à minuit|à 0h00
+MAIN|à minuit 15|à 0h15
+
+MAIN|enlève mon alarme de 6 heures 5|enlève mon alarme de 6h05
+MAIN|retire l'alarme de 8 heures 5|retire l'alarme de 8h05
+MAIN|s'il-te-plaît supprime mon alarme de 7 heures 5|s'il-te-plaît supprime mon alarme de 7h05
+MAIN|supprime l'alarme de 9 heures 5|supprime l'alarme de 9h05
+
+MAIN|6 heures et demie|6h30
+MAIN|6 heures et quart|6h15
+MAIN|7 heures moins quart|6h45
+MAIN|7 heures moins 5|6h55
+MAIN|12 heures 13 minutes 14 secondes|12h13min14s
+MAIN|2 heures 3 minutes 4 secondes|2h03min04s
+MAIN|5 minutes 2 secondes|5 minutes 2 secondes
+MAIN|7 heures du matin|7h du matin
+MAIN|6 heures 30|6h30
+MAIN|15 heures|15h
+MAIN|18 heures 30 minutes|18h30
+MAIN|2 heures 45 minutes|2h45
+
+MAIN|règle une alarme à 7 heures du matin|règle une alarme à 7h du matin
+MAIN|allume mon alarme de 6 heures 30|allume mon alarme de 6h30
+
+MAIN|active mon alarme de 22 heures|active mon alarme de 22h
+MAIN|ajoute un rendez-vous à 11 heures|ajoute un rendez-vous à 11h
+MAIN|change mon alarme de 3 heures à 4 heures|change mon alarme de 3h à 4h
+MAIN|change mon alarme et réveille-moi à 4 heures|change mon alarme et réveille-moi à 4h
+MAIN|rappelle-moi d'appeler maman à 18 heures|rappelle-moi d'appeler maman à 18h
+MAIN|règle mon alarme de 22 heures|règle mon alarme de 22h
+MAIN|règle une alarme de 11 heures|règle une alarme de 11h
+MAIN|réveille-moi à 4 heures|réveille-moi à 4h
+MAIN|change mon réveil du matin à 3 heures|change mon réveil du matin à 3h
+MAIN|créer une alarme à 3 heures|créer une alarme à 3h
+MAIN|crée une réunion à 10 heures|crée une réunion à 10h
+MAIN|règle l'alarme de 6 heures|règle l'alarme de 6h
+
+MAIN|j'ai besoin d'une alarme à 10 heures du soir|j'ai besoin d'une alarme à 22h
+MAIN|j'ai besoin d'une alarme à 6 heures du soir|j'ai besoin d'une alarme à 18h
+
+MAIN|ajoute une réunion pour 10 heures|ajoute une réunion pour 10h
+MAIN|lance-le pour 300 heures|lance-le pour 300 heures
+MAIN|créer une alarme pour 15 heures|créer une alarme pour 15h
+MAIN|modifie mon alarme pour 8 heures|modifie mon alarme pour 8h
+MAIN|règle le minuteur pour 101 heures|règle le minuteur pour 101 heures
+MAIN|règle une alarme pour 7 heures|règle une alarme pour 7h
+MAIN|102 heures|102 heures
+MAIN|que se passe-t-il mercredi 15 heures|que se passe-t-il mercredi 15h
+MAIN|règle mon alarme sur 11 heures le weekend|règle mon alarme sur 11h le weekend
+MAIN|règle une alarme dans 3 heures|règle une alarme dans 3 heures
+MAIN|active mon alarme de 6 heures 30|active mon alarme de 6h30
+MAIN|active mon alarme de 22 heures|active mon alarme de 22h
+MAIN|affiche mon rendez-vous de 13 heures aujourd'hui|affiche mon rendez-vous de 13h aujourd'hui
+MAIN|trouve mon évènement de 9 heures samedi|trouve mon évènement de 9h samedi
+MAIN|retire mon alarme de 6 heures 30 du calendrier|retire mon alarme de 6h30 du calendrier
+
+MAIN|ajoute un rendez-vous à midi|ajoute un rendez-vous à 12h
+MAIN|annule ma réunion de midi aujourd'hui|annule ma réunion de 12h aujourd'hui
+
+MAIN|à 1 heure|à 1h
+MAIN|change-la à 1 heure|change-la à 1h
+MAIN|à midi|à 12h
+MAIN|midi 30|12h30
+MAIN|à minuit|à 0h00
+MAIN|à minuit 15|à 0h15
+
+MAIN|enlève mon alarme de 6 heures 5|enlève mon alarme de 6h05
+MAIN|retire l'alarme de 8 heures 5|retire l'alarme de 8h05
+MAIN|s'il-te-plaît supprime mon alarme de 7 heures 5|s'il-te-plaît supprime mon alarme de 7h05
+MAIN|supprime l'alarme de 9 heures 5|supprime l'alarme de 9h05
+
+MAIN|6 heures et demie|6h30
+MAIN|7 heures et demi|7h30
+MAIN|6 heures et quart|6h15
+MAIN|7 heures moins quart|6h45
+MAIN|7 heures moins 5|6h55
+MAIN|12 heures 13 minutes 14 secondes|12h13min14s
+MAIN|2 heures 3 minutes 4 secondes|2h03min04s
+MAIN|5 minutes 2 secondes|5 minutes 2 secondes
+MAIN|5 minutes 2 secondes|5 minutes 2 secondes
+MAIN|7 heures du matin|7h du matin
+MAIN|6 heures 30|6h30
+MAIN|15 heures|15h
+MAIN|18 heures 30 minutes|18h30
+MAIN|10 heures et 3 minutes|10h03
+
+MAIN|règle une alarme à 7 heures du matin|règle une alarme à 7h du matin
+MAIN|allume mon alarme de 6 heures 30|allume mon alarme de 6h30
+
+MAIN|active mon alarme de 22 heures|active mon alarme de 22h
+MAIN|ajoute un rendez-vous à 11 heures|ajoute un rendez-vous à 11h
+MAIN|change mon alarme de 3 heures à 4 heures|change mon alarme de 3h à 4h
+MAIN|change mon alarme et réveille-moi à 4 heures|change mon alarme et réveille-moi à 4h
+MAIN|rappelle-moi d'appeler maman à 18 heures|rappelle-moi d'appeler maman à 18h
+MAIN|règle mon alarme de 22 heures|règle mon alarme de 22h
+MAIN|règle une alarme de 11 heures|règle une alarme de 11h
+MAIN|réveille-moi à 4 heures|réveille-moi à 4h
+MAIN|change mon réveil du matin à 3 heures|change mon réveil du matin à 3h
+MAIN|créer une alarme à 3 heures|créer une alarme à 3h
+MAIN|crée une réunion à 10 heures|crée une réunion à 10h
+MAIN|règle l'alarme de 6 heures|règle l'alarme de 6h
+
+MAIN|j'ai besoin d'une alarme à 10 heures du soir|j'ai besoin d'une alarme à 22h
+MAIN|j'ai besoin d'une alarme à 6 heures du soir|j'ai besoin d'une alarme à 18h
+MAIN|101 heures|101 heures
+
+MAIN|ajoute une réunion pour 10 heures|ajoute une réunion pour 10h
+MAIN|lance-le pour 300 heures|lance-le pour 300 heures
+MAIN|créer une alarme pour 15 heures|créer une alarme pour 15h
+MAIN|modifie mon alarme pour 8 heures|modifie mon alarme pour 8h
+MAIN|règle le minuteur pour 101 heures|règle le minuteur pour 101 heures
+MAIN|règle une alarme pour 7 heures|règle une alarme pour 7h
+MAIN|102 heures|102 heures
+MAIN|que se passe-t-il mercredi 15 heures|que se passe-t-il mercredi 15h
+
+MAIN|règle mon alarme sur 11 heures le weekend|règle mon alarme sur 11h le weekend
+MAIN|règle une alarme dans 3 heures|règle une alarme dans 3 heures
+MAIN|active mon alarme de 6 heures 30|active mon alarme de 6h30
+MAIN|active mon alarme de 22 heures|active mon alarme de 22h
+MAIN|affiche mon rendez-vous de 13 heures aujourd'hui|affiche mon rendez-vous de 13h aujourd'hui
+MAIN|trouve mon évènement de 9 heures samedi|trouve mon évènement de 9h samedi
+MAIN|retire mon alarme de 6 heures 30 du calendrier|retire mon alarme de 6h30 du calendrier
+
+MAIN|ajoute un rendez-vous à midi|ajoute un rendez-vous à 12h
+MAIN|annule ma réunion de midi aujourd'hui|annule ma réunion de 12h aujourd'hui
+MAIN|règle l'alarme pour minuit|règle l'alarme pour 0h00
+MAIN|règle une alarme dans 3 heures|règle une alarme dans 3 heures
+MAIN|ajoute un rendez-vous à midi|ajoute un rendez-vous à 12h
+MAIN|10 heures|10h
+MAIN|12 heures|12h
+
+
+MAIN|entre 10 heures et 11 heures|entre 10h et 11h
+
+MAIN|il est 7 heure|il est 7h
+
+
+
+
+MAIN|à 23 heures moins 15|à 22h45
+MAIN|à 23 heures moins 15 minutes|à 22h45
+MAIN|lis depuis 1 heure 2 minutes et 35 secondes|lis depuis 1 heure 2 minutes et 35 secondes
+MAIN|5 heures moins un|4h59
+
+MAIN|à minuit 15|à 0h15
+MAIN|à midi 15|à 12h15
+MAIN|à minuit 15 minute|à 0h15
+MAIN|à midi 15 minute|à 12h15
+MAIN|à minuit et 15 minute|à 0h15
+MAIN|à midi et 15 minute|à 12h15
+MAIN|à minuit 15 minutes|à 0h15
+MAIN|à midi 15 minutes|à 12h15
+MAIN|à minuit et 15 minutes|à 0h15
+MAIN|à midi et 15 minutes|à 12h15
+MAIN|à minuit et un minute|à 0h01
+MAIN|à midi et un minute|à 12h01
+MAIN|à minuit un minute|à 0h01
+MAIN|à midi un minute|à 12h01
+MAIN|à minuit et un minutes|à 0h01
+MAIN|à midi et un minutes|à 12h01
+MAIN|à minuit un minutes|à 0h01
+MAIN|à midi un minutes|à 12h01
+MAIN|à minuit un|à 0h01
+MAIN|à midi un|à 12h01
+MAIN|à minuit et un|à 0h00 et un
+MAIN|à midi et un|à 12h et un
+MAIN|à minuit et une minute|à 0h01
+MAIN|à midi et une minute|à 12h01
+MAIN|à minuit une minute|à 0h01
+MAIN|à midi une minute|à 12h01
+MAIN|à minuit et une minutes|à 0h01
+MAIN|à midi et une minutes|à 12h01
+MAIN|à minuit une minutes|à 0h01
+MAIN|à midi une minutes|à 12h01
+MAIN|à minuit une|à 0h01
+MAIN|à midi une|à 12h01
+MAIN|à minuit et une|à 0h00 et une
+MAIN|à midi et une|à 12h et une
+
+MAIN|à midi un quart|à 12h15
+MAIN|à midi une quart|à 12h15
+MAIN|à midi 2 quarts|à 12h30
+MAIN|à midi 3 quart|à 12h45
+MAIN|à minuit un quart|à 0h15
+MAIN|à minuit une quart|à 0h15
+MAIN|à minuit 2 quarts|à 0h30
+MAIN|à minuit 3 quart|à 0h45
+
+MAIN|à midi un quart minutes|à 12h15
+MAIN|à midi une quart minutes|à 12h15
+MAIN|à midi 2 quarts minutes|à 12h30
+MAIN|à midi 3 quart minutes|à 12h45
+MAIN|à minuit un quart minutes|à 0h15
+MAIN|à minuit une quart minutes|à 0h15
+MAIN|à minuit 2 quarts minutes|à 0h30
+MAIN|à minuit 3 quart minutes|à 0h45
+MAIN|à midi un quart minute|à 12h15
+MAIN|à midi une quart minute|à 12h15
+MAIN|à midi 2 quarts minute|à 12h30
+MAIN|à midi 3 quart minute|à 12h45
+MAIN|à minuit un quart minute|à 0h15
+MAIN|à minuit une quart minute|à 0h15
+MAIN|à minuit 2 quarts minute|à 0h30
+MAIN|à minuit 3 quart minute|à 0h45
+
+MAIN|à midi et un demi|à 12h30
+MAIN|à midi et une demi|à 12h30
+MAIN|à midi et demi|à 12h30
+MAIN|à minuit et demi|à 0h30
+MAIN|à minuit et un demi|à 0h30
+MAIN|à minuit et une demi|à 0h30
+MAIN|à minuit 0|à 0h00
+
+MAIN|à minuit 5 6|à 0h05 6
+MAIN|à midi 5 6|à 12h05 6
+MAIN|à minuit 0 6|à 0h06
+MAIN|à midi 0 6|à 12h06
+
+MAIN|à minuit moins 56 6|à 23h04 6
+MAIN|à midi moins 56 6|à 11h04 6
+
+MAIN|à minuit moins 56 6 minutes|à 23h04 6 minutes
+MAIN|à midi moins 56 6 minutes|à 11h04 6 minutes
+
+MAIN|à minuit moins 56 et 6 minutes|à 23h04 et 6 minutes
+MAIN|à midi moins 56 et 6 minutes|à 11h04 et 6 minutes
+
+MAIN|à minuit moins 5 6 minutes|à 23h55 6 minutes
+MAIN|à midi moins 5 6 minutes|à 11h55 6 minutes
+
+
+
+
+MAIN|à minuit moins 0 6 6|à 23h54 6
+MAIN|à midi moins 0 6 6|à 11h54 6
+
+
+
+
+MAIN|à 11 heures 5 6|à 11h05 6
+
+
+
+
+
+
+
+
+
+
+MAIN|à 17 heure 15|à 17h15
+MAIN|à 1 heures 15|à 1h15
+MAIN|à 17 heure 15 minute|à 17h15
+MAIN|à 1 heures 15 minute|à 1h15
+MAIN|à 17 heure et 15 minute|à 17h15
+MAIN|à 1 heures et 15 minute|à 1h15
+MAIN|à 17 heure 15 minutes|à 17h15
+MAIN|à 1 heures 15 minutes|à 1h15
+MAIN|à 17 heure et 15 minutes|à 17h15
+MAIN|à 1 heures et 15 minutes|à 1h15
+MAIN|à 17 heure et un minute|à 17h01
+MAIN|à 1 heures et un minute|à 1h01
+MAIN|à 17 heure un minute|à 17h01
+MAIN|à 1 heures un minute|à 1h01
+MAIN|à 17 heure et un minutes|à 17h01
+MAIN|à 1 heures et un minutes|à 1h01
+MAIN|à 17 heure un minutes|à 17h01
+MAIN|à 1 heures un minutes|à 1h01
+MAIN|à 17 heure un|à 17h01
+MAIN|à 1 heures un|à 1h01
+MAIN|à 17 heure et un|à 17h et un
+MAIN|à 1 heures et un|à 1h et un
+MAIN|à 17 heure et une minute|à 17h01
+MAIN|à 1 heures et une minute|à 1h01
+MAIN|à 17 heure une minute|à 17h01
+MAIN|à 1 heures une minute|à 1h01
+MAIN|à 17 heure et une minutes|à 17h01
+MAIN|à 1 heures et une minutes|à 1h01
+MAIN|à 17 heure une minutes|à 17h01
+MAIN|à 1 heures une minutes|à 1h01
+MAIN|à 17 heure une|à 17h01
+MAIN|à 1 heures une|à 1h01
+MAIN|à 17 heure et une|à 17h et une
+MAIN|à 1 heures et une|à 1h et une
+
+MAIN|à 1 heures un quart|à 1h15
+MAIN|à 1 heures une quart|à 1h15
+MAIN|à 1 heures 2 quarts|à 1h30
+MAIN|à 1 heures 3 quart|à 1h45
+MAIN|à 17 heure un quart|à 17h15
+MAIN|à 17 heure une quart|à 17h15
+MAIN|à 17 heure 2 quarts|à 17h30
+MAIN|à 17 heure 3 quart|à 17h45
+
+MAIN|à 1 heures un quart minutes|à 1h15
+MAIN|à 1 heures une quart minutes|à 1h15
+MAIN|à 1 heures 2 quarts minutes|à 1h30
+MAIN|à 1 heures 3 quart minutes|à 1h45
+MAIN|à 17 heure un quart minutes|à 17h15
+MAIN|à 17 heure une quart minutes|à 17h15
+MAIN|à 17 heure 2 quarts minutes|à 17h30
+MAIN|à 17 heure 3 quart minutes|à 17h45
+MAIN|à 1 heures un quart minute|à 1h15
+MAIN|à 1 heures une quart minute|à 1h15
+MAIN|à 1 heures 2 quarts minute|à 1h30
+MAIN|à 1 heures 3 quart minute|à 1h45
+MAIN|à 17 heure un quart minute|à 17h15
+MAIN|à 17 heure une quart minute|à 17h15
+MAIN|à 17 heure 2 quarts minute|à 17h30
+MAIN|à 17 heure 3 quart minute|à 17h45
+
+MAIN|à 1 heures et un demi|à 1h30
+MAIN|à 1 heures et une demi|à 1h30
+MAIN|à 1 heures et demi|à 1h30
+MAIN|à 17 heure et demi|à 17h30
+MAIN|à 17 heure et un demi|à 17h30
+MAIN|à 17 heure et une demi|à 17h30
+MAIN|à 17 heure 0|à 17h00
+
+MAIN|à 17 heure 5 6|à 17h05 6
+MAIN|à 1 heures 5 6|à 1h05 6
+
+MAIN|à 17 heure moins 56 6|à 16h04 6
+MAIN|à 1 heures moins 56 6|à 0h04 6
+
+MAIN|à 17 heure moins 56 6 minutes|à 16h04 6 minutes
+MAIN|à 1 heures moins 56 6 minutes|à 0h04 6 minutes
+
+MAIN|à 17 heure moins 56 et 6 minutes|à 16h04 et 6 minutes
+MAIN|à 1 heures moins 56 et 6 minutes|à 0h04 et 6 minutes
+
+MAIN|à 17 heure moins 5 6 minutes|à 16h55 6 minutes
+MAIN|à 1 heures moins 5 6 minutes|à 0h55 6 minutes
+
+MAIN|à 17 heure 0 0|à 17h
+
+MAIN|à 17 heure 56 minutes 45|à 17h56min45s
+
+MAIN|0 heures 5 minutes 2 secondes|0h05min02s
+MAIN|3 heures 45 minutes 32 secondes|3h45min32s
+MAIN|13 heures 45 minutes 32 secondes|13h45min32s
+MAIN|midi 5 minutes 2 secondes|12h05min02s
+MAIN|minuit 5 minutes 2 secondes|0h05min02s
+
+MAIN|0 heures et 5 minutes 2 secondes|0h05min02s
+MAIN|3 heures et 45 minutes 32 secondes|3h45min32s
+MAIN|13 heures et 45 minutes 32 secondes|13h45min32s
+MAIN|midi et 5 minutes 2 secondes|12h05min02s
+MAIN|minuit et 5 minutes 2 secondes|0h05min02s
+
+MAIN|0 heures 5 minutes et 2 secondes|0h05min02s
+MAIN|3 heures 45 minutes et 32 secondes|3h45min32s
+MAIN|13 heures 45 minutes et 32 secondes|13h45min32s
+MAIN|midi 5 minutes et 2 secondes|12h05min02s
+MAIN|minuit 5 minutes et 2 secondes|0h05min02s
+
+MAIN|0 heures et 5 minutes et 2 secondes|0h05min02s
+MAIN|3 heures et 45 minutes et 32 secondes|3h45min32s
+MAIN|13 heures et 45 minutes et 32 secondes|13h45min32s
+MAIN|midi et 5 minutes et 2 secondes|12h05min02s
+MAIN|minuit et 5 minutes et 2 secondes|0h05min02s
+
+
+MAIN|0 heures du soir et 5 minutes et 2 secondes|0h du soir et 5 minutes et 2 secondes
+MAIN|3 heures de l'après-midi et 45 minutes et 32 secondes|15h45min32s
+MAIN|3 heures de l'aprèm et 45 minutes et 32 secondes|15h45min32s
+MAIN|13 heures et 45 minutes et 32 secondes|13h45min32s
+MAIN|midi du soir et 5 minutes et 2 secondes|0h05min02s
+MAIN|minuit du soir et 5 minutes et 2 secondes|0h00 du soir et 5 minutes et 2 secondes
+
+MAIN|4 heures de l'aprèm|16h
+MAIN|4 heures 0 0 de l'aprèm|16h
+MAIN|4 heures 0 5 de l'aprèm|16h05
+MAIN|4 heure moins le quart de l'aprèm|15h45
+MAIN|4 heure moins 3 quart de l'aprèm|15h15
+MAIN|21 heure et quarts|21h15
+MAIN|12 heure et quarts de l'aprèm|0h15
+MAIN|12 heure de l'aprèm|0h
+MAIN|midi moins 2 demi|11h
+MAIN|va chercher à 17 heures 5 2 baguettes|va chercher à 17h05 2 baguettes
+MAIN|va chercher à 17 heures 0 2 baguettes|va chercher à 17h02 baguettes
+MAIN|4 heures 0 un minutes et 0 une secondes|4h01min01s
+MAIN|4 heures un minutes une secondes|4h01min01s
+
+MAIN|heure d'alarme 5 heures 30|heure d'alarme 5h30
+MAIN|efface l'évènement de demain 6 heures|efface l'évènement de demain 6h
+MAIN|ce soir 22 heures|ce soir 22h
+MAIN|ajoute un évènement sur mon calendrier pour demain 17 heures avec le groupe famille|ajoute un évènement sur mon calendrier pour demain 17h avec le groupe famille
+MAIN|crée une tâche de priorité haute pour demain 17 heures|crée une tâche de priorité haute pour demain 17h
+MAIN|samedi 22 heures|samedi 22h
+MAIN|lundi 15 heures|lundi 15h
+MAIN|mardi 15 heures|mardi 15h
+MAIN|demain 23 heures|demain 23h
+MAIN|demain minuit|demain 0h00
+MAIN|mardi test 16 heures|mardi test 16h
+MAIN|change la durée pour 2 heures|change la durée pour 2 heures
+MAIN|mardi 8 heures|mardi 8h
+MAIN|mercredi 14 heures|mercredi 14h
+MAIN|mercredi 16 heures|mercredi 16h
+MAIN|demain 15 heures paris|demain 15h paris
+MAIN|demain 16 heures|demain 16h
+MAIN|demain 7 heures|demain 7h
+MAIN|mercredi 20 heures|mercredi 20h
+MAIN|activer celle de mardi 9 heures|activer celle de mardi 9h
+MAIN|désactiver 7 heures|désactiver 7h
+MAIN|règle le minuteur pour une heure|règle le minuteur pour 1 heure
+MAIN|2 heures 0 0|2h
+MAIN|12 heures 0 0|12h
+
+MAIN|pour 2 heures|pour 2h
+MAIN|pour durée 2 heures|pour durée 2 heures
+MAIN|pour voiture 2 heures|pour voiture 2h
+MAIN|pour voiture durée 2 heures|pour voiture durée 2 heures
+MAIN|pour test test test voiture 2 heures|pour test test test voiture 2h
+MAIN|pour test test durée voiture 2 heures|pour test test durée voiture 2 heures
+MAIN|test test durée voiture 2 heures|test test durée voiture 2 heures
+MAIN|test test voiture 2 heures|test test voiture 2 heures
+MAIN|matinée 22 heures|matinée 22h
+MAIN|soirées 22 heure|soirées 22h
+MAIN|5 heures 0 0 minutes et 30 secondes|5h00min30s
+MAIN|5 heures 00 minutes et 30 secondes|5h00min30s
+MAIN|quel est mon agenda pour le 20 aout à 15 heures|quel est mon agenda pour le 20 aout à 15h
+MAIN|à 15 heures|à 15h
+
+MAIN|peux-tu ajouter un évènement dans mon agenda appelé journée nationale le 14 juillet à midi avec sabienne|peux-tu ajouter un évènement dans mon agenda appelé journée nationale le 14 juillet à 12h avec sabienne
+MAIN|créer dans le calendrier un évènement intitulé anniversaire à midi|créer dans le calendrier un évènement intitulé anniversaire à 12h
+MAIN|peux-tu ajouter un évènement dans mon agenda pour minuit avec max|peux-tu ajouter un évènement dans mon agenda pour 0h00 avec max
+MAIN|quelle est l'heure locale lorsqu'il est 22 heures à bangkok thaïlande|quelle est l'heure locale lorsqu'il est 22h à bangkok thaïlande
+MAIN|2 heures 0 0|2h
+MAIN|12 heures 0 0|12h
+MAIN|ne me réveille pas jusqu'à 4 heures demain okay|ne me réveille pas jusqu'à 4h demain okay
+MAIN|sont à 17 heures 30 20 heures 15 21 heures 15|sont à 17h30 20h15 21h15
+MAIN|sont à 17 heures 30 20 heures 15 et 21 heures 15|sont à 17h30 20h15 et 21h15
+MAIN|sont à 17 heures 30 20 heures 15 21 heures 15|sont à 17h30 20h15 21h15
+MAIN|mardi test 16 heures|mardi test 16h
+MAIN|montre-moi les mails reçus vers midi aujourd'hui|montre-moi les mails reçus vers 12h aujourd'hui
+MAIN|sauvegarde pour demain matin 10 heures un évènement réunion avec jean dupont|sauvegarde pour demain matin 10h un évènement réunion avec jean dupont
+MAIN|sauvegarde pour demain matin 10 heures un|sauvegarde pour demain matin 10h01
+
+MAIN|écris comme heure du rappel 7 heures|écris comme heure du rappel 7h
+MAIN|inscrire comme heure du rappel 7 heures|inscrire comme heure du rappel 7h
+MAIN|sauvegarde pour demain matin 10 heures un évènement réunion avec jean dupont|sauvegarde pour demain matin 10h un évènement réunion avec jean dupont
+MAIN|remplace l'heure par 23 heures|remplace l'heure par 23h
+MAIN|désactiver toutes les alarmes de 6 à 8 heures|désactiver toutes les alarmes de 6h à 8h
+MAIN|désactiver toutes les alarmes de 23 à 6 heures moins 8 de l'après-midi|désactiver toutes les alarmes de 23h à 17h52
+MAIN|désactiver toutes les alarmes de minuit à 6 heures moins 8 de l'après-midi|désactiver toutes les alarmes de 0h00 à 17h52
+MAIN|désactiver toutes les alarmes de minuit moins 56 à 6 heures moins 8 de l'après-midi|désactiver toutes les alarmes de 23h04 à 17h52
+
+MAIN|s'il te plaît retire mon alarme de 18 heures 30|s'il te plaît retire mon alarme de 18h30
+MAIN|qu'en est-il du créneau de minuit|qu'en est-il du créneau de 0h00
+MAIN|quel sera le point de rosée d'ici une heure|quel sera le point de rosée d'ici 1 heure
+MAIN|quel sera le point de rosée d'ici 1 heure|quel sera le point de rosée d'ici 1 heure
+MAIN|quel sera le point de rosée d'içi une heure|quel sera le point de rosée d'içi 1 heure
+MAIN|quel sera le point de rosée d'içi 1 heure|quel sera le point de rosée d'içi 1 heure
+
+MAIN|cherche des boulangeries qui sont ouvertes avant 8 heures|cherche des boulangeries qui sont ouvertes avant 8h
+MAIN|cherche des boulangeries qui sont ouvertes avant 10 heures|cherche des boulangeries qui sont ouvertes avant 10h
+MAIN|cherche des boulangeries qui sont ouvertes avant 15 heures|cherche des boulangeries qui sont ouvertes avant 15h
+MAIN|cherche des boulangeries qui sont ouvertes avant 17 heures|cherche des boulangeries qui sont ouvertes avant 17h
+MAIN|cherche des boulangeries qui sont ouvertes avant 21 heures|cherche des boulangeries qui sont ouvertes avant 21h
+MAIN|cherche des boulangeries qui sont ouvertes avant 21 heures|cherche des boulangeries qui sont ouvertes avant 21h
+MAIN|cherche des boulangeries qui sont ouvertes avant 23 heures|cherche des boulangeries qui sont ouvertes avant 23h
+MAIN|cherche des boulangeries qui sont ouvertes avant minuit|cherche des boulangeries qui sont ouvertes avant 0h00
+MAIN|cherche des boulangeries qui sont ouvertes avant 24 heures|cherche des boulangeries qui sont ouvertes avant 24 heures
+MAIN|cherche des boulangeries qui sont ouvertes avant 25 heures|cherche des boulangeries qui sont ouvertes avant 25 heures
+MAIN|cherche des boulangeries qui sont ouvertes avant 8 heures 30|cherche des boulangeries qui sont ouvertes avant 8h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 10 heures 30|cherche des boulangeries qui sont ouvertes avant 10h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 15 heures 30|cherche des boulangeries qui sont ouvertes avant 15h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 17 heures 30|cherche des boulangeries qui sont ouvertes avant 17h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 21 heures 30|cherche des boulangeries qui sont ouvertes avant 21h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 21 heures 30|cherche des boulangeries qui sont ouvertes avant 21h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 23 heures 30|cherche des boulangeries qui sont ouvertes avant 23h30
+MAIN|cherche des boulangeries qui sont ouvertes avant minuit 30|cherche des boulangeries qui sont ouvertes avant 0h30
+MAIN|cherche des boulangeries qui sont ouvertes avant 24 heures 30|cherche des boulangeries qui sont ouvertes avant 24 heures 30 minutes
+MAIN|cherche des boulangeries qui sont ouvertes avant 25 heures 30|cherche des boulangeries qui sont ouvertes avant 25 heures 30 minutes
+
+MAIN|règle la minuterie pour 2 heures|règle la minuterie pour 2 heures
+MAIN|mets un timer de 5 heures 30|mets un timer de 5 heures 30 minutes
+MAIN|mets des timers de 5 heures 30|mets des timers de 5 heures 30 minutes
+MAIN|mets un rendez-vous à 15 heures et 30 secondes|mets un rendez-vous à 15h00min30s
+MAIN|de une à 5 heures|de 1h à 5h
+MAIN|de une à une heure de l'après-midi|de 1h à 13h
+MAIN|de 8 à 5 heures|de 8h à 5h
+MAIN|de 15 heures et 30 minutes et 5 secondes|de 15h30min05s
+MAIN|de 15 heures 30 minutes et 5 secondes|de 15h30min05s
+MAIN|de 15 heures et 30 minutes 5 secondes|de 15h30min05s
+MAIN|de 15 heures 30 minutes 5 secondes|de 15h30min05s
+
+MAIN|de une heures et une minutes et une secondes|de 1h01min01s
+MAIN|de une heures une minutes et une secondes|de 1h01min01s
+MAIN|de une heures et une minutes une secondes|de 1h01min01s
+MAIN|de une heures une minutes une secondes|de 1h01min01s
+
+MAIN|de 15 heures 30 et 5 secondes|de 15h30 et 5 secondes
+
+MAIN|mets un minuteur d'une heure une voiture|mets un minuteur de 1 heure une voiture
+MAIN|mets un minuteur d'une heure une minute|mets un minuteur de 1 heure 1 minute
+MAIN|mets un minuteur d'une heure et une minute|mets un minuteur de 1 heure et 1 minute
+
+MAIN|mets un minuteur d'une heure une|mets un minuteur de 1 heure 1 minute
+MAIN|mets un minuteur de une heure une|mets un minuteur de 1 heure 1 minute
+MAIN|mets un minuteur de 3 heures 30|mets un minuteur de 3 heures 30 minutes
+MAIN|mets un minuteur d'une heure et quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de une heure et quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de 3 heures et quart|mets un minuteur de 3 heures 15 minutes
+
+MAIN|mets un minuteur d'une minute une|mets un minuteur de 1 minute 1 seconde
+MAIN|mets un minuteur de une minute une|mets un minuteur de 1 minute 1 seconde
+MAIN|mets un minuteur de 3 minutes 30|mets un minuteur de 3 minutes 30 secondes
+
+MAIN|mets un minuteur d'une heure moins le quart|mets un minuteur de 45 minutes
+MAIN|mets un minuteur de une heure moins le quart|mets un minuteur de 45 minutes
+MAIN|mets un minuteur de 2 heures moins le quart|mets un minuteur de 1 heure 45 minutes
+
+MAIN|mets un minuteur d'une heure et quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur d'une heure et un quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur d'une heure et un quart d'heure|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur d'une heure et demi|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur d'une heure et un demi|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur d'une heure et une demi-heure|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur d'une heure et 3 quarts|mets un minuteur de 1 heure 45 minutes
+MAIN|mets un minuteur d'une heure et 3 quarts d'heure|mets un minuteur de 1 heure 45 minutes
+
+MAIN|mets un minuteur de une heure et quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de une heure et un quart|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de une heure et un quart d'heure|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de une heure et demi|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur de une heure et un demi|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur de une heure et une demi-heure|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur de une heure et 3 quarts|mets un minuteur de 1 heure 45 minutes
+MAIN|mets un minuteur de une heure et 3 quarts d'heure|mets un minuteur de 1 heure 45 minutes
+
+MAIN|mets un minuteur de 3 heures et quart|mets un minuteur de 3 heures 15 minutes
+MAIN|mets un minuteur de 3 heures et un quart|mets un minuteur de 3 heures 15 minutes
+MAIN|mets un minuteur de 3 heures et un quart d'heure|mets un minuteur de 3 heures 15 minutes
+MAIN|mets un minuteur de 3 heures et demi|mets un minuteur de 3 heures 30 minutes
+MAIN|mets un minuteur de 3 heures et un demi|mets un minuteur de 3 heures 30 minutes
+MAIN|mets un minuteur de 3 heures et une demi-heure|mets un minuteur de 3 heures 30 minutes
+MAIN|mets un minuteur de 3 heures et 3 quarts|mets un minuteur de 3 heures 45 minutes
+MAIN|mets un minuteur de 3 heures et 3 quarts d'heure|mets un minuteur de 3 heures 45 minutes
+
+MAIN|mets un minuteur d'une demi-heure|mets un minuteur de 30 minutes
+MAIN|mets un minuteur de une demi-heure|mets un minuteur de 30 minutes
+MAIN|mets un minuteur d'un quart d'heure|mets un minuteur de 15 minutes
+MAIN|mets un minuteur de un quart d'heure|mets un minuteur de 15 minutes
+MAIN|mets un minuteur de 3 quarts d'heure|mets un minuteur de 45 minutes
+
+
+MAIN|mets un minuteur de 1,5 heure|mets un minuteur de 1 heure 30 minutes
+MAIN|mets un minuteur de 1,25 heure|mets un minuteur de 1 heure 15 minutes
+MAIN|mets un minuteur de 1,75 heure|mets un minuteur de 1 heure 45 minutes
+MAIN|mets un minuteur de 3,5 heures|mets un minuteur de 3 heures 30 minutes
+MAIN|mets un minuteur de 3,25 heures|mets un minuteur de 3 heures 15 minutes
+MAIN|mets un minuteur de 3,75 heures|mets un minuteur de 3 heures 45 minutes
+
+MAIN|mets un minuteur de 1,5 minute|mets un minuteur de 1 minute 30 secondes
+MAIN|mets un minuteur de 1,25 minute|mets un minuteur de 1 minute 15 secondes
+MAIN|mets un minuteur de 1,75 minute|mets un minuteur de 1 minute 45 secondes
+MAIN|mets un minuteur de 3,5 minutes|mets un minuteur de 3 minutes 30 secondes
+MAIN|mets un minuteur de 3,25 minutes|mets un minuteur de 3 minutes 15 secondes
+MAIN|mets un minuteur de 3,75 minutes|mets un minuteur de 3 minutes 45 secondes
+
+MAIN|5 heures et 3 quarts d'heure|5h45
+MAIN|minuteurs 5 heures et 3 quarts d'heure|minuteurs 5 heures 45 minutes
+MAIN|une heure moins le quart|0h45
+MAIN|mets un minuteur de une heure moins le quart|mets un minuteur de 45 minutes
+MAIN|d'une demi-heure|de 30 minutes
+MAIN|d'une heure d'une|de 1h d'une
+MAIN|11 heures et un quart d'une heure|11h15
+
+
+MAIN|timer une heure|timer 1 heure
+MAIN|timer 2 heures|timer 2 heures
+MAIN|timer une heure et quart|timer 1 heure 15 minutes
+MAIN|timer une heure et demie|timer 1 heure 30 minutes
+MAIN|timer 2 heures et demie|timer 2 heures 30 minutes
+MAIN|timer 1 heure 3 quarts|timer 1 heure 45 minutes
+MAIN|timer 1,5 heure|timer 1 heure 30 minutes
+MAIN|timer 2,5 heures|timer 2 heures 30 minutes
+MAIN|timer un quart d'heure|timer 15 minutes
+MAIN|timer une demi-heure|timer 30 minutes
+MAIN|timer une demi heure|timer 30 minutes
+MAIN|timer 3 quarts d'heure|timer 45 minutes
+MAIN|timer une minute|timer 1 minute
+MAIN|timer 15 minutes|timer 15 minutes
+MAIN|timer une minute et demie|timer 1 minute et 30 secondes
+MAIN|timer une minute 3 quarts|timer 1 minute 45 secondes
+MAIN|timer une demi minute|timer 30 secondes
+MAIN|timer 1 seconde|timer 1 seconde
+MAIN|timer 20 secondes|timer 20 secondes
+MAIN|timer 1 heure et 1 minute|timer 1 heure et 1 minute
+MAIN|timer 1 heure 1 minute|timer 1 heure 1 minute
+MAIN|timer 1 heure et 2 minutes|timer 1 heure et 2 minutes
+MAIN|timer 1 heure 2 minutes|timer 1 heure 2 minutes
+MAIN|timer 2 heures et 1 minute|timer 2 heures et 1 minute
+MAIN|timer 2 heures 1 minute|timer 2 heures 1 minute
+MAIN|timer 2 heures et 2 minutes|timer 2 heures et 2 minutes
+MAIN|timer 2 heures 2 minutes|timer 2 heures 2 minutes
+MAIN|timer 1 heure 30|timer 1 heure 30 minutes
+MAIN|timer 2 heures 45|timer 2 heures 45 minutes
+MAIN|timer une heure 15|timer 1 heure 15 minutes
+MAIN|timer 4 heures 15|timer 4 heures 15 minutes
+MAIN|timer 1 heure 30|timer 1 heure 30 minutes
+MAIN|timer 2 heures 30|timer 2 heures 30 minutes
+MAIN|timer une heure 45|timer 1 heure 45 minutes
+MAIN|timer 3 heures 45|timer 3 heures 45 minutes
+MAIN|timer 1 heure 15 minutes|timer 1 heure 15 minutes
+MAIN|timer 3 heures 10 minutes|timer 3 heures 10 minutes
+MAIN|timer 1 heure et 1 seconde|timer 1 heure et 1 seconde
+MAIN|timer 1 heure 1 seconde|timer 1 heure 1 seconde
+MAIN|timer 2 heures et 1 seconde|timer 2 heures et 1 seconde
+MAIN|timer 2 heures 1 seconde|timer 2 heures 1 seconde
+MAIN|timer 1 heure et 2 secondes|timer 1 heure et 2 secondes
+MAIN|timer 1 heure 2 secondes|timer 1 heure 2 secondes
+MAIN|timer 2 heures et 2 secondes|timer 2 heures et 2 secondes
+MAIN|timer 2 heures 2 secondes|timer 2 heures 2 secondes
+MAIN|timer 1 minute 30|timer 1 minute 30 secondes
+MAIN|timer 5 minutes 30|timer 5 minutes 30 secondes
+MAIN|timer 1 minute 15|timer 1 minute 15 secondes
+MAIN|timer 6 minutes 30|timer 6 minutes 30 secondes
+MAIN|timer 1 heure 1 minute et 1 seconde|timer 1 heure 1 minute et 1 seconde
+MAIN|timer 1 heure 1 minute 1 seconde|timer 1 heure 1 minute 1 seconde
+MAIN|timer 1 heure 1 minute et 2 secondes|timer 1 heure 1 minute et 2 secondes
+MAIN|timer 1 heure 1 minute 2 secondes|timer 1 heure 1 minute 2 secondes
+MAIN|timer 1 heure 2 minutes et 1 seconde|timer 1 heure 2 minutes et 1 seconde
+MAIN|timer 1 heure 2 minutes 1 seconde|timer 1 heure 2 minutes 1 seconde
+MAIN|timer 1 heure 2 minutes et 2 secondes|timer 1 heure 2 minutes et 2 secondes
+MAIN|timer 1 heure 2 minutes 2 secondes|timer 1 heure 2 minutes 2 secondes
+MAIN|timer 2 heures 1 minute et 2 secondes|timer 2 heures 1 minute et 2 secondes
+MAIN|timer 2 heures 1 minute 2 secondes|timer 2 heures 1 minute 2 secondes
+MAIN|timer 2 heures 1 minute et 1 seconde|timer 2 heures 1 minute et 1 seconde
+MAIN|timer 2 heures 1 minute 1 seconde|timer 2 heures 1 minute 1 seconde
+MAIN|timer 2 heures 2 minutes et 1 seconde|timer 2 heures 2 minutes et 1 seconde
+MAIN|timer 2 heures 2 minutes 1 seconde|timer 2 heures 2 minutes 1 seconde
+MAIN|timer 2 heures 2 minutes et 2 secondes|timer 2 heures 2 minutes et 2 secondes
+MAIN|timer 2 heures 2 minutes 2 secondes|timer 2 heures 2 minutes 2 secondes
+
+MAIN|mets un timer dans 3 quarts d'heure|mets un timer dans 45 minutes
+MAIN|mets un timer à 3 quarts d'heure|mets un timer à 45 minutes
+MAIN|mets un timer pour 3 quarts d'heure|mets un timer pour 45 minutes
+MAIN|mets un timer pour une heure|mets un timer pour 1 heure
+MAIN|mets un timer d'une minutes|mets un timer de 1 minutes
+MAIN|mets un timer d'une heures|mets un timer de 1 heures
+MAIN|mets un timer d'un heures|mets un timer de 1 heures
+MAIN|mets un timer de une minutes|mets un timer de 1 minutes
+MAIN|mets un timer de un minute|mets un timer de 1 minute
+MAIN|mets un timer de 1.5 minute|mets un timer de 1 minute 30 secondes
+MAIN|mets un timer de une minute une seconde|mets un timer de 1 minute 1 seconde
+MAIN|mets un timer d'un heure et demi|mets un timer de 1 heure 30 minutes
+MAIN|mets un timer de une minute et demi|mets un timer de 1 minute et 30 secondes
+
+MAIN|un quart d'heure|15 minutes
+MAIN|un quart d'heure|15 minutes
+MAIN|un quart|1 quart
+MAIN|une quart|1 quart
+MAIN|2 quart|2 quart
+MAIN|2 quarts|2 quarts
+MAIN|3 quart|3 quart
+MAIN|3 quarts|3 quarts
+MAIN|4 quart|4 quart
+MAIN|4 quarts|4 quarts
+MAIN|5 quart|5 quart
+MAIN|5 quarts|5 quarts
+MAIN|6 quart|6 quart
+MAIN|6 quarts|6 quarts
+MAIN|un demi|1 demi
+MAIN|une demi|1 demi
+MAIN|2 demi|2 demi
+MAIN|3 demi|3 demi
+MAIN|4 demi|4 demi
+MAIN|5 demi|5 demi
+MAIN|6 demi|6 demi
+MAIN|7 demi|7 demi
+MAIN|8 demi|8 demi
+MAIN|9 demi|9 demi
+MAIN|10 demi|10 demi
+MAIN|11 demi|11 demi
+
+MAIN|une seconde et un quart de minutes|1 seconde et 15 secondes
+MAIN|une minute et un quart de seconde|1 minute et 1 quart de seconde
+MAIN|une minute et un quart de minutes|1 minute et 15 secondes
+MAIN|une minute et quarts d'heure|1 minute et quarts d'heure
+MAIN|une minute et quarts|1 minute et 15 secondes
+
+MAIN|une point une|une point une
+MAIN|une point un|une point un
+MAIN|un point une|un point une
+MAIN|un point un|un point un
+MAIN|une points une|une points une
+MAIN|une points un|une points un
+MAIN|un points une|un points une
+MAIN|un points un|un points un
+MAIN|une virgule une|une virgule une
+MAIN|une virgule un|une virgule un
+MAIN|un virgule une|un virgule une
+MAIN|un virgule un|un virgule un
+MAIN|une virgules une|une virgules une
+MAIN|une virgules un|une virgules un
+MAIN|un virgules une|un virgules une
+MAIN|un virgules un|un virgules un
+
+MAIN|une point une heures|1.1 heures
+MAIN|une point un heures|1.1 heures
+MAIN|un point une heures|1.1 heures
+MAIN|un point un heures|1.1 heures
+MAIN|une points une heures|1.1 heures
+MAIN|une points un heures|1.1 heures
+MAIN|un points une heures|1.1 heures
+MAIN|un points un heures|1.1 heures
+MAIN|une virgule une heures|1,1 heures
+MAIN|une virgule un heures|1,1 heures
+MAIN|un virgule une heures|1,1 heures
+MAIN|un virgule un heures|1,1 heures
+MAIN|une virgules une heures|1,1 heures
+MAIN|une virgules un heures|1,1 heures
+MAIN|un virgules une heures|1,1 heures
+MAIN|un virgules un heures|1,1 heures
+
+MAIN|c'était moins une|c'était moins une
+
+MAIN|03/01/2022|03/01/2022
+MAIN|lance un jogging de 2 heures|lance un jogging de 2 heures
+MAIN|un lance un jogging de 2 heures 30|un lance un jogging de 2 heures 30 minutes
+MAIN|compte à rebour de 2 heures 30|compte à rebour de 2 heures 30 minutes
+MAIN|compte à rebour 2 heures 30|compte à rebour 2 heures 30 minutes
+MAIN|un compte à rebour de 2 heures 30|un compte à rebour de 2 heures 30 minutes
+MAIN|un compte à rebour 2 heures 30|un compte à rebour 2 heures 30 minutes
+MAIN|un séquenceur de 2 heures 30|un séquenceur de 2 heures 30 minutes
+MAIN|décale de 2 heures 30|décale de 2 heures 30 minutes
+MAIN|reporter ça au 12 avril à minuit|reporter ça au 12 avril à 0h00
+MAIN|change la date de fin par le 22 juin à minuit|change la date de fin par le 22 juin à 0h00
+MAIN|change mon alarme et réveille-moi à 4 heures|change mon alarme et réveille-moi à 4h
+MAIN|change mon alarme de 3 heures à 4 heures|change mon alarme de 3h à 4h
+MAIN|change mon alarme de 6 heures 30 pour 6 heures 45|change mon alarme de 6h30 pour 6h45
+MAIN|change mon alarme de 6 heures 30 pour 7 heures|change mon alarme de 6h30 pour 7h
+MAIN|change l'alarme du vendredi pour 7 heures 30|change l'alarme du vendredi pour 7h30
+
+
+##################################################################
+########### Need context when there is no on left side ###########
+##################################################################
+
+MAIN|décale d'une heure de plus l'évènement aux champs-élysées|décale de 1 heure de plus l'évènement aux champs-élysées
+MAIN|retarde d'une heure l'évènement aux champs-élysées|retarde de 1 heure l'évènement aux champs-élysées
+#MAIN|modifie d'une heure plus tard l'évènement aux champs-élysées|modifie de 1 heure plus tard l'évènement aux champs-élysées
+MAIN|modifie mon alarme pour 8 heures|modifie mon alarme pour 8h
+MAIN|mettre 7 heures 30 pour l'heure du rappel|mettre 7h30 pour l'heure du rappel
+MAIN|mettre 7 heures pour l'heure du rappel|mettre 7h pour l'heure du rappel
+
+##############################################################################################################################
+################################# Few examples to understand how it works (quater/half hour) #################################
+#when time is normalized, "et" is removed for quart/half for hours between (0-23) because of tr_hours_and_quarter_half to make
+#case like : 13 hours and half -> 13h30
+
+MAIN|13 heures et demi|13h30
+MAIN|timer 13 heures et quarts|timer 13 heures 15 minutes
+MAIN|25 heures et quarts|25 heures et 15 minutes
+MAIN|25 heures quarts|25 heures 15 minutes
+MAIN|20 heures et quarts|20h15
+MAIN|25 heures et quarts de gateaux|25 heures et quarts de gateaux
+MAIN|une minute et 2 quarts d'heure|1 minute et 30 minutes
+MAIN|une minute et 11 quarts d'heure|1 minute et 165 minutes
+MAIN|une minute et quart|1 minute et 15 secondes
+MAIN|une minute et 2 quarts de minutes|1 minute et 30 secondes
+MAIN|une minute et 2 quarts|1 minute et 30 secondes
+MAIN|une minute et 2 demi|1 minute et 60 secondes
+
+MAIN|une minute 2 quarts d'heure|1 minute 30 minutes
+MAIN|une minute 11 quarts d'heure|1 minute 165 minutes
+MAIN|une minute quart|1 minute 15 secondes
+MAIN|une minute 2 quarts de minutes|1 minute 30 secondes
+MAIN|une minute 2 quarts|1 minute 30 secondes
+MAIN|une minute 2 demi|1 minute 60 secondes
+
+
+MAIN|une minute et 2 quarts voiture|1 minute et 2 quarts voiture
+MAIN|une minute et 2 demi voiture|1 minute et 2 demi voiture
+MAIN|une minute quart voiture|1 minute quart voiture
+MAIN|une minute 2 quarts voiture|1 minute 2 quarts voiture
+MAIN|une minute 2 demi voiture|1 minute 2 demi voiture
+
+MAIN|un quarts d'heure|15 minutes
+MAIN|tout les quarts d'heure|tout les quarts d'heure
+MAIN|dans les quarts d'heure qui suivent|dans les quarts d'heure qui suivent
+MAIN|dans la demi-heure qui suit|dans la demi-heure qui suit
+MAIN|timer une heure et un quart d'heure|timer 1 heure 15 minutes
+MAIN|timer une heure un quart d'heure|timer 1 heure 15 minutes
+

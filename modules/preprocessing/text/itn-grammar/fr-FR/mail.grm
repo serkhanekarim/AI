@@ -1,0 +1,196 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+star = Optimize[bytelib.kBytes*];
+space = Optimize[" "];
+
+lb = Optimize["[BOS]" | space | chars.Punc];
+rb = Optimize["[EOS]" | space | chars.Punc];
+
+a_zA_Z0_9 = Optimize[bytelib.kUpper  | bytelib.kLower | bytelib.kDigit];
+a_z0_9 = Optimize[bytelib.kLower | bytelib.kDigit];
+a_z = Optimize[bytelib.kLower];
+
+six = Optimize["six"|"6"];
+huit = Optimize["huit"|"8"];
+
+
+point = Optimize[("point" | "dot")"s"?];
+hyphen = Optimize["-" | ("tiret" "s"?)];
+hyphen_extended = Optimize["tiret" "s"? (space|" du ") ("haut"|six)];
+underscore = Optimize[("underscore" "s"?) | ("tiret" "s"? (space|" du ") ("bas"|huit))];
+arobase = Optimize[("arobase" "s"?) | "at"];
+mail = Optimize[(("e" (space|hyphen)?)? "mail" "s"?)|("courriel" "s"?)|("courrier""s"? space "électronique""s"?)];
+apostrophe_l_d = Optimize[("l"|"d") "'"];
+
+symb_apostrophe = Optimize["'"];
+symb_point = Optimize["."];
+symb_hyphen = Optimize["-"];
+symb_underscore = Optimize["_"];
+symb_arobase = Optimize["@"];
+
+#special_chars = Optimize[("à"|"ä"|"â")|("é"|"è"|"ë"|"ê")|("ï"|"î")|("ô"|"ö")|("ù"|"û"|"ü")|("ÿ"|"ŷ")|("ç")|("œ")|("æ")];
+special_chars = Optimize[("À"|"à"|"ä"|"Ä"|"â"|"Â")|("Ë"|"Ê"|"È"|"É"|"é"|"è"|"ë"|"ê")|("Ï"|"Î"|"ï"|"î")|("Ô"|"Ö"|"ô"|"ö")|("Ù"|"Û"|"Ü"|"ù"|"û"|"ü")|("Ÿ"|"ÿ"|"ŷ")|("Ç"|"ç")|("Œ"|"œ")|("Æ"|"æ")];
+
+tag = Optimize["%;%"];
+tag_optional = Optimize["%:%"];
+
+tag_symb_point = Optimize[tag symb_point tag];
+tag_symb_hyphen = Optimize[tag symb_hyphen tag];
+tag_symb_underscore = Optimize[tag symb_underscore tag];
+tag_symb_arobase = Optimize[tag symb_arobase tag];
+
+tag_symb = Optimize[tag_symb_point|tag_symb_hyphen|tag_symb_underscore|tag_symb_arobase];
+
+word = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_zA_Z0_9|tag_symb)+];
+word_mail = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_z0_9|tag_optional)+];
+
+two_letters_words = Optimize["ai" | "as" | "an" | "au" | "bu" | "ce" | "de" | "du" | "es" | "et" | "eu" | "il" | "je" | "la" | "le" | "li" | "lu" | "ma" | "me" | "ne" | "nu" | "on" | "or" | "os" | "ou" | "pu" | "sa" | "se" | "si" | "su" | "ta" | "te" | "tu" | "un" | "va" | "vu"]; 
+
+remove_apostrophe = Optimize[(symb_apostrophe : "")];
+remove_accent_a = Optimize[(("À"|"à"|"ä"|"Ä"|"â"|"Â") : "a")];
+remove_accent_e = Optimize[(("Ë"|"Ê"|"È"|"É"|"é"|"è"|"ë"|"ê") : "e")];
+remove_accent_i = Optimize[(("Ï"|"Î"|"ï"|"î") : "i")];
+remove_accent_o = Optimize[(("Ô"|"Ö"|"ô"|"ö") : "o")];
+remove_accent_u = Optimize[(("Ù"|"Û"|"Ü"|"ù"|"û"|"ü") : "u")];
+remove_accent_y = Optimize[(("Ÿ"|"ÿ"|"ŷ") : "y")];
+remove_accent_c = Optimize[(("Ç"|"ç") : "c")];
+remove_accent_oe = Optimize[(("Œ"|"œ") : "oe")];
+remove_accent_ae = Optimize[(("Æ"|"æ") : "ae")];
+
+#remove_accent_a_in_mail = Optimize[(("à"|"ä"|"â") : "a")];
+#remove_accent_e_in_mail = Optimize[(("é"|"è"|"ë"|"ê") : "e")];
+#remove_accent_i_in_mail = Optimize[(("ï"|"î") : "i")];
+#remove_accent_o_in_mail = Optimize[(("ô"|"ö") : "o")];
+#remove_accent_u_in_mail = Optimize[(("ù"|"û"|"ü") : "u")];
+#remove_accent_y_in_mail = Optimize[(("ÿ"|"ŷ") : "y")];
+#remove_accent_c_in_mail = Optimize[(("ç") : "c")];
+#remove_accent_oe_in_mail = Optimize[(("œ") : "oe")];
+#remove_accent_ae_in_mail = Optimize[(("æ") : "ae")];
+
+lowercase = Optimize[(("A":"a")|("B":"b")|("C":"c")|("D":"d")|("E":"e")|("F":"f")|("G":"g")|("H":"h")|("I":"i")|("J":"j")|("K":"k")|("L":"l")|("M":"m")|("N":"n")|("O":"o")|("P":"p")|("Q":"q")|("R":"r")|("S":"s")|("T":"t")|("U":"u")|("V":"v")|("W":"w")|("X":"x")|("Y":"y")|("Z":"z"))];
+
+#remove_special_char_in_mail = Optimize[(remove_accent_ae_in_mail|remove_accent_oe_in_mail|remove_apostrophe|remove_accent_a_in_mail|remove_accent_e_in_mail|remove_accent_i_in_mail|remove_accent_o_in_mail|remove_accent_u_in_mail|remove_accent_y_in_mail|remove_accent_c_in_mail)];
+remove_special_char = Optimize[(remove_accent_ae|remove_accent_oe|lowercase|remove_apostrophe|remove_accent_a|remove_accent_e|remove_accent_i|remove_accent_o|remove_accent_u|remove_accent_y|remove_accent_c)];
+#remove_special_char_input = Optimize[Project[remove_special_char, 'input']];
+
+mail_separators = Optimize[tag_symb_underscore|tag_symb_hyphen|tag_symb_point|symb_hyphen];
+mail_separators_without_context = Optimize[tag_symb_underscore|tag_symb_hyphen|tag_symb_point];
+
+
+authorized_char_mail = Optimize[(a_z0_9|mail_separators|remove_special_char)+];
+authorized_char_mail_without_context = Optimize[(a_z0_9|mail_separators_without_context|remove_special_char)+];
+authorized_char_end_mail = Optimize[(a_z0_9|remove_special_char)+];
+
+#right_mail_context = Optimize[((a_z0_9|symb_hyphen|remove_special_char_input|tag_symb_point|tag_symb_hyphen|tag_symb_underscore)+ space)* arobase];
+right_mail_context = Optimize[(word space)* arobase];
+
+word_not_mail = Optimize[word_mail - tag_symb];
+additional_context = Optimize["[BOS]" (word_not_mail space)*];
+left_mail_context = Optimize[(("destinataire" "s"?) | ("contact" "s"?) | (apostrophe_l_d? "adresse" "s"?) | (apostrophe_l_d? mail) | ("cherche" "r"?)) space];
+left_mail_medium_context = Optimize[("à"|"par") space];
+left_mail_extrem_context = Optimize[("de" space)|"d'"];
+
+add_tag_optional = Optimize["" : tag_optional];
+tr_left_mail_context = Optimize[(left_mail_context|left_mail_medium_context|left_mail_extrem_context) add_tag_optional];
+
+########################################## Transducer ##########################################
+
+tr_point = Optimize[point : tag_symb_point];
+tr_arobase = Optimize[arobase : tag_symb_arobase];
+tr_hyphen = Optimize[hyphen : tag_symb_hyphen];
+tr_hyphen_extended = Optimize[hyphen_extended : tag_symb_hyphen];
+tr_underscore = Optimize[underscore : tag_symb_underscore];
+del_space = Optimize[space : ""];
+
+
+tr_top_level_domain_4 = Optimize[(("a r p a":"arpa")|("g o u v":"gouv"))];
+tr_top_level_domain_4_output = Optimize[Project[tr_top_level_domain_4, 'output']];
+
+tr_top_level_domain_3 = Optimize[(("c o m":"com")|("o r g":"org")|("n e t":"net")|("e d u":"edu")|("g o v":"gov")|("m i l":"mil"))];
+tr_top_level_domain_3_output = Optimize[Project[tr_top_level_domain_3, 'output']];
+
+tr_top_level_domain_2 = Optimize[a_z del_space a_z];
+tr_top_level_domain_2_output = Optimize[a_z{2}];
+tr_top_level_domain_2_output_restricted = Optimize[a_z{2} - two_letters_words];
+
+tr_end_mail_4 = Optimize[tr_point del_space (tr_top_level_domain_4|tr_top_level_domain_4_output)];
+tr_end_mail_3 = Optimize[tr_point del_space (tr_top_level_domain_3|tr_top_level_domain_3_output)];
+tr_end_mail_2 = Optimize[tr_point del_space (tr_top_level_domain_2|tr_top_level_domain_2_output)];
+tr_end_mail_2_restricted = Optimize[tr_point del_space (tr_top_level_domain_2|tr_top_level_domain_2_output_restricted)];
+
+
+right_end_mail_context = Optimize[tag_symb_point (tr_top_level_domain_4_output|tr_top_level_domain_3_output|tr_top_level_domain_2_output)];
+
+
+#many authorized chars for mail but with context
+#envoie un mail à kar point serkhane underscore du underscore 38 arobase hotmail point fr --> envoie un mail à kar.serkhane_du_38@hotmail.fr
+tr_start_mail = Optimize[(authorized_char_mail del_space)+];
+
+#many authorized chars for mail but without context - 0 space
+#envoie un mail à kar point serkhane  du 38 arobase hotmail point fr --> kar.serkhanedu38@hotmail.fr
+tr_start_mail_without_context_1 = Optimize[(authorized_char_mail_without_context del_space){1,2}];
+tr_start_mail_without_context_1_bis = Optimize[mail_separators_without_context (authorized_char_mail del_space)+];
+
+tr_end_mail = Optimize[(authorized_char_end_mail del_space)+];
+
+tr_mail = Optimize[tr_start_mail tr_arobase del_space tr_end_mail];
+tr_mail_without_context_1 = Optimize[tr_start_mail_without_context_1 tr_arobase del_space tr_end_mail];
+tr_mail_without_context_1_bis = Optimize[tr_start_mail_without_context_1_bis tr_arobase del_space tr_end_mail];
+
+tr_remove_tag = Optimize[(tag|tag_optional) : ""];
+
+################################################################################################
+
+
+
+########################################### Rewrite ############################################
+
+rw_end_mail_4 = Optimize[CDRewrite[tr_end_mail_4, lb, rb, star]];
+rw_end_mail_3 = Optimize[CDRewrite[tr_end_mail_3, lb, rb, star]];
+
+####### any_mail_context_right is used instead of any_mail_context_left because (www.) delspace XXXX
+rw_end_mail_2 = Optimize[CDRewrite[tr_end_mail_2, lb right_mail_context space, rb, star]];
+#######
+
+rw_end_mail_2_eos = Optimize[CDRewrite[tr_end_mail_2, lb, "[EOS]", star]];
+rw_end_mail_2_restricted = Optimize[CDRewrite[tr_end_mail_2_restricted, lb, rb, star]];
+
+rw_point = Optimize[CDRewrite[del_space tr_point del_space, "", right_mail_context rb, star]];
+rw_hyphen_extended = Optimize[CDRewrite[del_space tr_hyphen_extended del_space, "", right_mail_context rb, star]];
+rw_underscore = Optimize[CDRewrite[del_space tr_underscore del_space, "", right_mail_context rb, star]];
+rw_hyphen = Optimize[CDRewrite[del_space tr_hyphen del_space, "", right_mail_context rb, star]];
+
+rw_left_mail_context = Optimize[CDRewrite[tr_left_mail_context, (additional_context|tag_optional), "", star]];
+
+rw_mail = Optimize[CDRewrite[tr_mail, tag_optional, right_end_mail_context rb, star]];
+rw_mail_without_context_1 = Optimize[CDRewrite[tr_mail_without_context_1, lb, right_end_mail_context rb, star]];
+rw_mail_without_context_1_bis = Optimize[CDRewrite[tr_mail_without_context_1_bis, "", right_end_mail_context rb, star]];
+
+rw_remove_tag = Optimize[CDRewrite[tr_remove_tag, "", "", star]];
+
+################################################################################################
+
+
+
+############################################ Export ############################################
+
+export MAIN = Optimize[rw_end_mail_4
+                             @ rw_end_mail_3
+                             @ rw_end_mail_2
+                             @ rw_end_mail_2_eos
+                             @ rw_end_mail_2_restricted
+                             @ rw_hyphen_extended
+                             @ rw_underscore
+                             @ rw_hyphen
+                             @ rw_point
+                             @ rw_left_mail_context
+                             @ rw_mail
+                             @ rw_mail_without_context_1_bis
+                             @ rw_mail_without_context_1
+                             @ rw_remove_tag
+                             ];
+
+################################################################################################
+
+

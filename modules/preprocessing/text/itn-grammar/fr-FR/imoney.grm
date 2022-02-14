@@ -1,0 +1,248 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+
+digit = Optimize[bytelib.kDigit];
+star = Optimize[bytelib.kBytes*];
+space = Optimize[" "];
+
+lb = Optimize["[BOS]"|space|chars.Punc];
+rb = Optimize["[EOS]"|space|chars.Punc];
+lb_short = Optimize["[BOS]"|space];
+rb_short = Optimize["[EOS]"|space];
+
+and = Optimize[" et "];
+aftercomma = Optimize[space|and];
+one = Optimize["un"|"une"];
+one_to_digit = Optimize[one : "1"];
+
+plural = Optimize["s"];
+centimes = Optimize["centime" "s"?];
+
+########################################## Functions ##########################################
+
+func currency_normalizer_1[currency,currencysymbol,cents] {
+
+	digit = Optimize[bytelib.kDigit];
+	star = Optimize[bytelib.kBytes*];
+	space = Optimize[" "];
+
+	lb_short = Optimize["[BOS]"|space];
+	rb = Optimize["[EOS]"|space|chars.Punc];
+
+	and = Optimize[" et "];
+	currency_optimized = Optimize[currency];
+	of = Optimize["d'"|("de" space)];
+
+	add_0 = Optimize[("" : "0,")];
+	add_00 = Optimize[("" : "0,0")];
+	rm_cents_space_of = Optimize[(cents space of : "")];
+
+
+	#normalize cents ("16 centimes d'euros = 0,16 euros") (50 centimes de livre sterling = 0,50 livre sterling):
+	
+	tr_currency_only_1_cents_of_currency = Optimize[(add_00 digit space rm_cents_space_of)|(add_0 digit digit+ space rm_cents_space_of)];
+
+	rw_currency_only_1_cents_of_currency = CDRewrite[tr_currency_only_1_cents_of_currency, lb_short, currency_optimized rb, star];
+
+	return Optimize[rw_currency_only_1_cents_of_currency];
+
+}
+
+
+
+
+
+func currency_normalizer_2[currency,currencysymbol,cents] {
+
+	digit = Optimize[bytelib.kDigit];
+	star = Optimize[bytelib.kBytes*];
+	space = Optimize[" "];
+
+	lb_short = Optimize["[BOS]"|space];
+	rb = Optimize["[EOS]"|space|chars.Punc];
+
+	and = Optimize[" et "];
+	aftercomma = Optimize[space|and];
+	currency_optimized = Optimize[currency];
+	of = Optimize["d'"|("de" space)];
+
+	add_0 = Optimize[("" : "0,")];
+	add_00 = Optimize[("" : "0,0")];
+	cents_to_currency = Optimize[(cents : currency_optimized)];
+
+
+
+	#add currency and cent without currency ("15 dollars et? 16 centimes = 15 dollars et 0,16 dollars"):
+
+	tr_add_only_1_cents_no_currency = Optimize[(add_00 digit space cents_to_currency)|(add_0 digit digit+ space cents_to_currency)];
+
+	rw_add_only_1_cents_no_currency = CDRewrite[tr_add_only_1_cents_no_currency, lb_short digit+ space currency_optimized aftercomma, rb, star];
+
+
+	return Optimize[rw_add_only_1_cents_no_currency];
+
+}
+
+
+
+
+
+func money_cents_alone[cents,currency] {
+
+	#normalize cents alone without cents currency ("16 centimes = 0,16 euros") (50 pence = 0,50 livre sterling):
+
+	digit = Optimize[bytelib.kDigit];
+	star = Optimize[bytelib.kBytes*];
+	space = Optimize[" "];
+
+	lb_short = Optimize["[BOS]"|space];
+	rb = Optimize["[EOS]"|space|chars.Punc];
+	currency_optimized = Optimize[currency];
+
+	add_0 = Optimize[("" : "0,")];
+	add_00 = Optimize[("" : "0,0")];
+	cents_to_currency = Optimize[(cents : currency_optimized)];
+	
+	tr_currency_only_1_cents = Optimize[(add_00 digit space cents_to_currency)|(add_0 digit digit+ space cents_to_currency)];
+
+	rw_currency_only_1_cents = CDRewrite[tr_currency_only_1_cents, lb_short, rb, star];
+
+	return Optimize[rw_currency_only_1_cents];
+
+}
+
+
+
+
+
+func currency_normalizer_3[currency,symbolcurrency,cents] {
+
+	digit = Optimize[bytelib.kDigit];
+	star = Optimize[bytelib.kBytes*];
+	space = Optimize[" "];
+
+	lb_short = Optimize["[BOS]"|space];
+	rb = Optimize["[EOS]"|space|chars.Punc];
+
+	and = Optimize[" et "];
+	aftercomma = Optimize[space|and];
+	symbolcurrency_optimized = Optimize[symbolcurrency];
+	comma = Optimize[","];
+
+	merge_symb_0 = Optimize[(space symbolcurrency_optimized space : comma)];
+	merge_symb_00 = Optimize[(space symbolcurrency_optimized space : ",0")];
+	add_symb = Optimize[("" : space symbolcurrency_optimized)];
+
+
+	#merge digit currency and cents (16 EUR et 0,06 EUR = 16,06 EUR ):
+
+	tr_digit_cents_symbolcurrency_merge = Optimize[(space symbolcurrency_optimized aftercomma "0" : "")];
+
+	rewrite_digit_cents_symbolcurrency_merge = CDRewrite[tr_digit_cents_symbolcurrency_merge, lb_short digit+, comma digit+ space symbolcurrency_optimized rb, star];
+
+
+
+
+	#normalize digit currencysymbol digit (16 EUR 5$ = 16,05 EUR$):
+
+	tr_currency_alone_1_cents = Optimize[(merge_symb_00 digit add_symb)|(merge_symb_0 digit digit+ add_symb)];
+
+	rw_currency_alone_1_cents = CDRewrite[tr_currency_alone_1_cents, lb_short digit+, "[EOS]", star];
+
+
+	return Optimize[rewrite_digit_cents_symbolcurrency_merge @ rw_currency_alone_1_cents];
+
+}
+
+################################################################################################
+
+
+
+########################################## Transducer ##########################################
+
+tr_currency = Optimize[StringFile['dictionaries/money/currency.dict', byte]];
+
+tr_currency_input = Optimize[Project[tr_currency, 'input']];
+tr_currency_output = Optimize[Project[tr_currency, 'output']];
+
+
+
+tr_cryptocurrency = Optimize[StringFile['dictionaries/money/cryptocurrency.dict', byte]];
+
+tr_cryptocurrency_input = Optimize[Project[tr_cryptocurrency, 'input']];
+tr_cryptocurrency_output = Optimize[Project[tr_cryptocurrency, 'output']];
+
+
+tr_cents = Optimize[StringFile['dictionaries/money/cents.dict', byte]];
+
+################################################################################################
+
+
+
+
+
+########################################### Rewrite ############################################
+
+#("un dollar" = "1 dollar"):
+rewrite_currency_cryptocurrency_cents_un = Optimize[CDRewrite[one_to_digit, lb_short, space (tr_currency_input|tr_cryptocurrency_input|tr_cents) rb, star]
+					@ CDRewrite[one_to_digit, lb (tr_currency_input|tr_cryptocurrency_input|tr_cents) space, "[EOS]", star]];
+
+#=============================================================================================
+
+#normalize cents ("16 centimes d'euros = 0,16 euros") (50 centimes de livre sterling = 0,50 livre sterling):
+total_currency_normalizer_1 = Optimize[currency_normalizer_1["euro" plural?,"EUR",centimes]
+				     @ currency_normalizer_1["dollar" plural?,"USD",centimes]
+				     @ currency_normalizer_1["dinar" plural?,"DZD",centimes]
+				     @ currency_normalizer_1["bitcoin" plural?,"BTC",centimes]
+				     @ currency_normalizer_1["etherum" plural?,"ETH",centimes]];
+
+
+
+#add currency and cent without currency ("15 dollars et? 16 centimes = 15 dollars et 0,16 dollars"):
+total_currency_normalizer_2 = Optimize[currency_normalizer_2["euro" plural?,"EUR",centimes]
+				     @ currency_normalizer_2["dollar" plural?,"USD",centimes]
+				     @ currency_normalizer_2["dinar" plural?,"DZD",centimes]
+				     @ currency_normalizer_2["bitcoin" plural?,"BTC",centimes]
+				     @ currency_normalizer_2["etherum" plural?,"ETH",centimes]];
+
+#=============================================================================================
+
+#normalize cents alone without cents currency ("16 centimes = 0,16 EUR") (50 pence = 0,50 GBP):
+total_money_cents_alone = Optimize[money_cents_alone[centimes,"euro"]
+			@ money_cents_alone[Optimize[("pound"|"pence"|"penny")],"livre sterling"]];
+
+#=============================================================================================
+
+#add currencysymbol ("15 dollars et 0,16 dollars" = "15 USD et 0,16 USD"):
+rewrite_digit_currency_cryptocurrency = Optimize[CDRewrite[tr_currency|tr_cryptocurrency, digit space, rb, star]];
+
+#=============================================================================================
+
+#merge digit currency and cents (16 EUR et 0,06 EUR = 16,06 EUR ):
+#normalize digit currencysymbol digit (16 EUR 5$ = 16,05 EUR$):
+total_currency_normalizer_3 = Optimize[currency_normalizer_3["euro" plural?,"EUR",centimes]
+				     @ currency_normalizer_3["dollar" plural?,"USD",centimes]
+				     @ currency_normalizer_3["dinar" plural?,"DZD",centimes]
+				     @ currency_normalizer_3["bitcoin" plural?,"BTC",centimes]
+				     @ currency_normalizer_3["etherum" plural?,"ETH",centimes]];
+
+
+################################################################################################
+
+
+
+
+
+############################################ Export ############################################
+
+export MAIN = Optimize[rewrite_currency_cryptocurrency_cents_un
+			@ total_currency_normalizer_1
+			@ total_currency_normalizer_2
+			@ total_money_cents_alone 
+			@ rewrite_digit_currency_cryptocurrency
+			@ total_currency_normalizer_3];
+
+################################################################################################
+
+
+

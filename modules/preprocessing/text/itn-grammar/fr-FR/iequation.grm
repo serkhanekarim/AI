@@ -1,0 +1,487 @@
+import '../../fst-thrax-grammars/common/byte.grm' as bytelib;
+import '../../fst-thrax-grammars/common/chars.grm' as chars;
+import '../../fst-thrax-grammars/fr-FR/chars.grm' as Chars;
+
+space = Optimize[" "];
+digit = Optimize[bytelib.kDigit];
+digit1_9 = Optimize[("1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9")];
+digit_number = Optimize["0"|(digit1_9 digit{0,2} (space? digit{3})*)];
+star = Optimize[bytelib.kBytes*];
+
+lb = Optimize["[BOS]" | chars.Punc | space];
+rb = Optimize["[EOS]" | chars.Punc | space];
+
+lb_nopunc = Optimize["[BOS]"|space];
+rb_nopunc = Optimize["[EOS]"|space];
+
+tr_articles_1 = Optimize[StringFile['dictionaries/general/articles_1.dict', byte]];
+tr_articles_3 = Optimize[StringFile['dictionaries/general/articles_3.dict', byte]];
+tr_articles_of = Optimize[StringFile['dictionaries/general/articles_of.dict', byte]];
+
+tr_total_article = Optimize[tr_articles_1|tr_articles_3];
+
+sound_er = Optimize["é"|"ée"|"ées"|"és"|"er"|"ez"|"ai"|"ait"|"ais"|"aient"|"aies"|"aie"];
+sound_e = Optimize["e"|"es"|"ent"];
+
+by = Optimize["par"];
+to = Optimize["à"|"a"];
+and = Optimize["et"];
+
+
+
+########################################## Functions ##########################################
+
+func function_inverse_normalizer_article[tr_function_inverse_input,tr_function_inverse_output] {
+
+	#############################################################################################
+	#### Function to normalize reverse function with article like: "le cube DE moins 5 pi" = (−5 × π)^(3) ####
+	#############################################################################################
+
+	space = Optimize[" "];
+	digit = Optimize[bytelib.kDigit];
+	digit1_9 = Optimize[("1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9")];
+	digit_number = Optimize["0"|(digit1_9 digit{0,2} (space? digit{3})*)];
+	star = Optimize[bytelib.kBytes*];
+	lb_nopunc = Optimize["[BOS]" | space];
+	rb_nopunc = Optimize["[EOS]" | space];
+
+	tr_remove_space = Optimize[space : ""];
+	tr_add_space = Optimize["" : space];
+
+	tr_articles_1 = Optimize[StringFile['dictionaries/general/articles_1.dict', byte]];
+	tr_articles_3 = Optimize[StringFile['dictionaries/general/articles_3.dict', byte]];
+	tr_total_article = Optimize[tr_articles_1|tr_articles_3];
+	tr_remove_total_article = Optimize[tr_total_article : ""];
+
+	symb_parenthesis_open = Optimize["("];
+	symb_parenthesis_close = Optimize[")"];
+	tr_add_parenthesis_open = Optimize["" : symb_parenthesis_open];
+	tr_add_parenthesis_close = Optimize["" : symb_parenthesis_close];
+
+	tr_maths_symbols = Optimize[StringFile['dictionaries/maths/symbols.dict', byte]];
+
+	symb_times = Optimize["×"];
+	symb_minus = Optimize["−"];
+	symb_fractionated = Optimize["/"];
+
+	one = Optimize["une"|"un"];
+	tr_one_to_digit = Optimize[one :"1"];
+
+	point = Optimize["point""s"?];
+	comma = Optimize["virgule""s"?];
+	comma_number = Optimize[(","|".")];
+	tr_comma = Optimize[(space comma space):","];
+	tr_point = Optimize[(space point space):"."];
+	real_number = Optimize[(tr_one_to_digit|digit_number) ((comma_number|tr_comma|tr_point) (tr_one_to_digit|digit_number))?];
+
+	tr_space_to_product = Optimize[space : space symb_times space];
+	tr_space_to_minus = Optimize["moins" space : symb_minus];
+
+	tr_demi = Optimize[("demi" "e"? "s"?) : symb_fractionated "2"];
+	tr_tiers = Optimize[("tiers") : symb_fractionated "3"];
+	tr_quart = Optimize[("quart" "s"?) : symb_fractionated "4"];
+	tr_digit_e = Optimize[("" : symb_fractionated) digit_number ("e":"")];
+	tr_on_digit = Optimize[("sur" : (tr_add_space symb_fractionated)) space (tr_maths_symbols|real_number)];
+	tr_fraction = Optimize[(tr_maths_symbols|real_number) tr_remove_space (tr_demi|tr_tiers|tr_quart|tr_digit_e|tr_on_digit)];
+
+	tr_digit_factor_constant = Optimize[(tr_fraction|real_number|(tr_remove_total_article? tr_maths_symbols)) tr_space_to_product tr_remove_total_article? tr_maths_symbols];
+
+	tr_maths_value = Optimize[real_number|tr_maths_symbols|tr_digit_factor_constant|tr_fraction];
+	tr_moins_maths_value = Optimize[tr_space_to_minus tr_maths_value];
+	tr_total_maths_value = Optimize[tr_maths_value|tr_add_parenthesis_open tr_moins_maths_value tr_add_parenthesis_close];
+
+	tr_remove_function_inverse_input = Optimize[tr_function_inverse_input : ""];
+	tr_add_function_inverse_output = Optimize["" : tr_function_inverse_output];
+
+
+	tr_inverse_function = Optimize[tr_remove_total_article tr_remove_function_inverse_input tr_remove_space tr_remove_total_article? tr_total_maths_value tr_add_function_inverse_output];
+
+	rw_inverse_function = Optimize[CDRewrite[tr_inverse_function, lb_nopunc, rb_nopunc, star, 'sim', 'obl']];
+
+	return rw_inverse_function;
+
+}
+
+func function_inverse_normalizer[tr_function_inverse_input,tr_function_inverse_output] {
+
+	#############################################################################################
+	#### Function to normalize reverse function with optional article like: "factorielle 5" = (−5 × π)^(3) ####
+	#############################################################################################
+
+	space = Optimize[" "];
+	digit = Optimize[bytelib.kDigit];
+	digit1_9 = Optimize[("1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9")];
+	digit_number = Optimize["0"|(digit1_9 digit{0,2} (space? digit{3})*)];
+	star = Optimize[bytelib.kBytes*];
+	lb_nopunc = Optimize["[BOS]" | space];
+	rb_nopunc = Optimize["[EOS]" | space];
+
+	tr_remove_space = Optimize[space : ""];
+	tr_add_space = Optimize["" : space];
+
+	tr_articles_1 = Optimize[StringFile['dictionaries/general/articles_1.dict', byte]];
+	tr_articles_3 = Optimize[StringFile['dictionaries/general/articles_3.dict', byte]];
+	tr_total_article = Optimize[tr_articles_1|tr_articles_3];
+	tr_remove_total_article = Optimize[tr_total_article : ""];
+
+	symb_parenthesis_open = Optimize["("];
+	symb_parenthesis_close = Optimize[")"];
+	tr_add_parenthesis_open = Optimize["" : symb_parenthesis_open];
+	tr_add_parenthesis_close = Optimize["" : symb_parenthesis_close];
+
+	tr_maths_symbols = Optimize[StringFile['dictionaries/maths/symbols.dict', byte]];
+
+	symb_times = Optimize["×"];
+	symb_minus = Optimize["−"];
+	symb_fractionated = Optimize["/"];
+
+	one = Optimize["une"|"un"];
+	tr_one_to_digit = Optimize[one :"1"];
+
+	point = Optimize["point""s"?];
+	comma = Optimize["virgule""s"?];
+	comma_number = Optimize[(","|".")];
+	tr_comma = Optimize[(space comma space):","];
+	tr_point = Optimize[(space point space):"."];
+	real_number = Optimize[(tr_one_to_digit|digit_number) ((comma_number|tr_comma|tr_point) (tr_one_to_digit|digit_number))?];
+
+	tr_space_to_product = Optimize[space : space symb_times space];
+	tr_space_to_minus = Optimize["moins" space : symb_minus];
+
+	tr_demi = Optimize[("demi" "e"? "s"?) : symb_fractionated "2"];
+	tr_tiers = Optimize[("tiers") : symb_fractionated "3"];
+	tr_quart = Optimize[("quart" "s"?) : symb_fractionated "4"];
+	tr_digit_e = Optimize[("" : symb_fractionated) digit_number ("e":"")];
+	tr_on_digit = Optimize[("sur" : (tr_add_space symb_fractionated)) space (tr_maths_symbols|real_number)];
+	tr_fraction = Optimize[(tr_maths_symbols|real_number) tr_remove_space (tr_demi|tr_tiers|tr_quart|tr_digit_e|tr_on_digit)];
+
+	tr_digit_factor_constant = Optimize[(tr_fraction|real_number|(tr_remove_total_article? tr_maths_symbols)) tr_space_to_product tr_remove_total_article? tr_maths_symbols];
+
+	tr_maths_value = Optimize[real_number|tr_maths_symbols|tr_digit_factor_constant|tr_fraction];
+	tr_moins_maths_value = Optimize[tr_space_to_minus tr_maths_value];
+	tr_total_maths_value = Optimize[tr_maths_value|tr_add_parenthesis_open tr_moins_maths_value tr_add_parenthesis_close];
+
+	tr_remove_function_inverse_input = Optimize[tr_function_inverse_input : ""];
+	tr_add_function_inverse_output = Optimize["" : tr_function_inverse_output];
+
+
+	tr_inverse_function = Optimize[tr_remove_total_article? tr_remove_function_inverse_input tr_remove_space tr_remove_total_article? tr_total_maths_value tr_add_function_inverse_output];
+
+	rw_inverse_function = Optimize[CDRewrite[tr_inverse_function, lb_nopunc, rb_nopunc, star, 'sim', 'obl']];
+
+	return rw_inverse_function;
+
+}
+
+################################################################################################
+
+
+
+########################################## Transducer ##########################################
+
+################### Operation ###################
+
+tr_remove_total_article = Optimize[tr_total_article : ""];
+
+plus = Optimize[("plus")|(("somm"|"additionn") sound_er space by)];
+minus = Optimize[("moins")|("soustr" sound_er space by)];
+times = Optimize[("fois")|("multipli" sound_er space by)];
+divided = Optimize["divis" sound_er space by];
+fractionated = Optimize["fractionn" sound_er space by];
+
+total_operation_simple = Optimize[plus|minus|times|divided|fractionated];
+
+
+symb_plus = Optimize["+"];
+symb_minus = Optimize["−"];
+symb_times = Optimize["×"];
+symb_divided = Optimize["÷"];
+symb_fractionated = Optimize["/"];
+symb_parenthesis_open = Optimize["("];
+symb_parenthesis_close = Optimize[")"];
+
+total_symb_operator = Optimize[symb_plus|symb_minus|symb_times|symb_divided|symb_fractionated];
+
+
+tr_plus = Optimize[plus : symb_plus];
+tr_minus = Optimize[minus : symb_minus];
+tr_times = Optimize[times : symb_times];
+tr_divided = Optimize[divided : symb_divided];
+tr_fractionated = Optimize[fractionated : symb_fractionated];
+
+
+tr_basic_operation = Optimize[tr_plus|tr_minus|tr_times|tr_divided|tr_fractionated];
+
+
+tr_space_to_product = Optimize[space : space symb_times space];
+tr_space_to_minus = Optimize["moins" space : symb_minus];
+tr_remove_space = Optimize[space : ""];
+tr_add_space = Optimize["" : space];
+
+#################################################
+
+
+
+############# Maths Values/Symbols ##############
+
+tr_add_parenthesis_open = Optimize["" : symb_parenthesis_open];
+tr_add_parenthesis_close = Optimize["" : symb_parenthesis_close];
+
+tr_maths_symbols = Optimize[StringFile['dictionaries/maths/symbols.dict', byte]];
+tr_maths_symbols_input = Optimize[Project[tr_maths_symbols, 'input']];
+tr_maths_symbols_output = Optimize[Project[tr_maths_symbols, 'output']];
+
+tr_maths_symbols_context = Optimize[StringFile['dictionaries/maths/symbols_context.dict', byte]];
+tr_maths_symbols_context_input = Optimize[Project[tr_maths_symbols_context, 'input']];
+tr_maths_symbols_context_output = Optimize[Project[tr_maths_symbols_context, 'output']];
+
+one = Optimize["une"|"un"];
+tr_one_to_digit = Optimize[one :"1"];
+point = Optimize["point""s"?];
+comma = Optimize["virgule""s"?];
+comma_number = Optimize[(","|".")];
+tr_comma = Optimize[(space comma space):","];
+tr_point = Optimize[(space point space):"."];
+real_number = Optimize[(tr_one_to_digit|digit_number) ((comma_number|tr_comma|tr_point) (tr_one_to_digit|digit_number))?];
+
+tr_demi = Optimize[("demi" "e"? "s"?) : symb_fractionated "2"];
+tr_tiers = Optimize[("tiers") : symb_fractionated "3"];
+tr_quart = Optimize[("quart" "s"?) : symb_fractionated "4"];
+tr_digit_e = Optimize[("" : symb_fractionated) digit_number ("e":"")];
+tr_on_digit = Optimize[("sur" : (tr_add_space symb_fractionated)) space (tr_maths_symbols|real_number)];
+tr_fraction = Optimize[(tr_maths_symbols|real_number) tr_remove_space (tr_demi|tr_tiers|tr_quart|tr_digit_e|tr_on_digit)];
+
+#tr_remove_total_article? ?????????
+tr_digit_factor_constant = Optimize[(tr_fraction|real_number|(tr_remove_total_article? tr_maths_symbols)) tr_space_to_product tr_remove_total_article? tr_maths_symbols];
+
+tr_maths_value = Optimize[real_number|tr_maths_symbols|tr_digit_factor_constant|tr_fraction];
+tr_maths_value_input = Optimize[Project[tr_maths_value, 'input']];
+tr_maths_value_output = Optimize[Project[tr_maths_value, 'output']];
+
+tr_moins_maths_value = Optimize[tr_space_to_minus tr_maths_value];
+
+tr_total_maths_value = Optimize[tr_maths_value|tr_moins_maths_value];
+tr_total_maths_value_input = Optimize[Project[tr_total_maths_value, 'input']];
+tr_total_maths_value_output = Optimize[Project[tr_total_maths_value, 'output']];
+
+#################################################
+
+
+
+############### Maths Functions #################
+
+tr_functions = Optimize[StringFile['dictionaries/maths/functions.dict', byte]];
+tr_functions_input = Optimize[Project[tr_functions, 'input']];
+tr_functions_output = Optimize[Project[tr_functions, 'output']];
+
+
+tr_functions_before = Optimize[StringFile['dictionaries/maths/functions_before.dict', byte]];
+tr_functions_before_input = Optimize[Project[tr_functions_before, 'input']];
+tr_functions_before_output = Optimize[Project[tr_functions_before, 'output']];
+
+
+tr_functions_before_no_parenthesis = Optimize[StringFile['dictionaries/maths/functions_before_no_parenthesis.dict', byte]];
+tr_functions_before_no_parenthesis_input = Optimize[Project[tr_functions_before_no_parenthesis, 'input']];
+tr_functions_before_no_parenthesis_output = Optimize[Project[tr_functions_before_no_parenthesis, 'output']];
+
+
+### "5 pi puissance moins 5 pi" = 5 × π^(−2 × π) ###
+tr_mini_functions_normalization_before = Optimize[tr_maths_value tr_remove_space tr_functions_before tr_remove_space tr_remove_total_article? tr_add_parenthesis_open tr_total_maths_value tr_add_parenthesis_close];
+tr_mini_functions_normalization_before_output = Optimize[Project[tr_mini_functions_normalization_before, 'output']];
+
+
+### "5 pi au cube" = 5 × π^(3) ###
+tr_mini_functions_normalization_before_no_parenthesis = Optimize[tr_maths_value tr_remove_space tr_functions_before_no_parenthesis];
+tr_mini_functions_normalization_before_no_parenthesis_output = Optimize[Project[tr_mini_functions_normalization_before_no_parenthesis, 'output']];
+
+
+### context for : "(−2 × π)!" and not: "2 × π!" because it add parenthesis forminus value in mini function ###
+tr_moins_maths_value_parenthesis = Optimize[tr_add_parenthesis_open tr_space_to_minus tr_maths_value tr_add_parenthesis_close];
+tr_moins_maths_value_parenthesis_output = Optimize[Project[tr_moins_maths_value_parenthesis, 'output']];
+context_moins_maths_value_parenthesis = Optimize[tr_moins_maths_value_parenthesis_output (tr_functions_before_output|tr_functions_before_no_parenthesis_output)];
+
+
+### "cosinus de la factorielle de moins de pi" = "cos((−2 × π)!)" ###
+tr_functions_normalization = Optimize[tr_functions tr_remove_space tr_remove_total_article? tr_add_parenthesis_open (tr_total_maths_value_output|tr_mini_functions_normalization_before_no_parenthesis_output|tr_mini_functions_normalization_before_output|context_moins_maths_value_parenthesis) tr_add_parenthesis_close];
+tr_functions_normalization_output = Optimize[Project[tr_functions_normalization, 'output']];
+
+
+### "l'⨌" = "⨌" ou "du ⨌" = "⨌" ###
+tr_pre_article_functions_normalization = Optimize[tr_remove_total_article];
+
+
+### "−2 ⨌" = "−2 × ⨌" ###
+tr_pre_number_functions_normalization = Optimize[tr_total_maths_value_output tr_space_to_product];
+tr_pre_number_functions_normalization_output = Optimize[Project[tr_pre_number_functions_normalization, 'output']];
+
+#################################################
+
+
+############## Operation Imperative ###########
+
+plus_imperative = Optimize[("somm"|"additionn") (sound_e|sound_er)];
+minus_imperative = Optimize["soustr" sound_er "re"?];
+times_imperative = Optimize["multipli" (sound_e|sound_er)];
+divided_imperative = Optimize["divis" (sound_e|sound_er)];
+fractionated_imperative = Optimize["fractionn" (sound_e|sound_er)];
+
+tr_operand = Optimize[tr_add_parenthesis_open (symb_minus? (tr_total_maths_value|tr_total_maths_value_output|tr_mini_functions_normalization_before_output|tr_mini_functions_normalization_before_no_parenthesis_output|tr_functions_normalization_output|context_moins_maths_value_parenthesis) (space total_symb_operator space)?)+ tr_add_parenthesis_close];
+
+tr_plus_imperative = Optimize[((plus_imperative space) : "") tr_operand space ((by|and) : symb_plus) space tr_operand];
+tr_minus_imperative = Optimize[((minus_imperative space) : "") tr_operand space ((by|and) : symb_minus) space tr_operand];
+tr_times_imperative = Optimize[((times_imperative space) : "") tr_operand space ((by|and) : symb_times) space tr_operand];
+tr_divided_imperative = Optimize[((divided_imperative space) : "") tr_operand space ((by|and) : symb_divided) space tr_operand];
+tr_fractionated_imperative = Optimize[((fractionated_imperative space) : "") tr_operand space ((by|and) : symb_fractionated) space tr_operand];
+
+tr_basic_operation_imperative = Optimize[tr_plus_imperative|tr_minus_imperative|tr_times_imperative|tr_divided_imperative|tr_fractionated_imperative];
+
+#################################################
+
+
+
+############## Context Normalization ############
+
+special_chars = Optimize[("à"|"ä"|"â")|("é"|"è"|"ë"|"ê")|("ï"|"î")|("ô"|"ö")|("ù"|"û"|"ü")|("ÿ"|"ŷ")|("ç")|("œ")|("æ")];
+a_z0_9 = Optimize[bytelib.kLower|bytelib.kDigit];
+symb_apostrophe = Optimize["'"];
+symb_hyphen = Optimize["-"];
+word = Optimize[(special_chars|symb_apostrophe|symb_hyphen|a_z0_9)+];
+
+authorized_word_left = Optimize[word];
+any_word_context_left = Optimize[(authorized_word_left space)*];
+
+strict_authorized_word_left = Optimize[StringFile['dictionaries/maths/symbols_context_word.dict', byte]];
+
+context_left_symbols_normalization = Optimize[lb_nopunc strict_authorized_word_left space any_word_context_left];
+
+#################################################
+
+################################################################################################
+
+
+
+
+
+########################################### Rewrite ############################################
+
+#_______________________________________________________________________________________________
+
+rw_mini_functions_normalization_after = Optimize[function_inverse_normalizer_article["carré","^(2)"]
+					       @ function_inverse_normalizer_article["cube","^(3)"]
+					       @ function_inverse_normalizer["factorielle","!"]
+						];
+
+rw_mini_functions_normalization_before = Optimize[CDRewrite[tr_mini_functions_normalization_before, lb_nopunc, rb_nopunc, star]];
+rw_mini_functions_normalization_before_no_parenthesis = Optimize[CDRewrite[tr_mini_functions_normalization_before_no_parenthesis, lb_nopunc, rb_nopunc, star]];
+
+#_______________________________________________________________________________________________
+
+rw_digit_factor_constant = Optimize[CDRewrite[tr_digit_factor_constant, lb_nopunc, rb_nopunc, star]];
+
+#_______________________________________________________________________________________________
+
+
+###Output from function inverse is (for the moment) in before so no need to add more context
+context_basic_operation_left = Optimize[tr_maths_value_input|tr_total_maths_value_output|(minus space)? context_moins_maths_value_parenthesis|tr_mini_functions_normalization_before_output|tr_mini_functions_normalization_before_no_parenthesis_output];
+
+context_basic_operation_right = Optimize[(total_operation_simple space)? (tr_maths_value_input|tr_total_maths_value_output|(minus space)? context_moins_maths_value_parenthesis|tr_mini_functions_normalization_before_output|tr_mini_functions_normalization_before_no_parenthesis_output|tr_total_article? tr_functions_input)];
+
+
+
+rw_basic_operation = Optimize[CDRewrite[tr_basic_operation, lb_nopunc context_basic_operation_left space, space context_basic_operation_right rb_nopunc, star]];
+
+#_______________________________________________________________________________________________
+
+###Output from function inverse is (for the moment) in before so no need to add more context
+context_space_to_minus_left = Optimize[tr_mini_functions_normalization_before_output space|tr_mini_functions_normalization_before_no_parenthesis_output space|context_moins_maths_value_parenthesis space|(total_symb_operator space)|(tr_total_article? tr_functions_input space tr_total_article?)];
+
+
+context_space_to_minus_right = Optimize[tr_mini_functions_normalization_before_output|tr_mini_functions_normalization_before_no_parenthesis_output|context_moins_maths_value_parenthesis|((tr_maths_value_input|tr_maths_value_output) space (tr_total_article? tr_functions_input|total_symb_operator))|tr_total_article? tr_functions_input];
+
+
+
+rw_space_to_minus_left = Optimize[CDRewrite[tr_space_to_minus, lb_nopunc context_space_to_minus_left, context_basic_operation_right rb_nopunc, star]];
+rw_space_to_minus_right = Optimize[CDRewrite[tr_space_to_minus, lb_nopunc, context_space_to_minus_right rb_nopunc, star]];
+
+#_______________________________________________________________________________________________
+
+###Output from function inverse is (for the moment) in before so no need to add more context
+context_one_symb_operation_left = Optimize[tr_mini_functions_normalization_before_output space|tr_mini_functions_normalization_before_no_parenthesis_output space|context_moins_maths_value_parenthesis space|(total_symb_operator space)|(symb_minus? tr_total_article? tr_functions_input space tr_total_article?)];
+
+context_one_symb_operation_right = Optimize[tr_mini_functions_normalization_before_output|tr_mini_functions_normalization_before_no_parenthesis_output|context_moins_maths_value_parenthesis space|total_symb_operator|tr_total_article? tr_functions_input];
+
+
+
+rw_one_symb_operation_left = Optimize[CDRewrite[tr_one_to_digit|tr_maths_symbols|real_number, lb_nopunc context_one_symb_operation_left symb_minus?, rb_nopunc, star]];
+rw_one_symb_operation_right = Optimize[CDRewrite[tr_one_to_digit|tr_maths_symbols|real_number, lb_nopunc symb_minus?, space context_one_symb_operation_right rb_nopunc symb_minus?, star]];
+
+rw_fraction_left = Optimize[CDRewrite[tr_fraction, lb_nopunc context_one_symb_operation_left symb_minus?, rb_nopunc, star]];
+rw_fraction_right = Optimize[CDRewrite[tr_fraction, lb_nopunc symb_minus?, space context_one_symb_operation_right rb_nopunc symb_minus?, star]];
+rw_fraction_alone = Optimize[CDRewrite[tr_fraction, "[BOS]", "[EOS]", star]];
+rw_fraction_context = Optimize[CDRewrite[tr_fraction, lb_nopunc, space tr_articles_of rb_nopunc, star]];
+
+
+#_______________________________________________________________________________________________
+
+rw_functions_normalization = Optimize[CDRewrite[tr_functions_normalization, lb symb_minus?, rb_nopunc, star]];
+rw_pre_article_functions_normalization = Optimize[CDRewrite[tr_pre_article_functions_normalization, lb_nopunc symb_minus?, tr_functions_output symb_parenthesis_open, star]];
+rw_pre_number_functions_normalization = Optimize[CDRewrite[tr_pre_number_functions_normalization, lb_nopunc, tr_functions_output symb_parenthesis_open, star]];
+
+#_______________________________________________________________________________________________
+
+rw_basic_operation_imperative = Optimize[CDRewrite[tr_basic_operation_imperative, lb_nopunc, rb_nopunc, star]];
+
+#_______________________________________________________________________________________________
+
+rw_symbols_context = Optimize[CDRewrite[tr_maths_symbols_context, context_left_symbols_normalization, rb_nopunc, star]];
+
+################################################################################################
+
+
+
+
+
+############################################ Export ############################################
+
+mini_functions = Optimize[rw_mini_functions_normalization_after
+                       @ rw_mini_functions_normalization_before
+                       @ rw_mini_functions_normalization_before_no_parenthesis];
+
+operations = Optimize[rw_digit_factor_constant
+                       @ rw_basic_operation
+                       @ rw_space_to_minus_left
+                       @ rw_space_to_minus_right
+                       @ rw_one_symb_operation_left
+                       @ rw_one_symb_operation_right
+		       @ rw_fraction_left
+		       @ rw_fraction_right
+		       @ rw_fraction_alone
+		       @ rw_fraction_context];
+
+functions = Optimize[rw_functions_normalization
+                   @ rw_pre_article_functions_normalization
+                   @ rw_pre_number_functions_normalization];
+
+imperative = Optimize[rw_basic_operation_imperative];
+
+
+context_normalization = Optimize[rw_symbols_context];
+
+
+export MAIN_1 = mini_functions;
+export MAIN_2 = operations;
+export MAIN_3 = functions;
+export MAIN_4 = imperative;
+export MAIN_5 = context_normalization;
+
+#total = Optimize[mini_functions @ operations @ functions @ imperative @ context_normalization];
+
+#export MAIN = total;
+
+################################################################################################
+
+
+
+
+
+
