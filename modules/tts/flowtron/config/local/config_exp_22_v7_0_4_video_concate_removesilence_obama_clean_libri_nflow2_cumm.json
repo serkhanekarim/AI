@@ -3,7 +3,7 @@
         "language": "en"
     },
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_22_v7_0_4_video_concate_removesilence_obama_clean_libri_nflow2_cumm/outdir",
+        "output_directory": "/home/serkhane/models/tts/flowtron/exp_22_v7_0_4_video_concate_removesilence_obama_clean_libri_nflow2_cumm/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -17,7 +17,7 @@
         "ignore_layers": [],
         "finetune_layers": [],
         "include_layers": [],
-        "warmstart_checkpoint_path": "",
+        "warmstart_checkpoint_path": "/home/serkhane/models/tts/flowtron/exp_20_v7_0_2_video_concate_removesilence_obama_clean_libri_nflow2/outdir/model_276000",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
@@ -27,8 +27,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_train_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
-        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_valid_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
+        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_train_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
+        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_valid_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
