@@ -3,7 +3,7 @@
         "language": "en"
     },
     "train_config": {
-        "output_directory": "/home/serkhane/models/tts/flowtron/exp_22_v7_0_4_video_concate_removesilence_obama_clean_libri_nflow2_cumm/outdir",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_29_v7_4_3_mcv_en_0_1_0_removesilence_libri_nflow2_cumm_final_deactivate_att_prior/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -17,7 +17,7 @@
         "ignore_layers": [],
         "finetune_layers": [],
         "include_layers": [],
-        "warmstart_checkpoint_path": "",
+        "warmstart_checkpoint_path": "/home/ks1/models/tts/flowtron/config_exp_28_v7_4_2_mcv_en_0_1_0_removesilence_libri_nflow2_cumm/outdir/model_69000",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
@@ -27,8 +27,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_train_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
-        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube/en/obama_clean/v2_obama_clean_concate_removesilence/youtube_audio_text_valid_filelist_en_v2_obama_clean_concate_removesilence_obama_clean.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_0_1_0_removesilence/mcv_audio_text_train_filelist_en_None.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/en/v1_mcv_en_0_1_0_removesilence/mcv_audio_text_valid_filelist_en_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
@@ -39,7 +39,7 @@
         "mel_fmin": 0.0,
         "mel_fmax": 8000.0,
         "max_wav_value": 32768.0,
-        "use_attn_prior": true,
+        "use_attn_prior": false,
         "attn_prior_threshold": 1e-4,
         "prior_cache_path": "/attention_prior_cache",
         "betab_scaling_factor": 1.0,
@@ -50,7 +50,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers":  1,
+        "n_speakers": 4,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,

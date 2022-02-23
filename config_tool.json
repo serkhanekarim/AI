@@ -24,22 +24,24 @@
 		"nb_speaker": null
 	},
 	"youtube_data_taflowtron": {
-		"name_train_param_config": "youtube_trimming",
-		"name_data_config": "TEDx",
-		"language": "en",
+		"name_train_param_config": "exp_29_v8_0_video_concate_removesilence_macron_clean_libri",
+		"name_data_config": "v2_concate_removesilence_manualclean",
+		"language": "fr",
 		
 		"data_directory": null,
 		"directory_taflowtron_filelist": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists",
 		"path_hparam_file": "/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json",
 		"path_symbols_file": null,
-		"path_list_url": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/en/obama_clean.txt",
-		"path_youtube_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/en/youtube_subtitle_cleaner_flowtron.tsv",
+		"path_list_url": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/fr/macron.txt",
+		"path_youtube_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/fr/youtube_subtitle_cleaner_flowtron.tsv",
+		"path_local_subtitle_audio": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/fr/macron.tsv",
+		"detect_subtitle": false,
 		
-		"converter": true,
-		"silence": "",
+		"converter": false,
+		"silence": "remove",
 		"silence_threshold": null,
 		"remove_noise": false,
-		"audio_normalization": false,
+		"audio_normalization": true,
 		"generated_subtitle": false,
 		"concatenate_vtt": true,
 		"max_limit_duration": 10000,
@@ -48,7 +50,7 @@
 		"tts_model": "flowtron",
 		"warmstart_model": "flowtron_libritts2p3k.pt",
 		"batch_size": null,
-		"nb_speaker": null
+		"nb_speaker": 1
 	},
 	"collect_news_data":{
 		"data_directory": null,

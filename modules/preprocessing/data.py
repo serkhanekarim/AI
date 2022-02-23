@@ -311,7 +311,7 @@ class DataPreprocessor:
         
         return list_time, list_subtitle
     
-    def get_ITN_data(self, data_text, data_option=None, regex_match=re.compile('[^a-zA-Z-\']+')):
+    def get_ITN_data(self, data_text, data_option=None, language="en"):
         '''
         Find ITN/symbols elements in text
 
@@ -323,6 +323,8 @@ class DataPreprocessor:
             list containing other data for instance audio path related to the data_text        
         regex_match : string
             regex to use to match required symbols
+        language : string
+            language to match word regarding language
         
         Returns
         -------
@@ -332,7 +334,13 @@ class DataPreprocessor:
         '''
         
         regex_match_only_digit = re.compile('^\d+\.?$')
-        regex_match_punctuation = re.compile('[a-zA-Z]{3,}[,.;:]')
+        
+        if language == "en":
+            regex_match=re.compile('[^a-zA-Z-\']+')
+            regex_match_punctuation = re.compile('[a-zA-Z]{3,}[,.;:]')
+        if language == "fr":
+            regex_match=re.compile('[^ABCDEFGHIJKLMNOPQRSTUVWXYZÉÈÊËÂÀÄÙÛÜÎÏÔÖŸÆŒÇabcdefghijklmnopqrstuvwxyzéèêëâàäùûüîïôöÿæœç\-\']+')
+            regex_match_punctuation = re.compile('[ABCDEFGHIJKLMNOPQRSTUVWXYZÉÈÊËÂÀÄÙÛÜÎÏÔÖŸÆŒÇabcdefghijklmnopqrstuvwxyzéèêëâàäùûüîïôöÿæœç\-\']{3,}[,.;:]')
         
         if data_option is not None:
             return [word + "\t" + sentence + "\t" + data_option[index] for index,sentence in enumerate(tqdm(data_text)) for word in sentence.split() if re.search(regex_match,word) is not None and re.search(regex_match_only_digit,word) is None and re.search(regex_match_punctuation,word) is None]

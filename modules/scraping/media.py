@@ -39,6 +39,7 @@ class MediaScraper:
             Return the path of the audio and the subtitle
 
         '''
+        #if subtitle_language == "fr": subtitle_language = "fr-FR"
         command_get_id = "youtube-dl " + url + " --get-id"
         youtube_id = subprocess.check_output(command_get_id, text=True, shell=True)[:-1]
         if generated_subtitle: 

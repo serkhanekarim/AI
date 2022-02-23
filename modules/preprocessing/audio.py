@@ -321,14 +321,19 @@ class AudioPreprocessor:
         silence_mel_padding = 0
         silence_audio_size = trim_hop_size * silence_mel_padding
         
+        #print(path_input)
         data, sampling_rate = librosa.core.load(path_input, sr)
         if data.size !=0:
+            data_backup = data
             data = data / np.abs(data).max() *0.999
             data_= librosa.effects.trim(data, top_db= trim_top_db, frame_length=trim_fft_size, hop_length=trim_hop_size)[0]
             data_ = data_*max_wav_value
             data_ = np.append(data_, [0.]*silence_audio_size)
             data_ = data_.astype(dtype=np.int16)
-            write(path_input, sr, data_)
+            if data.size !=0:
+                write(path_input, sr, data_)
+            else:
+                write(path_input, sr, data_backup)
         
     def trim_silence(self, path_input, path_output, replace=False):
         '''

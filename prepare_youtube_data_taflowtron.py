@@ -20,6 +20,7 @@ from tqdm import tqdm
 from multiprocessing import Pool
 import csv
 import re
+import librosa
 
 def main(args, project_name):
     '''
@@ -72,6 +73,8 @@ def main(args, project_name):
     path_symbols_file = args["path_symbols_file"]
     path_list_url = args["path_list_url"]
     path_youtube_cleaner = args["path_youtube_cleaner"]
+    detect_subtitle = args["detect_subtitle"]
+    path_local_subtitle_audio = args["path_local_subtitle_audio"]
     converter = args["converter"]
     silence = args["silence"]
     silence_threshold = args["silence_threshold"]
@@ -95,29 +98,45 @@ def main(args, project_name):
     ITN_symbols = []
     voice_id = 0
     total_set_audio_length = 0
-    source = Method().get_filename(path_list_url)
-    
-    '''
-    Get audio and subtitle from youtube url
-    '''
-    list_url = DataReader(path_list_url).read_data_file()
-    list_url = [line[:-1] for line in list_url]
     
     obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
     cleaner_youtube = DataReader(path_youtube_cleaner).read_data_file(**obj)
+    
+    if not detect_subtitle:
+        '''
+        Get local path
+        '''
+        source = Method().get_filename(path_local_subtitle_audio)
+        obj = {'header':None, 'na_filter':False, 'quoting':csv.QUOTE_NONE}
+        data_path_subtitle_audio = DataReader(path_local_subtitle_audio).read_data_file(**obj)
+        list_path_audio = list(data_path_subtitle_audio[data_path_subtitle_audio.columns[0]])
+        list_path_subtitle = list(data_path_subtitle_audio[data_path_subtitle_audio.columns[1]])
+        list_url = range(len(list_path_subtitle))
+    else:
+        '''
+        Get audio and subtitle from youtube url
+        '''
+        source = Method().get_filename(path_list_url)
+        list_url = DataReader(path_list_url).read_data_file()
+        list_url = [line[:-1] for line in list_url]
     
     for url in tqdm(list_url):
         
         '''
         Download audio and subtitle from youtube using youtube-dl
         '''
-        dir_original_youtube_data = os.path.join(data_directory,language,'original')
-        os.makedirs(dir_original_youtube_data,exist_ok=True)
-        path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
-                                                                          audio_format=AUDIO_FORMAT, 
-                                                                          subtitle_language=language, 
-                                                                          directory_output=dir_original_youtube_data,
-                                                                          generated_subtitle=generated_subtitle)
+        if detect_subtitle:
+            dir_original_youtube_data = os.path.join(data_directory,language,'original')
+            os.makedirs(dir_original_youtube_data,exist_ok=True)
+            path_subtitle, path_audio = MediaScraper().get_audio_youtube_data(url=url, 
+                                                                              audio_format=AUDIO_FORMAT, 
+                                                                              subtitle_language=language, 
+                                                                              directory_output=dir_original_youtube_data,
+                                                                              generated_subtitle=generated_subtitle)
+        else:
+            path_subtitle = list_path_subtitle[url]
+            path_audio = list_path_audio[url]
+            
         if re.search('NO_(MANUAL|GENERATED)_SUBTITLE\.vtt',path_subtitle) is not None:
             continue
         base = os.path.basename(path_audio)
@@ -177,11 +196,19 @@ def main(args, project_name):
             list_arg = [(audio_path, 
                          os.path.join(dir_audio_data_files_trimmed,Method().get_filename(audio_path) + "." + AUDIO_FORMAT),
                          True) for audio_path in list_trimmed_audio_path]
+            print("Removing all silences found in the middle, at the beginning and at the end...")
             with Pool(processes=nb_max_parallelized_process) as pool:
                 pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
             shutil.rmtree(dir_audio_data_files_trimmed)
             
+            print("Removing audio ")
+            id_audio_to_keep = [index for index in tqdm(range(len(list_trimmed_audio_path))) if librosa.get_duration(filename=list_trimmed_audio_path[index]) != 0]
+            list_subtitle = [list_subtitle[index] for index in id_audio_to_keep]
+            list_trimmed_audio_path = [list_trimmed_audio_path[index] for index in id_audio_to_keep]
+            list_time = [list_time[index] for index in id_audio_to_keep]
+            
             list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
+            print("Removing all silences found in beginninig and at the end...")
             with Pool(processes=nb_max_parallelized_process) as pool:
                 pool.starmap(AudioPreprocessor().trim_lead_trail_silence, tqdm(list_arg))
         
@@ -213,17 +240,20 @@ def main(args, project_name):
         Get ITN symbols from subtitles
         '''
         print("Getting ITN symbols from data...")
-        ITN_symbols += DataPreprocessor().get_ITN_data(data_text=list_subtitle, data_option=list_trimmed_audio_path)
+        ITN_symbols += DataPreprocessor().get_ITN_data(data_text=list_subtitle, data_option=list_trimmed_audio_path, language=language)
+    
+        '''
+        Create taflowtron filelist and data information
+        '''
+        print("Get data information...")
+        list_duration = [librosa.get_duration(filename=audio_path) for audio_path in tqdm(list_trimmed_audio_path)]
         
         '''
         Update audio path for cluster
         '''
         list_trimmed_audio_path = [audio_path.replace(data_directory,dir_cluster_data) for audio_path in list_trimmed_audio_path]
-    
-        '''
-        Create taflowtron filelist and data information
-        '''
-        list_duration = [(time[1]-time[0])/1000 for time in list_time]
+        
+        #list_duration = [(time[1]-time[0])/1000 for time in list_time]
         list_average_duration = [sum(list_duration)/len(list_duration)]*len(list_duration)
         list_total_video_extraction = [sum(list_duration)/3600]*len(list_duration)
         total_set_audio_length += sum(list_duration)
