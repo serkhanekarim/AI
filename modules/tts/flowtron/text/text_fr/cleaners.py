@@ -22,24 +22,25 @@ from .urls import normalize_url
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r'\s+')
+_beg_end_whitespace_re = re.compile(r'^\s+|\s+$')
 
 # List of (regular expression, replacement) pairs for abbreviations:
 _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in [
     ('mrs', 'misess'),
     ('ms', 'miss'),
-    ('mr', 'mister'),
-    ('dr', 'doctor'),
+    ('mr', 'monsieur'),
+    ('dr', 'docteur'),
     ('st', 'saint'),
     ('co', 'company'),
     ('jr', 'junior'),
     ('maj', 'major'),
-    ('gen', 'general'),
-    ('drs', 'doctors'),
+    ('gen', 'général'),
+    ('drs', 'docteurs'),
     ('rev', 'reverend'),
     ('lt', 'lieutenant'),
     ('hon', 'honorable'),
-    ('sgt', 'sergeant'),
-    ('capt', 'captain'),
+    ('sgt', 'sergent'),
+    ('capt', 'capitaine'),
     ('esq', 'esquire'),
     ('ltd', 'limited'),
     ('col', 'colonel'),
@@ -47,7 +48,7 @@ _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in 
 ]]
 
 _safe_abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in [
-    ('no', 'number'),
+    ('no', 'numéro'),
 ]]
 
 
@@ -79,8 +80,8 @@ def lowercase(text):
 
 
 def collapse_whitespace(text):
-    return re.sub(_whitespace_re, ' ', text)
-
+    text = re.sub(_whitespace_re, ' ', text)
+    return re.sub(_beg_end_whitespace_re, '', text)
 
 def separate_acronyms(text):
     text = re.sub(r"([0-9]+)([a-zA-Z]+)", r"\1 \2", text)
@@ -118,13 +119,14 @@ def flowtron_cleaners(text):
     text = remove_hyphens(text)
     text = expand_datestime(text)
     text = expand_numbers(text)
+    text = collapse_whitespace(text)
     text = expand_safe_abbreviations(text)
     text = expand_acronyms(text)
     return text
 
 
 def english_cleaners(text):
-    '''Pipeline for English text, with number and abbreviation expansion.'''
+    '''Pipeline for French text, with number and abbreviation expansion.'''
     text = convert_to_ascii(text)
     text = lowercase(text)
     text = expand_numbers(text)

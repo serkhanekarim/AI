@@ -9,7 +9,7 @@ from text.text_en import cmudict
 _punctuation = '!\'",.:;? '
 _math = '#%&*+-/[]()'
 _special = '_@©°½—₩€$'
-_accented = 'áçéêëñöøćž'
+_accented = 'ÉÈÊËÂÀÄÙÛÜÎÏÔÖŸéèêëâàäùûüîïôöÿæœç'
 _numbers = '0123456789'
 _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 

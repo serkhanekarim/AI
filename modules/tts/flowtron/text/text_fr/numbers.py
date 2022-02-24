@@ -1,14 +1,13 @@
 """ from https://github.com/keithito/tacotron """
 
-import inflect
+from num2words import num2words
 import re
 
-_large_numbers = '(trillion|billion|million|thousand|hundred)'
+_large_numbers = '(trillion|billion|million|mille|cent)'
 
-_measurements = '(f|c|k|d)'
-_measurements_key = {'f': 'fahrenheit', 'c': 'celsius', 'k': 'thousand', 'd': 'd'}
+_measurements = '(f|c|k)'
+_measurements_key = {'f': 'fahrenheit', 'c': 'celsius', 'k': 'mille'}
 
-_inflect = inflect.engine()
 _comma_number_re = re.compile(r'([0-9][0-9\,]+[0-9])')
 _decimal_number_re = re.compile(r'([0-9]+\.[0-9]+)')
 
@@ -17,13 +16,13 @@ _dollars_re = re.compile(r'\$([0-9\.\,]*[0-9]+[ ]?{}?)'.format(_large_numbers), 
 
 _measurement_re = re.compile(r'([0-9\.\,]*[0-9]+(\s)?{}\b)'.format(_measurements), re.IGNORECASE)
 
-_ordinal_re = re.compile(r'\d+(st|nd|rd|th)')
-_number_re = re.compile(r"(\b([12]\d)?\d0'?s\b)|\d+")
+_ordinal_re = re.compile(r'(\d+)(i?[éèe]mes?|i?ere?s?|st|nde?s?|th|es?)')
+_number_re = re.compile(r"(\d+)")
 
 _percent_re = re.compile(r'\d(\s?%)')
 
 def _remove_commas(m):
-  return m.group(1).replace(',', '')
+  return m.group(1).replace(',', ' virgule ')
 
 
 def _expand_decimal_point(m):
@@ -45,27 +44,27 @@ def _expand_dollars(m):
     cents = int(parts[1]) if len(parts) > 1 and parts[1] else 0
     if dollars and cents:
         dollar_unit = 'dollar' if dollars == 1 else 'dollars'
-        cent_unit = 'cent' if cents == 1 else 'cents'
+        cent_unit = 'centime' if cents == 1 else 'centimes'
         return "{} {}, {} {} ".format(
-            _inflect.number_to_words(dollars), dollar_unit,
-            _inflect.number_to_words(cents), cent_unit)
+            num2words(str(dollars),lang="fr"), dollar_unit,
+            num2words(str(cents),lang="fr"), cent_unit)
     elif dollars:
         dollar_unit = 'dollar' if dollars == 1 else 'dollars'
-        return "{} {} ".format(_inflect.number_to_words(dollars), dollar_unit)
+        return "{} {} ".format(num2words(str(dollars),lang="fr"), dollar_unit)
     elif cents:
-        cent_unit = 'cent' if cents == 1 else 'cents'
-        return "{} {} ".format(_inflect.number_to_words(cents), cent_unit)
+        cent_unit = 'centime' if cents == 1 else 'centimes'
+        return "{} {} ".format(num2words(str(cents),lang="fr"), cent_unit)
     else:
-        return 'zero dollars'
+        return 'zéro dollars'
 
 
 def _expand_ordinal(m):
-    return _inflect.number_to_words(m.group(0))
+    return num2words(m.group(0),lang="fr", to="ordinal")
 
 
 def _expand_measurement(m):
     _, number, measurement = re.split('(\d+(?:\.\d+)?)', m.group(0))
-    number = _inflect.number_to_words(number)
+    number = num2words(number,lang="fr")
     measurement = "".join(measurement.split())
     measurement = _measurements_key[measurement.lower()]
     return "{} {}".format(number, measurement)
@@ -73,37 +72,14 @@ def _expand_measurement(m):
 def _expand_percents(m):   
     if re.match(r'\s',m.group(1)[0]) is None:
         #if there is a space between the digit and the percent symbol
-        return m.group(0).replace("%","percent")
+        return m.group(0).replace("%","pour cent")
     else:
         #Else add a space
-        return m.group(0).replace("%"," percent")
+        return m.group(0).replace("%"," pour cent")
 
 
 def _expand_number(m):
-    _, number, suffix = re.split(r"(\d+(?:'\d+)?)", m.group(0))
-    num = int(number)
-    if num > 1000 and num < 3000:
-        if num == 2000:
-            text = 'two thousand'
-        elif num > 2000 and num < 2010:
-            text = 'two thousand ' + _inflect.number_to_words(num % 100)
-        elif num % 100 == 0:
-            text = _inflect.number_to_words(num // 100) + ' hundred'
-        else:
-            num = _inflect.number_to_words(num, andword='', zero='oh', group=2).replace(', ', ' ')
-            num = re.sub(r'-', ' ', num)
-            text = num
-    else:
-        num = _inflect.number_to_words(num, andword='')
-        num = re.sub(r'-', ' ', num)
-        num = re.sub(r',', '', num)
-        text = num
-
-    if re.match("'?s",suffix) is not None and text[-1] == 'y':
-        #For centuries
-        text = text[:-1] + 'ies'
-
-    return text
+    return num2word(m.group(0),lang="fr")
 
 
 def normalize_numbers(text):
