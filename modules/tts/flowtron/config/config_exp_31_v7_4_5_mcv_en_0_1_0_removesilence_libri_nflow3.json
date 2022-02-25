@@ -3,7 +3,7 @@
         "language": "en"
     },
     "train_config": {
-        "output_directory": "/home/ks1/models/tts/flowtron/exp_31_v7_4_(_mcv_en_0_1_0_removesilence_libri_nflow3/outdir",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_31_v7_4_5_mcv_en_0_1_0_removesilence_libri_nflow3/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
