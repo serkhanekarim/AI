@@ -11,6 +11,8 @@ from modules.Global.variable import Var
 from modules.preprocessing.cleaner import DataCleaner
 from modules.preprocessing.time import TimePreprocessor
 
+import librosa
+
 class DataPreprocessor:
     '''
     Class used to make data preprocessor
@@ -139,6 +141,10 @@ class DataPreprocessor:
             list_user.append(res[index][0])
             list_number_element.append(res[index][1].shape[0])
             list_user_df.append(res[index][1])
+            # print(list_user_df)
+            # print(self.dataframe)
+            # print(index)
+            # print(res[index][1])
             if option_column is not None: list_option_element.append(list(list_user_df[index][option_column].unique())[0])
         
         data_info = pd.DataFrame({user_column:list_user,element_column:list_number_element,option_column:list_option_element},columns=[user_column, element_column, option_column])  
@@ -155,6 +161,7 @@ class DataPreprocessor:
             list_audio_path = []
             list_subtitle = []
             list_speaker_id = []
+            list_duration = []
             dir_to_create = []
             list_original_path = []
             for index, user in enumerate(tqdm(list_user)):
@@ -165,10 +172,13 @@ class DataPreprocessor:
                 nb_part = len_table // (self.NB_LIMIT_FILE_CLUSTER + 1)
                 part_extension = ["part_" + str(index) for index in range(nb_part+1)]
                 dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
-                list_original_path += [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
+                list_original_path_user = [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
+                list_original_path += list_original_path_user
                 list_audio_path += [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
                 list_subtitle += list(table[element_column])
                 list_speaker_id += [str(index)]*len_table
+                list_duration.append(sum([librosa.get_duration(filename=file) for file in list_original_path_user]))
+            data_info["Duration"] = list_duration
             return list_audio_path, list_subtitle, list_speaker_id, data_info, len(list_user), dir_to_create, list_original_path
     
     def _useless_data(self, data):

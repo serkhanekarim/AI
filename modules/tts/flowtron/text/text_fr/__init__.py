@@ -117,4 +117,4 @@ def files_to_list(filename):
     files = [f.rstrip() for f in files]
     return files
 
-HETERONYMS = set(files_to_list('data/heteronyms'))
+HETERONYMS = set(files_to_list('data/heteronyms_fr-FR'))

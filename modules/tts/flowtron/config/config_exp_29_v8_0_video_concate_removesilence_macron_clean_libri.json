@@ -25,8 +25,8 @@
     },
     "data_config": {
     	"language": "en",
-        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/fr/macron/v2_concate_removesilence_manualclean/youtube_audio_text_train_filelist_fr_v2_concate_removesilence_manualclean_macron.txt",
-        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/fr/macron/v2_concate_removesilence_manualclean/youtube_audio_text_valid_filelist_fr_v2_concate_removesilence_manualclean_macron.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/fr/macron/v2_concate_removesilence_onlybegend_manualclean/youtube_audio_text_train_filelist_fr_v2_concate_removesilence_onlybegend_manualclean_macron.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/youtube/fr/macron/v2_concate_removesilence_onlybegend_manualclean/youtube_audio_text_valid_filelist_fr_v2_concate_removesilence_onlybegend_manualclean_macron.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",

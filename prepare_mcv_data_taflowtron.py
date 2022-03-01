@@ -21,6 +21,8 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 from multiprocessing import Pool
 
+import librosa
+
 def main(args, project_name):
     '''
     Prepare Mozilla common voice data for Tacotron2 and Flowtron
@@ -79,7 +81,9 @@ def main(args, project_name):
     path_hparam_file = args["path_hparam_file"]
     path_symbols_file = args["path_symbols_file"]
     path_speaker_whitelist = args["path_speaker_whitelist"]
-    silence = args["silence"]
+    silence_begend = args["silence_begend"]
+    more_silence = args["more_silence"]
+    add_silence = args["add_silence"]
     silence_threshold = args["silence_threshold"]
     remove_noise = args["remove_noise"]
     audio_normalization = args["audio_normalization"]
@@ -175,7 +179,7 @@ def main(args, project_name):
     '''
     Add and/or Remove leading and trailing silence and/or convert audio
     '''
-    if silence == "remove":
+    if more_silence:
         print("Revoming leading/middle/trailing silence and convert audio...")
         dir_audio_data_files_trimmed = os.path.join(data_directory,language,'_temp_clips_trimmed')
         os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
@@ -186,11 +190,17 @@ def main(args, project_name):
             pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
         shutil.rmtree(dir_audio_data_files_trimmed)
         
+        print("Removing empty audio...")
+        id_audio_to_keep = [index for index in tqdm(range(len(list_audio_path_preprocessing))) if librosa.get_duration(filename=list_audio_path_preprocessing[index]) != 0]
+        list_subtitle = [list_subtitle[index] for index in id_audio_to_keep]
+        list_audio_path_preprocessing = [list_audio_path_preprocessing[index] for index in id_audio_to_keep]
+    
+    if silence_begend:    
         list_arg = [(audio_path, audio_path) for audio_path in list_audio_path_preprocessing]
         with Pool(processes=nb_max_parallelized_process) as pool:
             pool.starmap(AudioPreprocessor().trim_lead_trail_silence, tqdm(list_arg))
  
-    if silence == "add":
+    if add_silence:
         print("Padding silence...")
         list_arg = [(audio_path,audio_path,silence_threshold,True,True) for audio_path in tqdm(list_audio_path_preprocessing)]
         with Pool(processes=nb_max_parallelized_process) as pool:

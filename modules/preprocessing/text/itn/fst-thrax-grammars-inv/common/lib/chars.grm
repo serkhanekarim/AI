@@ -1,0 +1,26 @@
+emoticon = ":-)" | ";-)" | ":-(" | ":-|" | ":-/";
+
+interp = "," | ":" | "{" | "}" | "(" | ")" | "@" | "!" | "?" | "_"
+    | "'" | ";" | "\"";
+
+punc_not_dot = emoticon | interp; 
+
+export Punc = Optimize["." | interp];
+
+export PuncToDel = Optimize["." | punc_not_dot];
+
+export PuncInitialDot = Optimize["." punc_not_dot*];
+
+export DelPunc = Optimize[PuncToDel+ : ""];
+export DelPuncExceptDot = Optimize[(PuncToDel+ - PuncInitialDot) : ""];
+
+export ErasePunc = Optimize[PuncToDel+ : " "];
+export ErasePuncExceptDot = Optimize[(PuncToDel+ - PuncInitialDot) : " "];
+
+func Respace[star] {
+    return Optimize[
+        CDRewrite[" "+ : " ", "", "", star]
+        @ CDRewrite[" " : "", "[BOS]", "", star]
+        @ CDRewrite[" " : "", "", "[EOS]", star]
+    ];
+}

@@ -76,7 +76,9 @@ def main(args, project_name):
     detect_subtitle = args["detect_subtitle"]
     path_local_subtitle_audio = args["path_local_subtitle_audio"]
     converter = args["converter"]
-    silence = args["silence"]
+    silence_begend = args["silence_begend"]
+    more_silence = args["more_silence"]
+    add_silence = args["add_silence"]
     silence_threshold = args["silence_threshold"]
     remove_noise = args["remove_noise"]
     audio_normalization = args["audio_normalization"]
@@ -189,7 +191,7 @@ def main(args, project_name):
         '''
         Add and/or Remove leading and trailing silence and/or convert audio
         '''
-        if silence == "remove":
+        if more_silence:
             print("Revoming leading/middle/trailing silence and convert audio...")
             dir_audio_data_files_trimmed = os.path.join(data_directory,language,source,name_data_config,youtube_code,'_temp_clips_trimmed')
             os.makedirs(dir_audio_data_files_trimmed,exist_ok=True)
@@ -201,18 +203,19 @@ def main(args, project_name):
                 pool.starmap(AudioPreprocessor().trim_silence, tqdm(list_arg))
             shutil.rmtree(dir_audio_data_files_trimmed)
             
-            print("Removing audio ")
+            print("Removing empty audio...")
             id_audio_to_keep = [index for index in tqdm(range(len(list_trimmed_audio_path))) if librosa.get_duration(filename=list_trimmed_audio_path[index]) != 0]
             list_subtitle = [list_subtitle[index] for index in id_audio_to_keep]
             list_trimmed_audio_path = [list_trimmed_audio_path[index] for index in id_audio_to_keep]
             list_time = [list_time[index] for index in id_audio_to_keep]
             
+        if silence_begend:
             list_arg = [(audio_path, audio_path) for audio_path in list_trimmed_audio_path]
-            print("Removing all silences found in beginninig and at the end...")
+            print("Removing all silences found in beginning and at the end...")
             with Pool(processes=nb_max_parallelized_process) as pool:
                 pool.starmap(AudioPreprocessor().trim_lead_trail_silence, tqdm(list_arg))
         
-        if silence == "add":
+        if add_silence:
             print("Padding silence...")
             list_arg = [(audio_path,audio_path,silence_threshold,True,True) for audio_path in tqdm(list_trimmed_audio_path)]
             with Pool(processes=nb_max_parallelized_process) as pool:

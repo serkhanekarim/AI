@@ -1,7 +1,0 @@
-functions.dict: For normalazing any functions: cosinus de 5 ----> cos(5)
-functions_before.dict: 5 exposant 4 ----> 5^(4)
-functions_before_no_parenthesis.dict: 5 au carré ----> 5^(2)
-functions_inverse.dict: Le carré de 5 ----> 5^(2)
-symbols.dict: For normalizing maths constant in a maths operation context
-symbols_context.dict: Normalizing below symbols regarding value request context in sentence (symbols_context_word.dict): C'est quoi la valeur de pi ----> C'est quoi la valeur de π
-symbols_context_word.dict: Words in sentence to be accepted as a value request context in sentence

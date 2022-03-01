@@ -1,6 +1,0 @@
-MAIN|règle la taille de l'image sur 16 9e|règle la taille de l'image sur 16:9
-MAIN|règle le format de l'image sur 16 9e|règle le format de l'image sur 16:9
-MAIN|règle la taille de l'image sur 16 9es|règle la taille de l'image sur 16:9
-MAIN|règle le format de l'image sur 16 9es|règle le format de l'image sur 16:9
-#################################################################################################
-MAIN|03/01/2022|03/01/2022
