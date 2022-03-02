@@ -24,7 +24,6 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-    	"language": "en",
         "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/mcv_audio_text_train_filelist_fr_None.txt",
         "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/mcv_audio_text_valid_filelist_fr_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
