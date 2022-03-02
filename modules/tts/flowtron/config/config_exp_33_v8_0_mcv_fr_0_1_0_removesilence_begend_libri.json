@@ -66,6 +66,6 @@
         "use_cumm_attention": false
     },
     "language_config": {
-        "language": "fr",
+        "language": "fr"
     }
 }
