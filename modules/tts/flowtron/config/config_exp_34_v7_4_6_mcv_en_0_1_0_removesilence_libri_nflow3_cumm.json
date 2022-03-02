@@ -39,7 +39,7 @@
         "mel_fmin": 0.0,
         "mel_fmax": 8000.0,
         "max_wav_value": 32768.0,
-        "use_attn_prior": false,
+        "use_attn_prior": true,
         "attn_prior_threshold": 1e-4,
         "prior_cache_path": "/attention_prior_cache",
         "betab_scaling_factor": 1.0,

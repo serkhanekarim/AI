@@ -1,4 +1,7 @@
 {
+    "language_config": {
+        "language": "fr"
+    },
     "train_config": {
         "output_directory": "/home/ks1/models/tts/flowtron/exp_33_v8_0_mcv_fr_0_1_0_removesilence_begend_libri/outdir",
         "epochs": 10000000,
@@ -8,7 +11,7 @@
         "grad_clip_val": 1,
         "sigma": 1.0,
         "iters_per_checkpoint": 1000,
-        "batch_size": 6,
+        "batch_size": 5,
         "seed": 1234,
         "checkpoint_path": "",
         "ignore_layers": ["speaker_embedding.weight"],
@@ -63,8 +66,5 @@
         "dummy_speaker_embedding": false,
         "use_gate_layer": true,
         "use_cumm_attention": false
-    },
-    "language_config": {
-        "language": "fr"
     }
 }
