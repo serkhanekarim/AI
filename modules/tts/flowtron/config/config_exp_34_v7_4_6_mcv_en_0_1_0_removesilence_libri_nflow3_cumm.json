@@ -65,6 +65,6 @@
         "fixed_gaussian": true,
         "dummy_speaker_embedding": false,
         "use_gate_layer": true,
-        "use_cumm_attention": true
+        "use_cumm_attention": false
     }
 }
