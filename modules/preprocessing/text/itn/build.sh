@@ -16,8 +16,8 @@ tar -xvf $TRX.tar.gz
 (
 cd $FST || exit 1
 
-./configure --enable-far=true --enable-pdt=true --enable-mpdt=true
-make
+sudo ./configure --enable-far=true --enable-pdt=true --enable-mpdt=true
+sudo make
 sudo make install
 )
 
@@ -31,7 +31,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 (
 cd $TRX || exit 1
 
-./configure
-make
+sudo ./configure
+sudo make
 sudo make install
 )

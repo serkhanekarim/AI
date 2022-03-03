@@ -79,7 +79,7 @@ def _expand_percents(m):
 
 
 def _expand_number(m):
-    return num2word(m.group(0),lang="fr")
+    return num2words(m.group(0),lang="fr")
 
 
 def normalize_numbers(text):

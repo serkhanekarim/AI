@@ -28,7 +28,7 @@ _letter_to_arpabet = {
     'W': 'd u b l ə v e',
     'X': 'i k s',
     'Y': 'i ɡ ʁ ɛ k',
-    'Z': 'z ɛ d',
+    'Z': 'z ɛ d'
 }
 
 # must ignore roman numerals

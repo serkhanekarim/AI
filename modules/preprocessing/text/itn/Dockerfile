@@ -1,9 +1,9 @@
-FROM ubuntu:21.10
+FROM ubuntu:latest
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y file g++ make sudo gawk tar wget python python3
+RUN apt-get update && apt-get install -y file g++ make sudo gawk tar wget
 COPY . /app/
 WORKDIR /app
-RUN ./build.sh
+RUN sudo ./build.sh
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /app/fst-thrax-grammars-inv/fr-FR/
 RUN cd /app/fst-thrax-grammars-inv/fr-FR/

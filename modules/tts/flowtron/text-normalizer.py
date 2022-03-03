@@ -5,10 +5,10 @@ import os
 import argparse
 import csv
 
-from text.cleaners import basic_cleaners
-from text.cleaners import transliteration_cleaners
-from text.cleaners import flowtron_cleaners
-from text.cleaners import english_cleaners
+from text.text_fr.cleaners import basic_cleaners
+from text.text_fr.cleaners import transliteration_cleaners
+from text.text_fr.cleaners import flowtron_cleaners
+from text.text_fr.cleaners import english_cleaners
 
 from tqdm import tqdm
 
@@ -64,7 +64,7 @@ def main(args):
 
 if __name__ == "__main__":
     
-    #./text-normalizer.py -path_test '/home/serkhane/Repositories/AI/modules/preprocessing/text_normalizer/test/unit_test-main-en.txt' -module_normalizer 'flowtron_cleaners'
+    #./text-normalizer.py -path_test '/home/serkhane/Repositories/AI/modules/preprocessing/text/regex-text-normalization/test' -module_normalizer 'flowtron_cleaners'
     
     PROJECT_NAME = os.path.splitext(os.path.basename(__file__))[0]
     
