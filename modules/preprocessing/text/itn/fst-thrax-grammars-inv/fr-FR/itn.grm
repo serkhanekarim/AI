@@ -1,5 +1,5 @@
 import 'inumerals.grm' as inumerals;
 import 'idate.grm' as idate;
 
-export MAIN1 = inumerals.MAIN; #normalize_numeral
-export MAIN2 = idate.MAIN; #normalize_date
+export INUMERALS = inumerals.MAIN; #normalize_numeral
+export IDATE = idate.MAIN; #normalize_date

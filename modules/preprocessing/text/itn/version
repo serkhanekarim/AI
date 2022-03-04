@@ -2,7 +2,7 @@
 #                                                                                  #
 #  project-name: IIAI - Rodin - Audio                                              #
 #  module-name: ITN                                                                #
-#  module-version: 0.0.4                                                           #
+#  module-version: 0.1.0                                                           #
 #  authors: Karim Serkhane                                                         #
 #  copyright: G42                                                                  #
 #                                                                                  #
@@ -27,5 +27,13 @@
 #-------------------------------------------------------------------------------
 #                                   0.0.4:
 # - Create docker image
+#
+#-------------------------------------------------------------------------------
+#                                   0.1.0:
+# - Update Dockerfile file using conda
+#
+#-------------------------------------------------------------------------------
+#                                   0.1.1:
+# - Add docker build script for compiling grammar and cuild the ITN docker image
 #
 #-------------------------------------------------------------------------------

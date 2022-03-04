@@ -1,0 +1,5 @@
+name: itn
+channels:
+- conda-forge
+dependencies:
+- thrax
