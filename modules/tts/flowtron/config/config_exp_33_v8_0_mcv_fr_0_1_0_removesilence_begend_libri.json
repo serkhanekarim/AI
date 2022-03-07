@@ -1,6 +1,6 @@
 {
     "language_config": {
-        "language": "fr"
+        "language": "en"
     },
     "train_config": {
         "output_directory": "/home/ks1/models/tts/flowtron/exp_33_v8_0_mcv_fr_0_1_0_removesilence_begend_libri/outdir",
