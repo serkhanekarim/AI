@@ -96,9 +96,9 @@ def get_arpabet(word, cmudict, index=0):
         end_symbols = ''
 
     arpabet_suffix = ''
-    if _apostrophe.match(word) is not None and word.lower() != "it's" and word.lower()[-1] == 's':
-        word = word[:-2]
-        arpabet_suffix = ' Z'
+    #if _apostrophe.match(word) is not None and word.lower() != "it's" and word.lower()[-1] == 's':
+    #    word = word[:-2]
+    #    arpabet_suffix = ' Z'
     arpabet = None if word.lower() in HETERONYMS else cmudict.lookup(word)
 
     if arpabet is not None:
