@@ -31,7 +31,7 @@
         "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/mcv_audio_text_valid_filelist_fr_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0,
-        "cmudict_path": "data/ipa_dictionary_fr-FR",
+        "cmudict_path": "data/cmudict_dictionary",
         "sampling_rate": 22050,
         "filter_length": 1024,
         "hop_length": 256,
@@ -50,7 +50,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers": 4,
+        "n_speakers": 3,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,

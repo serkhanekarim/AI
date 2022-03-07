@@ -57,14 +57,14 @@ def load_wav_to_torch(full_path):
 
 
 class Data(torch.utils.data.Dataset):
-    def __init__(self, training_files, validation_files, filter_length, hop_length, win_length,
+    def __init__(self, filelist_path, filter_length, hop_length, win_length,
                  sampling_rate, mel_fmin, mel_fmax, max_wav_value, p_arpabet,
                  cmudict_path, text_cleaners, speaker_ids=None,
                  use_attn_prior=False, attn_prior_threshold=1e-4,
                  prior_cache_path="", betab_scaling_factor=1.0, randomize=True,
                  keep_ambiguous=False, seed=1234):
         self.max_wav_value = max_wav_value
-        self.audiopaths_and_text = load_filepaths_and_text(training_files)
+        self.audiopaths_and_text = load_filepaths_and_text(filelist_path)
         self.use_attn_prior = use_attn_prior
         self.betab_scaling_factor = betab_scaling_factor
         self.attn_prior_threshold = attn_prior_threshold
@@ -164,7 +164,7 @@ class Data(torch.utils.data.Dataset):
                          if random.random() < self.p_arpabet else word
                          for word in words])
         text_norm = torch.LongTensor(text_to_sequence(text))
-        return text_norm, text
+        return text_norm
 
     def __getitem__(self, index):
         # Read audio and text
@@ -177,7 +177,7 @@ class Data(torch.utils.data.Dataset):
                 sampling_rate, self.sampling_rate))
 
         mel = self.get_mel(audio)
-        text_encoded, _ = self.get_text(text)
+        text_encoded = self.get_text(text)
         speaker_id = self.get_speaker_id(speaker_id)
         attn_prior = None
         if self.use_attn_prior:
@@ -274,14 +274,12 @@ if __name__ == "__main__":
 
     filepaths_and_text = load_filepaths_and_text(args.filelist)
     for (filepath, text, speaker_id) in filepaths_and_text:
-        print("speaker id: ", speaker_id)
-        print("text: ", text)
-        text_1, text_2 = mel2samp.get_text(text)
-        print("text norm: ", text_2)
-        print("text encoded: ", text_1)
-        #audio, sr = load_wav_to_torch(filepath)
-        #melspectrogram = mel2samp.get_mel(audio)
-        #filename = os.path.basename(filepath)
-        #new_filepath = args.output_dir + '/' + filename + '.pt'
-        #print(new_filepath)
-        #torch.save(melspectrogram, new_filepath)
+        print("speaker id", speaker_id)
+        print("text", text)
+        print("text encoded", mel2samp.get_text(text))
+        audio, sr = load_wav_to_torch(filepath)
+        melspectrogram = mel2samp.get_mel(audio)
+        filename = os.path.basename(filepath)
+        new_filepath = args.output_dir + '/' + filename + '.pt'
+        print(new_filepath)
+        torch.save(melspectrogram, new_filepath)

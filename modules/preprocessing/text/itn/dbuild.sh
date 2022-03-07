@@ -32,7 +32,9 @@ SCRIPT_DIR=`dirname $SCRIPT`
 
 if [ $1 == "--conda" ]; then
 	cd $SCRIPT_DIR
+	source ~/anaconda3/etc/profile.d/conda.sh
 	conda env create --file environment.yml
+	conda init bash
 	conda activate itn
 fi
 

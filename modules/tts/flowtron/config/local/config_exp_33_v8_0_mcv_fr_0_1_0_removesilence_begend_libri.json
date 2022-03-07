@@ -14,7 +14,7 @@
         "ignore_layers": ["speaker_embedding.weight"],
         "finetune_layers": [],
         "include_layers": ["encoder", "embedding"],
-        "warmstart_checkpoint_path": "/home/serkhane/models/tts/flowtron/flowtron_libritts2p3k.pt",
+        "warmstart_checkpoint_path": "/home/serkhane/models/tts/flowtron/flowtron_ljs.pt",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
@@ -27,7 +27,7 @@
         "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/local/mcv_audio_text_train_filelist_fr_None.txt",
         "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/local/mcv_audio_text_valid_filelist_fr_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
-        "p_arpabet": 1.0,
+        "p_arpabet": 1,
         "cmudict_path": "data/ipa_dictionary_fr-FR",
         "sampling_rate": 22050,
         "filter_length": 1024,
@@ -47,7 +47,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers": 4,
+        "n_speakers": 3,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,

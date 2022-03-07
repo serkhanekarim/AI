@@ -1,0 +1,364 @@
+euro	EUR
+euros	EUR
+dinar	DZD
+dinars	DZD
+won	KRW
+wons	KRW
+yen	JPY
+yens	JPY
+dollar	USD
+dollars	USD
+dirham	AED
+dirhams	AED
+franc	FRF
+francs	FRF
+franc cfa	XOF
+francs cfa	XOF
+roupie	INR
+roupies	INR
+shilling	KES
+shillings	KES
+kwacha	ZMW
+kwachas	ZMW
+manat	AZN
+manats	AZN
+rouble	RUB
+roubles	RUB
+riyal	SAR
+riyals	SAR
+rial	IRR
+rials	IRR
+peso	MXN
+pesos	MXN
+florin	ANG
+florins	ANG
+guaraní	PYG
+guaranís	PYG
+leu	RON
+leus	RON
+dinar algérien	DZD
+dinars algériens	DZD
+livre égyptienne	EGP
+livres égyptiennes	EGP
+dinar libyen	LYD
+dinars libyens	LYD
+dirham marocain	MAD
+dirhams marocains	MAD
+ouguiya	MRU
+ouguiyas	MRU
+livre soudanaise	SDG
+livres soudanaises	SDG
+dinar tunisien	TND
+dinars tunisiens	TND
+franc cfa uemoa	XOF
+francs cfa uemoa	XOF
+escudo du cap-vert	CVE
+escudos du cap-vert	CVE
+dalasi	GMD
+dalasis	GMD
+cedi	GHS
+cedis	GHS
+franc guinéen	GNF
+francs guinéens	GNF
+dollar libérien	LRD
+dollars libériens	LRD
+naira	NGN
+nairas	NGN
+leone	SLL
+leones	SLL
+franc cfa cemac	XAF
+francs cfa cemac	XAF
+franc congolais	CDF
+francs congolais	CDF
+dobra	STD
+dobras	STD
+franc burundais	BIF
+francs burundais	BIF
+franc de djibouti	DJF
+francs de djibouti	DJF
+nakfa	ERN
+nakfas	ERN
+birr	ETB
+birrs	ETB
+shilling kényan	KES
+shillings kényans	KES
+shilling ougandais	UGX
+shillings ougandais	UGX
+franc rwandais	RWF
+francs rwandais	RWF
+roupie seychelloise	SCR
+roupies seychelloises	SCR
+shilling somalien	SOS
+shillings somaliens	SOS
+livre sud-soudanaise	SSP
+livres sud-soudanaises	SSP
+shilling tanzanien	TZS
+shillings tanzaniens	TZS
+rand	ZAR
+rands	ZAR
+kwanza	AOA
+kwanzas	AOA
+pula	BWP
+pulas	BWP
+couronne norvégienne	NOK
+couronnes norvégiennes	NOK
+franc comorien	KMF
+francs comoriens	KMF
+loti	LSL
+lotis	LSL
+ariary	MGA
+ariarys	MGA
+kwacha malawien	MWK
+kwachas malawiens	MWK
+roupie mauricienne	MUR
+roupies mauriciennes	MUR
+metical	MZN
+meticals	MZN
+dollar namibien	NAD
+dollars namibiens	NAD
+livre de sainte-hélène	SHP
+livres de sainte-hélène	SHP
+lilangeni	SZL
+lilangenis	SZL
+kwacha de zambie	ZMW
+kwachas de zambie	ZMW
+kwacha zambien	ZMW
+kwachas zambiens	ZMW
+dollar du zimbabwe	ZWL
+dollars du zimbabwe	ZWL
+tenge	KZT
+tenges	KZT
+som	KGS
+soms	KGS
+sum	UZS
+sums	UZS
+somoni	TJS
+somonis	TJS
+manat turkmène	TMT
+manats turkmènes	TMT
+dram	AMD
+drams	AMD
+manat azerbaïdjanais	AZN
+manats azerbaïdjanais	AZN
+lari	GEL
+laris	GEL
+rouble russe	RUB
+roubles russes	RUB
+yuan	CNY
+yuans	CNY
+renminbi	CNY
+renminbis	CNY
+yuan renminbi	CNY
+yuans renminbis	CNY
+won nord-coréen	KPW
+wons nord-coréens	KPW
+won sud-coréen	KRW
+wons sud-coréens	KRW
+dollar de hong kong	HKD
+dollars de hong kong	HKD
+dollar hongkongais	HKD
+dollars hongkongais	HKD
+pataca	MOP
+patacas	MOP
+tugrik	MNT
+tugriks	MNT
+dollar de taïwan	TWD
+dollars de taïwan	TWD
+nouveau dollar de taïwan	TWD
+nouveaux dollars de taïwan	TWD
+afghani	AFN
+afghanis	AFN
+riyal saoudien	SAR
+riyals saoudiens	SAR
+dinar de bahreïn	BHD
+dinars de bahreïn	BHD
+dirham des émirats arabes unis	AED
+dirhams des émirats arabes unis	AED
+rial iranien	IRR
+rials iraniens	IRR
+dinar irakien	IQD
+dinars irakiens	IQD
+shekel	ILS
+shekels	ILS
+dinar jordanien	JOD
+dinars jordaniens	JOD
+dinar koweïtien	KWD
+dinars koweïtiens	KWD
+livre libanaise	LBP
+livres libanaises	LBP
+rial omanais	OMR
+rials omanais	OMR
+riyal qatari	QAR
+riyals qataris	QAR
+livre syrienne	SYP
+livres syriennes	SYP
+livre turque	TRY
+livres turques	TRY
+riyal yéménite	YER
+riyals yéménites	YER
+kyat	MMK
+kyats	MMK
+dollar de brunei	BND
+dollars de brunei	BND
+riel	KHR
+riels	KHR
+rupiah	IDR
+rupiahs	IDR
+kip	LAK
+kips	LAK
+ringgit	MYR
+ringgits	MYR
+peso philippin	PHP
+pesos philippins	PHP
+dollar de singapour	SGD
+dollars de singapour	SGD
+baht	THB
+bahts	THB
+dollar américain	USD
+dollars américains	USD
+dong	VND
+dongs	VND
+taka	BDT
+takas	BDT
+ngultrum	BTN
+ngultrums	BTN
+roupie indienne	INR
+roupies indiennes	INR
+rufiyaa	MVR
+rufiyaas	MVR
+roupie népalaise	NPR
+roupies népalaises	NPR
+roupie pakistanaise	PKR
+roupies pakistanaises	PKR
+roupie srilankaise	LKR
+roupies srilankaises	LKR
+dollar des bermudes	BMD
+dollars des bermudes	BMD
+dollar canadien	CAD
+dollars canadiens	CAD
+dollar des états-unis	USD
+dollars des états-unis	USD
+couronne danoise	DKK
+couronnes danoises	DKK
+peso mexicain	MXN
+pesos mexicains	MXN
+dollar de belize	BZD
+dollars de belize	BZD
+colon du costa rica	CRC
+colons du costa rica	CRC
+quetzal	GTQ
+quetzals	GTQ
+lempira	HNL
+lempiras	HNL
+cordoba d'or	NIO
+cordobas d'or	NIO
+córdoba oro	NIO
+córdobas oro	NIO
+balboa	PAB
+balboas	PAB
+dollar des caraïbes orientales	XCD
+dollars des caraïbes orientales	XCD
+florin arubais	AWG
+florins arubais	AWG
+dollar des bahamas	BSD
+dollars des bahamas	BSD
+dollar barbadien	BBD
+dollars barbadiens	BBD
+dollar des îles caïmans	KYD
+peso cubain	CUP
+peso cubain convertible	CUC
+florin des antilles néerlandaises	ANG
+florins néerlandaises	ANG
+florin néerlandaises	ANG
+peso dominicain	DOP
+gourde haïtienne	HTG
+dollar jamaïcain	JMD
+dollar trinidadien	TTD
+peso argentin	ARS
+boliviano bolivien	BOB
+réal brésilien	BRL
+peso chilien	CLP
+peso colombien	COP
+livre des îles malouines	FKP
+dollar guyanien	GYD
+guaraní paraguayen	PYG
+nuevo sol péruvien	PEN
+dollar du suriname	SRD
+peso uruguayen	UYU
+bolívar vénézuélien	VES
+lev bulgare	BGN
+kuna croate	HRK
+forint hongrois	HUF
+złoty polonais	PLN
+złoty	PLN
+złotys	PLN
+livre sterling	GBP
+livre de gibraltar	GIP
+couronne suédoise	SEK
+couronne tchèque	CZK
+leu roumain	RON
+lek albanais	ALL
+rouble biélorusse	BYN
+mark convertible	BAM
+couronne islandaise	ISK
+franc suisse	CHF
+denar	MKD
+leu moldave	MDL
+dinar serbe	RSD
+hryvnia	UAH
+dollar australien	AUD
+dollar néo-zélandais	NZD
+dollar de fidji	FJD
+franc pacifique	XPF
+kina	PGK
+dollar des îles salomon	SBD
+tala	WST
+pa'anga	TOP
+vatu	VUV
+dollars des îles caïmans	KYD
+pesos cubains	CUP
+pesos cubains convertibles	CUC
+florins des antilles néerlandaises	ANG
+pesos dominicains	DOP
+gourdes haïtiennes	HTG
+dollars jamaïcains	JMD
+dollars trinidadiens	TTD
+pesos argentins	ARS
+bolivianos boliviens	BOB
+réals brésiliens	BRL
+pesos chiliens	CLP
+pesos colombiens	COP
+livres des îles malouines	FKP
+dollars guyaniens	GYD
+guaranís paraguayens	PYG
+nuevos sol péruvien	PEN
+dollars du suriname	SRD
+pesos uruguayens	UYU
+bolívars vénézuéliens	VES
+levs bulgares	BGN
+kunas croates	HRK
+forints hongrois	HUF
+złotys polonais	PLN
+livres sterling	GBP
+livres de gibraltar	GIP
+couronnes suédoises	SEK
+couronnes tchèques	CZK
+leus roumains	RON
+leks albanais	ALL
+roubles biélorusses	BYN
+marks convertibles	BAM
+couronnes islandaises	ISK
+francs suisses	CHF
+denars	MKD
+leus moldaves	MDL
+dinars serbes	RSD
+hryvnias	UAH
+dollars australiens	AUD
+dollars néo-zélandais	NZD
+dollars de fidji	FJD
+francs pacifiques	XPF
+kinas	PGK
+dollars des îles salomon	SBD
+talas	WST
+pa'angas	TOP
+vatus	VUV

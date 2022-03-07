@@ -1,5 +1,7 @@
 import 'inumerals.grm' as inumerals;
 import 'idate.grm' as idate;
+import 'icurrency.grm' as icurrency;
 
 export INUMERALS = inumerals.MAIN; #normalize_numeral
 export IDATE = idate.MAIN; #normalize_date
+export ICURRENCY = icurrency.MAIN; #normalize_currency
