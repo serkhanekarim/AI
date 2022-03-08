@@ -1,4 +1,4 @@
-\-E\.Macron *\: *	
+\-E\.\s*Macron\s*\:\s*	
 \bANNOUNCER\:	
 ^President Obama\:	
 ^PRESIDENT OBAMA\:	

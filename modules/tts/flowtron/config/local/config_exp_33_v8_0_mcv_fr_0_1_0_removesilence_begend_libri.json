@@ -27,7 +27,7 @@
         "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/local/mcv_audio_text_train_filelist_fr_None.txt",
         "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/local/mcv_audio_text_valid_filelist_fr_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
-        "p_arpabet": 1,
+        "p_arpabet": 0,
         "cmudict_path": "data/ipa_dictionary_fr-FR",
         "sampling_rate": 22050,
         "filter_length": 1024,

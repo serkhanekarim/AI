@@ -26,8 +26,8 @@
 		"nb_speaker": null
 	},
 	"youtube_data_taflowtron": {
-		"name_train_param_config": "exp_NA",
-		"name_data_config": "vNA",
+		"name_train_param_config": "exp_39_v9_0_video_concate_removesilence_onlybegend_manualclean_macron_libri",
+		"name_data_config": "v2_concate_removesilence_onlybegend_manualclean",
 		"language": "fr",
 		
 		"data_directory": null,
@@ -37,7 +37,7 @@
 		"path_list_url": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/fr/macron_add.txt",
 		"path_youtube_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/youtube/fr/youtube_subtitle_cleaner_flowtron.tsv",
 		"path_local_subtitle_audio": "/home/serkhane/Repositories/AI/modules/scraping/sources/url/youtube/fr/macron.tsv",
-		"detect_subtitle": true,
+		"detect_subtitle": false,
 		
 		"converter": false,
 		"silence_begend": true,
