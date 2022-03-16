@@ -1,9 +1,9 @@
 {
     "train_config": {
-        "output_directory": "",
+        "output_directory": "/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
-        "learning_rate": 1e-5,
+        "learning_rate": 1e-3,
         "weight_decay": 1e-6,
         "grad_clip_val": 1,
         "sigma": 1.0,
@@ -11,9 +11,9 @@
         "batch_size": 6,
         "seed": 1234,
         "checkpoint_path": "",
-        "ignore_layers": ["speaker_embedding.weight"],
+        "ignore_layers": [],
         "finetune_layers": [],
-        "include_layers": ["encoder", "embedding"],
+        "include_layers": ["speaker", "encoder", "embedding"],
         "warmstart_checkpoint_path": "",
         "with_tensorboard": true,
         "fp16_run": true,
@@ -24,10 +24,10 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_train_filelist_en.txt",
-        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_valid_filelist_en.txt",
+        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/libritts/libritts_train_clean_100_audiopath_text_sid_shorterthan10s_atleast5min_train_filelist.txt",
+        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/libritts/libritts_train_clean_100_audiopath_text_sid_atleast5min_val_filelist.txt",
         "text_cleaners": ["flowtron_cleaners"],
-        "p_arpabet": 0.0,
+        "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
         "sampling_rate": 22050,
         "filter_length": 1024,
@@ -47,11 +47,11 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers":  1,
+        "n_speakers": 2311,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,
-        "n_flows": 1,
+        "n_flows": 2,
         "n_mel_channels": 80,
         "n_attn_channels": 640,
         "n_hidden": 1024,
@@ -65,6 +65,6 @@
         "use_cumm_attention": false
     },
     "language_config": {
-        "language": "ar"
+        "language": "en"
     }
 }

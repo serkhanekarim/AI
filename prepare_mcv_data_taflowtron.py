@@ -95,7 +95,7 @@ def main(args, project_name):
     if data_directory is None: data_directory = directory_of_data
     
     dir_tts_model = os.path.join('models','tts',tts_model)
-    dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME)
+    dir_cluster_data = os.path.join(DIR_CLUSTER,DATA_FOLDER_NAME,"audio",language)
     #data_information = pd.DataFrame()
     data_filelist = []
     ITN_symbols = []

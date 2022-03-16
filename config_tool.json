@@ -1,17 +1,17 @@
 {
 	"mcv_data_taflowtron": {
-		"name_train_param_config": "exp_33_v8_0_mcv_fr_0_1_0_removesilence_begend_libri",
-		"name_data_config": "v1_mcv_fr_0_1_0_removesilence_begend",
-		"language": "fr",
+		"name_train_param_config": "exp_41_v10_0_mcv_ar_0_1_0_removesilence_begend_libri",
+		"name_data_config": "v2_mcv_ar_0_1_0_removesilence_begend_whitelist",
+		"language": "ar",
 		"gender": null,
 		
 		"data_directory": "/home/serkhane/Repositories/AI/DATA/cv-corpus-8.0-2022-01-19",
 		"directory_file_audio_info": "/home/serkhane/Repositories/AI/DATA/cv-corpus-8.0-2022-01-19",
-		"path_mcv_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/mcv/fr/mcv_cleaner_flowtron.tsv",
+		"path_mcv_cleaner": "/home/serkhane/Repositories/AI/modules/preprocessing/cleaners/mcv/ar/mcv_cleaner_flowtron.tsv",
 		"directory_taflowtron_filelist": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists",
 		"path_hparam_file": "/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json",
 		"path_symbols_file": null,
-		"path_speaker_whitelist": "/home/serkhane/Repositories/AI/modules/scraping/sources/mcv/fr/speaker_whitelist_0.1.0.txt",
+		"path_speaker_whitelist": "/home/serkhane/Repositories/AI/modules/scraping/sources/mcv/ar/speaker_whitelist_0.1.0.txt",
 		
 		"silence_begend": true,
 		"more_silence": false,

@@ -1,6 +1,9 @@
 {
+    "language_config": {
+        "language": "fr"
+    },
     "train_config": {
-        "output_directory": "",
+        "output_directory": "/home/serkhane/models/tts/flowtron/exp_40_v8_0_1_mcv_fr_0_1_0_removesilence_begend_libri/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -14,7 +17,7 @@
         "ignore_layers": ["speaker_embedding.weight"],
         "finetune_layers": [],
         "include_layers": ["encoder", "embedding"],
-        "warmstart_checkpoint_path": "",
+        "warmstart_checkpoint_path": "/home/serkhane/models/tts/flowtron/flowtron_libritts2p3k.pt",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
@@ -24,11 +27,11 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_train_filelist_en.txt",
-        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_valid_filelist_en.txt",
+        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/mcv_audio_text_train_filelist_fr_None.txt",
+        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/mcv/fr/v1_mcv_fr_0_1_0_removesilence_begend/mcv_audio_text_valid_filelist_fr_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
-        "p_arpabet": 0.0,
-        "cmudict_path": "data/cmudict_dictionary",
+        "p_arpabet": 0,
+        "cmudict_path": "data/ipa_dictionary_fr-FR",
         "sampling_rate": 22050,
         "filter_length": 1024,
         "hop_length": 256,
@@ -37,7 +40,7 @@
         "mel_fmax": 8000.0,
         "max_wav_value": 32768.0,
         "use_attn_prior": true,
-        "attn_prior_threshold": 0.0,
+        "attn_prior_threshold": 1e-4,
         "prior_cache_path": "/attention_prior_cache",
         "betab_scaling_factor": 1.0,
         "keep_ambiguous": false
@@ -47,7 +50,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers":  1,
+        "n_speakers": 3,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,
@@ -63,8 +66,5 @@
         "dummy_speaker_embedding": false,
         "use_gate_layer": true,
         "use_cumm_attention": false
-    },
-    "language_config": {
-        "language": "ar"
     }
 }

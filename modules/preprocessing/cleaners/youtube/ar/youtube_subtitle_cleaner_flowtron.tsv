@@ -1,0 +1,19 @@
+\-E\.\s*Macron\s*\:\s*	
+\bANNOUNCER\:	
+^President Obama\:	
+^PRESIDENT OBAMA\:	
+^The President\:	
+.*\n?(.*<\d\d\:\d\d:\d\d\.\d\d\d><c>.*)\n	\1
+<\d\d\:\d\d:\d\d\.\d\d\d><c>	
+</c>	
+<c>	
+\&nbsp\;	
+[\(\[].*[\)\]]	
+^\.\.\.$	
+[‘’]	'
+["«‹»›„“‟”"❝❞❮❯〝〞〟＂‚‘‛❛❜❟—…]	
+--	
+\n	 
+\t	 
+\[.*\]|^\s+|\s+$	
+\s+	 

@@ -2,7 +2,7 @@
 import re
 from text.text_ar import cleaners
 from text.text_ar.symbols import symbols
-#from text.text_ar.symbols import _punctuation as punctuation_symbols
+from text.text_ar.symbols import _punctuation as punctuation_symbols
 
 # Mappings from symbol to numeric ID and vice versa:
 _symbol_to_id = {s: i for i, s in enumerate(symbols)}
@@ -96,9 +96,9 @@ def get_arpabet(word, cmudict, index=0):
         end_symbols = ''
 
     arpabet_suffix = ''
-    if _apostrophe.match(word) is not None and word.lower() != "it's" and word.lower()[-1] == 's':
-        word = word[:-2]
-        arpabet_suffix = ' Z'
+    #if _apostrophe.match(word) is not None and word.lower() != "it's" and word.lower()[-1] == 's':
+    #    word = word[:-2]
+    #    arpabet_suffix = ' Z'
     arpabet = None if word.lower() in HETERONYMS else cmudict.lookup(word)
 
     if arpabet is not None:
@@ -117,4 +117,4 @@ def files_to_list(filename):
     files = [f.rstrip() for f in files]
     return files
 
-HETERONYMS = set(files_to_list('data/heteronyms_ar'))
+HETERONYMS = set(files_to_list('data/heteronyms_ar-AR'))

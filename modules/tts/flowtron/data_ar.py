@@ -26,6 +26,7 @@ from scipy.io.wavfile import read
 from scipy.stats import betabinom
 from audio_processing import TacotronSTFT
 from text.text_ar import text_to_sequence, cmudict, _clean_text, get_arpabet
+from camel_tools.utils.charmap import CharMapper
 
 
 def beta_binomial_prior_distribution(phoneme_count, mel_count,
@@ -158,10 +159,11 @@ class Data(torch.utils.data.Dataset):
         return torch.LongTensor([self.speaker_ids[int(speaker_id)]])
 
     def get_text(self, text):
+        ar2bw = CharMapper.builtin_mapper('ar2bw')
         text = _clean_text(text, self.text_cleaners)
         words = re.findall(r'\S*\{.*?\}\S*|\S+', text)
         text = ' '.join([get_arpabet(word, self.cmudict)
-                         if random.random() < self.p_arpabet else word
+                         if random.random() < self.p_arpabet else ar2bw(word)
                          for word in words])
         text_norm = torch.LongTensor(text_to_sequence(text))
         return text_norm

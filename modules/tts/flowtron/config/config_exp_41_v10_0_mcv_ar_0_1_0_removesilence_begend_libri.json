@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "",
+        "output_directory": "/home/ks1/models/tts/flowtron/exp_41_v10_0_mcv_ar_0_1_0_removesilence_begend_libri/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-5,
@@ -14,7 +14,7 @@
         "ignore_layers": ["speaker_embedding.weight"],
         "finetune_layers": [],
         "include_layers": ["encoder", "embedding"],
-        "warmstart_checkpoint_path": "",
+        "warmstart_checkpoint_path": "/home/ks1/models/tts/flowtron/flowtron_libritts2p3k.pt",
         "with_tensorboard": true,
         "fp16_run": true,
         "gate_loss": true,
@@ -24,11 +24,11 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_train_filelist_en.txt",
-        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/youtube_audio_text_valid_filelist_en.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/ar/v2_mcv_ar_0_1_0_removesilence_begend_whitelist/mcv_audio_text_train_filelist_ar_None.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/mcv/ar/v2_mcv_ar_0_1_0_removesilence_begend_whitelist/mcv_audio_text_valid_filelist_ar_None.txt",
         "text_cleaners": ["flowtron_cleaners"],
-        "p_arpabet": 0.0,
-        "cmudict_path": "data/cmudict_dictionary",
+        "p_arpabet": 0,
+        "cmudict_path": "data/ipa_dictionary_ar-AR",
         "sampling_rate": 22050,
         "filter_length": 1024,
         "hop_length": 256,
@@ -47,7 +47,7 @@
         "dist_url": "tcp://localhost:54321"
     },
     "model_config": {
-        "n_speakers":  1,
+        "n_speakers": 2,
         "n_speaker_dim": 128,
         "n_text": 185,
         "n_text_dim": 512,

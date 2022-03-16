@@ -2,38 +2,38 @@ import re
 from .cmudict import CMUDict
 
 _letter_to_arpabet = {
-    'A': 'EY1',
-    'B': 'B IY1',
-    'C': 'S IY1',
-    'D': 'D IY1',
-    'E': 'IY1',
-    'F': 'EH1 F',
-    'G': 'JH IY1',
-    'H': 'EY1 CH',
-    'I': 'AY1',
-    'J': 'JH EY1',
-    'K': 'K EY1',
-    'L': 'EH1 L',
-    'M': 'EH1 M',
-    'N': 'EH1 N',
-    'O': 'OW1',
-    'P': 'P IY1',
-    'Q': 'K Y UW1',
-    'R': 'AA1 R',
-    'S': 'EH1 S',
-    'T': 'T IY1',
-    'U': 'Y UW1',
-    'V': 'V IY1',
-    'X': 'EH1 K S',
-    'Y': 'W AY1',
-    'W': 'D AH1 B AH0 L Y UW0',
-    'Z': 'Z IY1',
-    's': 'Z'
+
+    'A': 'a',
+    'B': 'b e',
+    'C': 's e',
+    'D': 'd e',
+    'E': 'ə',
+    'F': 'ɛ f',
+    'G': 'ʒ e',
+    'H': 'a ʃ',
+    'I': 'i',
+    'J': 'ʒ i',
+    'K': 'k a',
+    'L': 'ɛ l',
+    'M': 'ɛ m',
+    'N': 'ɛ n',
+    'O': 'o',
+    'P': 'p e',
+    'Q': 'k y',
+    'R': 'ɛ ʁ',
+    'S': 'ɛ s',
+    'T': 't e',
+    'U': 'y',
+    'V': 'v e',
+    'W': 'd u b l ə v e',
+    'X': 'i k s',
+    'Y': 'i ɡ ʁ ɛ k',
+    'Z': 'z ɛ d'
 }
 
 # must ignore roman numerals
 _acronym_re = re.compile(r'([A-Z][A-Z]+)s?|([A-Z]\.([A-Z]\.)+s?)')
-cmudict = CMUDict('data/cmudict_dictionary', keep_ambiguous=False)
+cmudict = CMUDict('data/ipa_dictionary_ar-AR', keep_ambiguous=False)
 
 
 def _expand_acronyms(m, add_spaces=True):

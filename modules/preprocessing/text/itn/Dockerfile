@@ -15,4 +15,4 @@ RUN conda env create --file environment.yml
 #CMD conda init bash && source /root/.bashrc && conda activate itn
 
 # Run live ITN
-CMD ./run_itn.sh fr-FR
+#CMD ./run_itn.sh fr-FR
