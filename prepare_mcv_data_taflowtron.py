@@ -84,6 +84,7 @@ def main(args, project_name):
     silence_begend = args["silence_begend"]
     more_silence = args["more_silence"]
     add_silence = args["add_silence"]
+    duration_minimum_user = args["duration_minimum_user"]
     silence_threshold = args["silence_threshold"]
     remove_noise = args["remove_noise"]
     audio_normalization = args["audio_normalization"]
@@ -137,7 +138,8 @@ def main(args, project_name):
                                                                                                                                                                                         tts=tts_model,
                                                                                                                                                                                         option_column=OPTION_COLUMN,
                                                                                                                                                                                         option_value=gender,
-                                                                                                                                                                                        speaker_whitelist=speaker_whitelist)
+                                                                                                                                                                                        speaker_whitelist=speaker_whitelist,
+                                                                                                                                                                                        duration_minimum_user=duration_minimum_user)
 
     list_audio_path_preprocessing = [os.path.join(dir_audio_data_files_preprocessing,Method().get_filename(audio_path) + "." + AUDIO_FORMAT) for audio_path in list_audio_path_original]
 
@@ -206,7 +208,11 @@ def main(args, project_name):
         with Pool(processes=nb_max_parallelized_process) as pool:
             pool.starmap(AudioPreprocessor().add_lead_trail_audio_wav_silence, tqdm(list_arg))
             
-   
+    print("Removing empty and long audio (>10 seconds)...")
+    id_audio_to_keep = [index for index in tqdm(range(len(list_audio_path_preprocessing))) if 0 < librosa.get_duration(filename=list_audio_path_preprocessing[index]) <= 10]
+    list_subtitle = [list_subtitle[index] for index in id_audio_to_keep]
+    list_audio_path_preprocessing = [list_audio_path_preprocessing[index] for index in id_audio_to_keep]
+    
     '''
     Copying audio files into ImageNET tree style
     '''
@@ -290,7 +296,10 @@ def main(args, project_name):
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "language": ', value = '"' + language + '"\n')        
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "training_files": ', value = '"' + path_cluster_train_filelist + '",\n')
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "validation_files": ', value = '"' + path_cluster_valid_filelist + '",\n')
-        # data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + 'data/data' + '_' + language + '/cmudict_dictionary' + '",\n')
+        if language == "en":
+            data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + os.path.join('data','cmudict_dictionary') + '",\n')
+        else:
+            data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + os.path.join('data','ipa_dictionary',language + "-" + language.upper()) + '",\n')            
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
 
     if path_symbols_file is not None:

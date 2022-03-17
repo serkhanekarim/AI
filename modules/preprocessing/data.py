@@ -85,7 +85,8 @@ class DataPreprocessor:
                                        option_column=None,
                                        option_value=None,
                                        format_conversion=".wav",
-                                       speaker_whitelist=None):
+                                       speaker_whitelist=None,
+                                       duration_minimum_user=300):
         '''
         From a dataframe containg audio information in Mozilla Common voice format, convert it
         into taflowtron fileslist format
@@ -116,6 +117,8 @@ class DataPreprocessor:
             format used by tacotron2 training (always .wav)
         speaker_whitelist : list
             list of speaker ID to use
+        speaker_whitelist : int
+            minimum duration in seconds of user
             
         Returns
         -------
@@ -141,10 +144,6 @@ class DataPreprocessor:
             list_user.append(res[index][0])
             list_number_element.append(res[index][1].shape[0])
             list_user_df.append(res[index][1])
-            # print(list_user_df)
-            # print(self.dataframe)
-            # print(index)
-            # print(res[index][1])
             if option_column is not None: list_option_element.append(list(list_user_df[index][option_column].unique())[0])
         
         data_info = pd.DataFrame({user_column:list_user,element_column:list_number_element,option_column:list_option_element},columns=[user_column, element_column, option_column])  
@@ -166,18 +165,22 @@ class DataPreprocessor:
             list_original_path = []
             for index, user in enumerate(tqdm(list_user)):
                 table = list_user_df[index][[path_column,element_column]]
-                len_table = table.shape[0]
-                table[element_column] = DataCleaner().clean_text(data=table[element_column],
-                                                                 cleaner=cleaner)
-                nb_part = len_table // (self.NB_LIMIT_FILE_CLUSTER + 1)
-                part_extension = ["part_" + str(index) for index in range(nb_part+1)]
-                dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
                 list_original_path_user = [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
-                list_original_path += list_original_path_user
-                list_audio_path += [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
-                list_subtitle += list(table[element_column])
-                list_speaker_id += [str(index)]*len_table
-                list_duration.append(sum([librosa.get_duration(filename=file) for file in list_original_path_user]))
+                duration_user = sum([librosa.get_duration(filename=file) for file in list_original_path_user])
+                list_duration.append(duration_user)
+                if duration_user >= duration_minimum_user:
+                    len_table = table.shape[0]
+                    table[element_column] = DataCleaner().clean_text(data=table[element_column],
+                                                                     cleaner=cleaner)
+                    nb_part = len_table // (self.NB_LIMIT_FILE_CLUSTER + 1)
+                    part_extension = ["part_" + str(index) for index in range(nb_part+1)]
+                    dir_to_create += [os.path.join(data_directory_preprocessed,user,part) for part in part_extension]
+                    list_original_path += list_original_path_user
+                    list_audio_path += [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
+                    list_subtitle += list(table[element_column])
+                    list_speaker_id += [str(index)]*len_table
+                else:
+                    print("Total user duration is: " + str(duration_user) + " second(s) from: " + str(user) + " is below to: " + str(duration_minimum_user) + " second(s), this user will be filtered out.")
             data_info["Duration"] = list_duration
             return list_audio_path, list_subtitle, list_speaker_id, data_info, len(list_user), dir_to_create, list_original_path
     

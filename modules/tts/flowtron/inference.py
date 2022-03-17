@@ -36,8 +36,7 @@ def parse_args():
                         help='Path to waveglow state dict', type=str)
     parser.add_argument('-t', '--text', help='Text to synthesize', type=str)
     parser.add_argument('-i', '--id', help='Speaker id', type=int)
-    parser.add_argument('-n', '--n_frames', help='Number of frames',
-                        default=400, type=int)
+    parser.add_argument('-n', '--n_frames', help='Number of frames', type=int)
     parser.add_argument('-o', "--output_dir", default="results/inferences")
     parser.add_argument("-s", "--sigma", default=0.5, type=float)
     parser.add_argument("-g", "--gate", default=0.5, type=float)
@@ -134,5 +133,6 @@ if __name__ == "__main__":
 
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = False
+    if args.n_frames is None: args.n_frames = len(args.text)*6
     infer(args.flowtron_path, args.waveglow_path, args.output_dir, args.text,
           args.id, args.n_frames, args.sigma, args.gate, args.seed)

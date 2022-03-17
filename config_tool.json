@@ -1,7 +1,7 @@
 {
 	"mcv_data_taflowtron": {
-		"name_train_param_config": "exp_41_v10_0_mcv_ar_0_1_0_removesilence_begend_libri",
-		"name_data_config": "v2_mcv_ar_0_1_0_removesilence_begend_whitelist",
+		"name_train_param_config": "exp_43_v10_1_mcv_ar_0_1_0_removesilence_begend_libri",
+		"name_data_config": "v3_mcv_ar_0_1_0_removesilence_begend_autowhitelist",
 		"language": "ar",
 		"gender": null,
 		
@@ -11,7 +11,7 @@
 		"directory_taflowtron_filelist": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists",
 		"path_hparam_file": "/home/serkhane/Repositories/AI/modules/tts/flowtron/config/config.json",
 		"path_symbols_file": null,
-		"path_speaker_whitelist": "/home/serkhane/Repositories/AI/modules/scraping/sources/mcv/ar/speaker_whitelist_0.1.0.txt",
+		"path_speaker_whitelist": null,
 		
 		"silence_begend": true,
 		"more_silence": false,
@@ -19,6 +19,7 @@
 		"silence_threshold": null,
 		"remove_noise": false,
 		"audio_normalization": true,
+		"duration_minimum_user": 300,
 		
 		"tts_model": "flowtron",
 		"warmstart_model": "flowtron_libritts2p3k.pt",
