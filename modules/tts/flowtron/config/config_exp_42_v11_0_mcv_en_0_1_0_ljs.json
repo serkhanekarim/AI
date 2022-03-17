@@ -24,8 +24,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/ljs/v1_1_ljs_en_0_1_0/ljs_audio_text_train_filelist_en_female.txt",
-        "validation_files": "/home/serkhane/Repositories/AI/modules/tts/flowtron/filelists/ljs/v1_1_ljs_en_0_1_0/ljs_audio_text_valid_filelist_en_female.txt",
+        "training_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/ljs/v1_1_ljs_en_0_1_0/ljs_audio_text_train_filelist_en_female.txt",
+        "validation_files": "/home/ks1/Repositories/AI/modules/tts/flowtron/filelists/ljs/v1_1_ljs_en_0_1_0/ljs_audio_text_valid_filelist_en_female.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0,
         "cmudict_path": "data/cmudict_dictionary",
