@@ -3624,7 +3624,7 @@
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ034-0022.wav|testified that twenty identifiable fingerprints and eight palmprints were developed on these cartons.|0
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ036-0081.wav|The station wagon stopped to pick up the man and then drove off.|0
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ001-0165.wav|One fruitful source of badness in paper|0
-/home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ050-0278.wav|the recommendations we have here suggested would greatly advance the security of the office without any impairment of our fundamental liberties.|
+/home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ050-0278.wav|the recommendations we have here suggested would greatly advance the security of the office without any impairment of our fundamental liberties.|0
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ006-0241.wav|A prisoner Baxter is in the infirmary in consequence of a severe injury to his wrist-joint.|0
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ025-0106.wav|which contain no chlorophyll and are not green, are always, so far as respiration is concerned, in the exact position of animals.|0
 /home/ks1/DATA/audio/en/LJSpeech-1.1/wavs/LJ019-0277.wav|the prisoners should be made to dispense with the use of a mattress, and should sleep on planks.|0
