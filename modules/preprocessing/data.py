@@ -163,6 +163,7 @@ class DataPreprocessor:
             list_duration = []
             dir_to_create = []
             list_original_path = []
+            nb_user = 0
             for index, user in enumerate(tqdm(list_user)):
                 table = list_user_df[index][[path_column,element_column]]
                 list_original_path_user = [os.path.join(data_directory,audio_path) for audio_path in table[path_column]]
@@ -179,10 +180,11 @@ class DataPreprocessor:
                     list_audio_path += [os.path.join(data_directory_preprocessed,user,part_extension[index//(self.NB_LIMIT_FILE_CLUSTER+1)],os.path.splitext(list(table[path_column])[index])[0]+format_conversion) for index in range(len_table)]
                     list_subtitle += list(table[element_column])
                     list_speaker_id += [str(index)]*len_table
+                    nb_user += 1
                 else:
                     print("Total user duration is: " + str(duration_user) + " second(s) from: " + str(user) + " is below to: " + str(duration_minimum_user) + " second(s), this user will be filtered out.")
             data_info["Duration"] = list_duration
-            return list_audio_path, list_subtitle, list_speaker_id, data_info, len(list_user), dir_to_create, list_original_path
+            return list_audio_path, list_subtitle, list_speaker_id, data_info, nb_user, dir_to_create, list_original_path
     
     def _useless_data(self, data):
         '''

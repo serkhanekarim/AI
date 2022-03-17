@@ -299,7 +299,7 @@ def main(args, project_name):
         if language == "en":
             data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + os.path.join('data','cmudict_dictionary') + '",\n')
         else:
-            data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + os.path.join('data','ipa_dictionary',language + "-" + language.upper()) + '",\n')            
+            data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "cmudict_path": ', value = '"' + os.path.join('data','ipa_dictionary' + "_" + language + "-" + language.upper()) + '",\n')            
         data_haparams = DataWriter(data_haparams, new_path_hparam_file).write_edit_data(key='        "n_speakers": ', value = str(nb_speaker) + ',\n')
 
     if path_symbols_file is not None:
