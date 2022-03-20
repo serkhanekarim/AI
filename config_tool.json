@@ -1,7 +1,7 @@
 {
 	"mcv_data_taflowtron": {
-		"name_train_param_config": "exp_43_v10_1_mcv_ar_0_1_0_removesilence_begend_libri",
-		"name_data_config": "v3_mcv_ar_0_1_0_removesilence_begend_autowhitelist",
+		"name_train_param_config": "exp_44_v10_2_mcv_ar_0_1_0_removesilence_begend_libri",
+		"name_data_config": "v3_mcv_ar_0_1_1_removesilence_begend_autowhitelist",
 		"language": "ar",
 		"gender": null,
 		
@@ -20,6 +20,7 @@
 		"remove_noise": false,
 		"audio_normalization": true,
 		"duration_minimum_user": 300,
+		"duration_minimum_recording": 0.5,
 		
 		"tts_model": "flowtron",
 		"warmstart_model": "flowtron_libritts2p3k.pt",

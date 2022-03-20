@@ -85,6 +85,7 @@ def main(args, project_name):
     more_silence = args["more_silence"]
     add_silence = args["add_silence"]
     duration_minimum_user = args["duration_minimum_user"]
+    duration_minimum_recording = args["duration_minimum_recording"]
     silence_threshold = args["silence_threshold"]
     remove_noise = args["remove_noise"]
     audio_normalization = args["audio_normalization"]
@@ -209,7 +210,7 @@ def main(args, project_name):
             pool.starmap(AudioPreprocessor().add_lead_trail_audio_wav_silence, tqdm(list_arg))
             
     print("Removing empty and long audio (>10 seconds)...")
-    id_audio_to_keep = [index for index in tqdm(range(len(list_audio_path_preprocessing))) if 0 < librosa.get_duration(filename=list_audio_path_preprocessing[index]) <= 10]
+    id_audio_to_keep = [index for index in tqdm(range(len(list_audio_path_preprocessing))) if duration_minimum_recording <= librosa.get_duration(filename=list_audio_path_preprocessing[index]) <= 10]
     list_subtitle = [list_subtitle[index] for index in id_audio_to_keep]
     list_audio_path_preprocessing = [list_audio_path_preprocessing[index] for index in id_audio_to_keep]
     
