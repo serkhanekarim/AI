@@ -11,3 +11,5 @@
 ####################################################################################
 
 This is ITN delivery containing grammars for inverse-text-normalization
+
+If ou dono't have the required libraries installed, open terminal and run ./dbuild.sh or you can also run ./dbuild.sh --conda to create an ITN conda environment.

@@ -30,7 +30,7 @@
 SCRIPT=$(readlink -f $0)
 SCRIPT_DIR=`dirname $SCRIPT`
 
-if [ $1 == "--conda" ]; then
+if [ "$1" == "--conda" ]; then
 	cd $SCRIPT_DIR
 	source ~/anaconda3/etc/profile.d/conda.sh
 	conda env create --file environment.yml
