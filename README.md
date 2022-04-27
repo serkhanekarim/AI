@@ -1,38 +1,5 @@
-Clone the full repo by opening a console on Ubuntu and run:
+## Personal works
 
-git clone https://github.com/serkhanekarim/ai.git
+### Karim SERKHANE
 
-Create a python3 env and open a console on the marketing-analysis folder and run :
-make install
-Then run :
-
-Question 6:
-./model_training_regression.py
-or :
-./model_training_regression.py -h
-for more help
-
-
-
-Question 7:
-./model_training_train.py
-or :
-./model_training_train.py -h
-for more help
-
-Close the windows plots to let the script continue
-
-Results are here: marketing-analysis/results/predictions.csv
-
-
-
-Question 8:
-./kernel.py
-or :
-./kernel.py -h
-for more help
-
-
-
-
-You can also find results in marketing-analysis/results folder and marketing-analysis/results/experiments for plots
+Here my personal work for some data analysis projects, but also NLP and Audio (ASR and TTS) projects for different languages (French, English and Arabic).
