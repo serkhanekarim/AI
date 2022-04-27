@@ -1,345 +1,297 @@
-dix	10
-onze	11
-douze	12
-treize	13
-quatorze	14
-quinze	15
-seize	16
-dix-sept	17
-dix-huit	18
-dix-neuf	19
-vingt	20
-vingt et un	21
-vingt et une	21
-vingt-et-un	21
-vingt-et-une	21
-vingt et uns	21
-vingt et unes	21
-vingt-et-uns	21
-vingt-et-unes	21
-vingt-deux	22
-vingt-trois	23
-vingt-quatre	24
-vingt-cinq	25
-vingt-six	26
-vingt-sept	27
-vingt-huit	28
-vingt-neuf	29
-trente	30
-trente et un	31
-trente et une	31
-trente-et-un	31
-trente-et-une	31
-trente et uns	31
-trente et unes	31
-trente-et-uns	31
-trente-et-unes	31
-trente-deux	32
-trente-trois	33
-trente-quatre	34
-trente-cinq	35
-trente-six	36
-trente-sept	37
-trente-huit	38
-trente-neuf	39
-quarante	40
-quarante et un	41
-quarante et une	41
-quarante-et-un	41
-quarante-et-une	41
-quarante et uns	41
-quarante et unes	41
-quarante-et-uns	41
-quarante-et-unes	41
-quarante-deux	42
-quarante-trois	43
-quarante-quatre	44
-quarante-cinq	45
-quarante-six	46
-quarante-sept	47
-quarante-huit	48
-quarante-neuf	49
-cinquante	50
-cinquante et un	51
-cinquante et une	51
-cinquante-et-un	51
-cinquante-et-une	51
-cinquante et uns	51
-cinquante et unes	51
-cinquante-et-uns	51
-cinquante-et-unes	51
-cinquante-deux	52
-cinquante-trois	53
-cinquante-quatre	54
-cinquante-cinq	55
-cinquante-six	56
-cinquante-sept	57
-cinquante-huit	58
-cinquante-neuf	59
-soixante	60
-soixante et un	61
-soixante et une	61
-soixante-et-un	61
-soixante-et-une	61
-soixante et uns	61
-soixante et unes	61
-soixante-et-uns	61
-soixante-et-unes	61
-soixante-deux	62
-soixante-trois	63
-soixante-quatre	64
-soixante-cinq	65
-soixante-six	66
-soixante-sept	67
-soixante-huit	68
-soixante-neuf	69
-soixante-dix	70
-soixante et onze	71
-soixante-et-onze	71
-soixante-douze	72
-soixante-treize	73
-soixante-quatorze	74
-soixante-quinze	75
-soixante-seize	76
-soixante-dix-sept	77
-soixante-dix-huit	78
-soixante-dix-neuf	79
-quatre-vingts	80
-quatre-vingt-un	81
-quatre-vingt-une	81
-quatre-vingt-uns	81
-quatre-vingt-unes	81
-quatre-vingt-deux	82
-quatre-vingt-trois	83
-quatre-vingt-quatre	84
-quatre-vingt-cinq	85
-quatre-vingt-six	86
-quatre-vingt-sept	87
-quatre-vingt-huit	88
-quatre-vingt-neuf	89
-quatre-vingt-dix	90
-quatre-vingt-onze	91
-quatre-vingt-douze	92
-quatre-vingt-treize	93
-quatre-vingt-quatorze	94
-quatre-vingt-quinze	95
-quatre-vingt-seize	96
-quatre-vingt-dix-sept	97
-quatre-vingt-dix-huit	98
-quatre-vingt-dix-neuf	99
-septante	70
-septante et un	71
-septante-et-un	71
-septante et une	71
-septante-et-une	71
-septante et uns	71
-septante-et-uns	71
-septante et unes	71
-septante-et-unes	71
-septante-deux	72
-septante-trois	73
-septante-quatre	74
-septante-cinq	75
-septante-six	76
-septante-sept	77
-septante-huit	78
-septante-neuf	79
-octante	80
-octante-et-un	81
-octante et un	81
-octante-et-une	81
-octante et une	81
-octante-et-uns	81
-octante et uns	81
-octante-et-unes	81
-octante et unes	81
-octante-deux	82
-octante-trois	83
-octante-quatre	84
-octante-cinq	85
-octante-six	86
-octante-sept	87
-octante-huit	88
-octante-neuf	89
-huitante	80
-huitante-et-un	81
-huitante et un	81
-huitante-et-une	81
-huitante et une	81
-huitante-et-uns	81
-huitante et uns	81
-huitante-et-unes	81
-huitante et unes	81
-huitante-deux	82
-huitante-trois	83
-huitante-quatre	84
-huitante-cinq	85
-huitante-six	86
-huitante-sept	87
-huitante-huit	88
-huitante-neuf	89
-nonante	90
-nonante-et-un	91
-nonante et un	91
-nonante-et-une	91
-nonante et une	91
-nonante-et-uns	91
-nonante et uns	91
-nonante-et-unes	91
-nonante et unes	91
-nonante-deux	92
-nonante-trois	93
-nonante-quatre	94
-nonante-cinq	95
-nonante-six	96
-nonante-sept	97
-nonante-huit	98
-nonante-neuf	99
-dix sept	17
-dix huit	18
-dix neuf	19
-vingt deux	22
-vingt trois	23
-vingt quatre	24
-vingt cinq	25
-vingt six	26
-vingt sept	27
-vingt huit	28
-vingt neuf	29
-trente deux	32
-trente trois	33
-trente quatre	34
-trente cinq	35
-trente six	36
-trente sept	37
-trente huit	38
-trente neuf	39
-quarante deux	42
-quarante trois	43
-quarante quatre	44
-quarante cinq	45
-quarante six	46
-quarante sept	47
-quarante huit	48
-quarante neuf	49
-cinquante deux	52
-cinquante trois	53
-cinquante quatre	54
-cinquante cinq	55
-cinquante six	56
-cinquante sept	57
-cinquante huit	58
-cinquante neuf	59
-soixante deux	62
-soixante trois	63
-soixante quatre	64
-soixante cinq	65
-soixante six	66
-soixante sept	67
-soixante huit	68
-soixante neuf	69
-soixante douze	72
-soixante treize	73
-soixante quatorze	74
-soixante quinze	75
-soixante seize	76
-soixante dix sept	77
-soixante dix huit	78
-soixante dix neuf	79
-soixante dix-sept	77
-soixante dix-huit	78
-soixante dix-neuf	79
-soixante-dix sept	77
-soixante-dix huit	78
-soixante-dix neuf	79
-quatre vingts	80
-quatre-vingt un	81
-quatre-vingt une	81
-quatre-vingt uns	81
-quatre-vingt unes	81
-quatre vingt un	81
-quatre vingt une	81
-quatre vingt uns	81
-quatre vingt unes	81
-quatre vingt deux	82
-quatre vingt trois	83
-quatre vingt quatre	84
-quatre vingt cinq	85
-quatre vingt six	86
-quatre vingt sept	87
-quatre vingt huit	88
-quatre vingt neuf	89
-quatre vingt-deux	82
-quatre vingt-trois	83
-quatre vingt-quatre	84
-quatre vingt-cinq	85
-quatre vingt-six	86
-quatre vingt-sept	87
-quatre vingt-huit	88
-quatre vingt-neuf	89
-quatre vingt dix	90
-quatre vingt onze	91
-quatre vingt douze	92
-quatre vingt treize	93
-quatre vingt quatorze	94
-quatre vingt quinze	95
-quatre vingt seize	96
-quatre vingt dix sept	97
-quatre vingt dix huit	98
-quatre vingt dix neuf	99
-quatre vingt dix-sept	97
-quatre vingt dix-huit	98
-quatre vingt dix-neuf	99
-quatre-vingt deux	82
-quatre-vingt trois	83
-quatre-vingt quatre	84
-quatre-vingt cinq	85
-quatre-vingt six	86
-quatre-vingt sept	87
-quatre-vingt huit	88
-quatre-vingt neuf	89
-quatre-vingt dix	90
-quatre-vingt onze	91
-quatre-vingt douze	92
-quatre-vingt treize	93
-quatre-vingt quatorze	94
-quatre-vingt quinze	95
-quatre-vingt seize	96
-quatre-vingt dix sept	97
-quatre-vingt dix huit	98
-quatre-vingt dix neuf	99
-quatre-vingt dix-sept	97
-quatre-vingt dix-huit	98
-quatre-vingt dix-neuf	99
-septante deux	72
-septante trois	73
-septante quatre	74
-septante cinq	75
-septante six	76
-septante sept	77
-septante huit	78
-septante neuf	79
-octante deux	82
-octante trois	83
-octante quatre	84
-octante cinq	85
-octante six	86
-octante sept	87
-octante huit	88
-octante neuf	89
-huitante deux	82
-huitante trois	83
-huitante quatre	84
-huitante cinq	85
-huitante six	86
-huitante sept	87
-huitante huit	88
-huitante neuf	89
-nonante deux	92
-nonante trois	93
-nonante quatre	94
-nonante cinq	95
-nonante six	96
-nonante sept	97
-nonante huit	98
-nonante neuf	99
+1	وَاحِد
+2	اِثْنَان
+3	ثَلَاثَة
+4	أَرْبَعَة
+5	خَمْسَة
+6	سِتَّة
+7	سَبْعَة
+8	ثَمَانِيَة
+9	تِسْعَة
+10	عَشَرَة
+11	أَحَدَ عَشَرَ
+12	اِثْنَا عَشَرَ
+13	ثَلَاثَةَ عَشَرَ
+14	أَرْبَعَةَ عَشَرَ
+15	خَمْسَةَ عَشَرَ
+16	سِتَّةَ عَشَرَ
+17	سَبْعَةَ عَشَرَ
+18	ثَمَانِيَةَ عَشَرَ
+19	تِسْعَةَ عَشَرَ
+20	عِشْرُونَ
+21	وَاحِد و عِشْرُونَ
+22	اِثْنَان و عِشْرُونَ
+23	ثَلَاثَة و عِشْرُونَ
+24	أَرْبَعَة و عِشْرُونَ
+25	خَمْسَة و عِشْرُونَ
+26	سِتَّة و عِشْرُونَ
+27	سَبْعَة و عِشْرُونَ
+28	ثَمَانِيَة و عِشْرُونَ
+29	تِسْعَة و عِشْرُونَ
+30	ثَلَاثُونَ
+31	وَاحِد و ثَلَاثُونَ
+32	اِثْنَان و ثَلَاثُونَ
+33	ثَلَاثَة و ثَلَاثُونَ
+34	أَرْبَعَة و ثَلَاثُونَ
+35	خَمْسَة و ثَلَاثُونَ
+36	سِتَّة و ثَلَاثُونَ
+37	سَبْعَة و ثَلَاثُونَ
+38	ثَمَانِيَة و ثَلَاثُونَ
+39	تِسْعَة و ثَلَاثُونَ
+40	أَرْبَعُونَ
+41	وَاحِد و أَرْبَعُونَ
+42	اِثْنَان و أَرْبَعُونَ
+43	ثَلَاثَة و أَرْبَعُونَ
+44	أَرْبَعَة و أَرْبَعُونَ
+45	خَمْسَة و أَرْبَعُونَ
+46	سِتَّة و أَرْبَعُونَ
+47	سَبْعَة و أَرْبَعُونَ
+48	ثَمَانِيَة و أَرْبَعُونَ
+49	تِسْعَة و أَرْبَعُونَ
+50	خَمْسُونَ
+51	وَاحِد و خَمْسُونَ
+52	اِثْنَان و خَمْسُونَ
+53	ثَلَاثَة و خَمْسُونَ
+54	أَرْبَعَة و خَمْسُونَ
+55	خَمْسَة و خَمْسُونَ
+56	سِتَّة و خَمْسُونَ
+57	سَبْعَة و خَمْسُونَ
+58	ثَمَانِيَة و خَمْسُونَ
+59	تِسْعَة و خَمْسُونَ
+60	سِتُّونَ
+61	وَاحِد و سِتُّونَ
+62	اِثْنَان و سِتُّونَ
+63	ثَلَاثَة و سِتُّونَ
+64	أَرْبَعَة و سِتُّونَ
+65	خَمْسَة و سِتُّونَ
+66	سِتَّة و سِتُّونَ
+67	سَبْعَة و سِتُّونَ
+68	ثَمَانِيَة و سِتُّونَ
+69	تِسْعَة و سِتُّونَ
+70	سَبْعُونَ
+71	وَاحِد و سَبْعُونَ
+72	اِثْنَان و سَبْعُونَ
+73	ثَلَاثَة و سَبْعُونَ
+74	أَرْبَعَة و سَبْعُونَ
+75	خَمْسَة و سَبْعُونَ
+76	سِتَّة و سَبْعُونَ
+77	سَبْعَة و سَبْعُونَ
+78	ثَمَانِيَة و سَبْعُونَ
+79	تِسْعَة و سَبْعُونَ
+80	ثَمَانُونَ
+81	وَاحِد و ثَمَانُونَ
+82	اِثْنَان و ثَمَانُونَ
+83	ثَلَاثَة و ثَمَانُونَ
+84	أَرْبَعَة و ثَمَانُونَ
+85	خَمْسَة و ثَمَانُونَ
+86	سِتَّة و ثَمَانُونَ
+87	سَبْعَة و ثَمَانُونَ
+88	ثَمَانِيَة و ثَمَانُونَ
+89	تِسْعَة و ثَمَانُونَ
+90	تِسْعُونَ
+91	وَاحِد و تِسْعُونَ
+92	اِثْنَان و تِسْعُونَ
+93	ثَلَاثَة و تِسْعُونَ
+94	أَرْبَعَة و تِسْعُونَ
+95	خَمْسَة و تِسْعُونَ
+96	سِتَّة و تِسْعُونَ
+97	سَبْعَة و تِسْعُونَ
+98	ثَمَانِيَة و تِسْعُونَ
+99	تِسْعَة و تِسْعُونَ
+1	واحد
+2	اثنان
+3	ثلاثة
+4	أربعة
+5	خمسة
+6	ستة
+7	سبعة
+8	ثمانية
+9	تسعة
+10	عشرة
+11	أحد عشر
+12	اثنا عشر
+13	ثلاثة عشر
+14	أربعة عشر
+15	خمسة عشر
+16	ستة عشر
+17	سبعة عشر
+18	ثمانية عشر
+19	تسعة عشر
+20	عشرون
+21	واحد وعشرون
+22	اثنان وعشرون
+23	ثلاثة وعشرون
+24	أربعة وعشرون
+25	خمسة وعشرون
+26	ستة وعشرون
+27	سبعة وعشرون
+28	ثمانية وعشرون
+29	تسعة وعشرون
+30	ثلاثون
+31	واحد وثلاثون
+32	اثنان وثلاثون
+33	ثلاثة وثلاثون
+34	أربعة وثلاثون
+35	خمسة وثلاثون
+36	ستة وثلاثون
+37	سبعة وثلاثون
+38	ثمانية وثلاثون
+39	تسعة وثلاثون
+40	أربعون
+41	واحد وأربعون
+42	اثنان وأربعون
+43	ثلاثة وأربعون
+44	أربعة وأربعون
+45	خمسة وأربعون
+46	ستة وأربعون
+47	سبعة وأربعون
+48	ثمانية وأربعون
+49	تسعة وأربعون
+50	خمسون
+51	واحد وخمسون
+52	اثنان وخمسون
+53	ثلاثة وخمسون
+54	أربعة وخمسون
+55	خمسة وخمسون
+56	ستة وخمسون
+57	سبعة وخمسون
+58	ثمانية وخمسون
+59	تسعة وخمسون
+60	ستون
+61	واحد وستون
+62	اثنان وستون
+63	ثلاثة وستون
+64	أربعة وستون
+65	خمسة وستون
+66	ستة وستون
+67	سبعة وستون
+68	ثمانية وستون
+69	تسعة وستون
+70	سبعون
+71	واحد وسبعون
+72	اثنان وسبعون
+73	ثلاثة وسبعون
+74	أربعة وسبعون
+75	خمسة وسبعون
+76	ستة وسبعون
+77	سبعة وسبعون
+78	ثمانية وسبعون
+79	تسعة وسبعون
+80	ثمانون
+81	واحد وثمانون
+82	اثنان وثمانون
+83	ثلاثة وثمانون
+84	أربعة وثمانون
+85	خمسة وثمانون
+86	ستة وثمانون
+87	سبعة وثمانون
+88	ثمانية وثمانون
+89	تسعة وثمانون
+90	تسعون
+91	واحد وتسعون
+92	اثنان وتسعون
+93	ثلاثة وتسعون
+94	أربعة وتسعون
+95	خمسة وتسعون
+96	ستة وتسعون
+97	سبعة وتسعون
+98	ثمانية وتسعون
+99	تسعة وتسعون
+1	واحد
+2	اثنان
+3	ثلاثة
+4	أربعة
+5	خمسة
+6	ستة
+7	سبعة
+8	ثمانية
+9	تسعة
+10	عشرة
+11	أحد عشر
+12	اثنا عشر
+13	ثلاثة عشر
+14	أربعة عشر
+15	خمسة عشر
+16	ستة عشر
+17	سبعة عشر
+18	ثمانية عشر
+19	تسعة عشر
+20	عشرين 
+21	واحد وعشرين
+22	اثنان وعشرين
+23	ثلاثة وعشرين 
+24	أربعة وعشرين
+25	خمسة وعشرين
+26	ستة وعشرين
+27	سبعة وعشرين
+28	ثمانية وعشرين
+29	تسعة وعشرين
+30	ثلاثين
+31	واحد وثلاثين
+32	اثنان وثلاثين
+33	ثلاثة وثلاثين
+34	أربعة وثلاثين
+35	خمسة وثلاثين
+36	ستة وثلاثين
+37	سبعة وثلاثين
+38	ثمانية وثلاثين
+39	تسعة وثلاثين
+40	أربعين
+41	واحد وأربعين
+42	اثنان وأربعين
+43	ثلاثة وأربعين
+44	أربعة وأربعين
+45	خمسة وأربعين
+46	ستة وأربعين
+47	سبعة وأربعين
+48	ثمانية وأربعين
+49	تسعة وأربعين
+50	خمسين
+51	واحد وخمسين
+52	اثنان وخمسين
+53	ثلاثة وخمسين
+54	أربعة وخمسين
+55	خمسة وخمسين
+56	ستة وخمسين
+57	سبعة وخمسين
+58	ثمانية وخمسين
+59	تسعة وخمسين
+60	ستين
+61	واحد وستين
+62	اثنان وستين
+63	ثلاثة وستين
+64	أربعة وستين
+65	خمسة وستين
+66	ستة وستين
+67	سبعة وستين
+68	ثمانية وستين
+69	تسعة وستين
+70	سبعين
+71	واحد وسبعين
+72	اثنان وسبعين
+73	ثلاثة وسبعين
+74	أربعة وسبعين
+75	خمسة وسبعين
+76	ستة وسبعين
+77	سبعة وسبعين
+78	ثمانية وسبعين
+79	تسعة وسبعين
+80	ثمانين
+81	واحد وثمانين
+82	اثنان وثمانين
+83	ثلاثة وثمانين
+84	أربعة وثمانين
+85	خمسة وثمانين
+86	ستة وثمانين
+87	سبعة وثمانين
+88	ثمانية وثمانين
+89	تسعة وثمانين
+90	تسعين
+91	واحد وتسعين
+92	اثنان وتسعين
+93	ثلاثة وتسعين
+94	أربعة وتسعين
+95	خمسة وتسعين
+96	ستة وتسعين
+97	سبعة وتسعين
+98	ثمانية وتسعين
+99	تسعة وتسعين

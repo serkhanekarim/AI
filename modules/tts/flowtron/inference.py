@@ -133,6 +133,10 @@ if __name__ == "__main__":
 
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = False
-    if args.n_frames is None: args.n_frames = len(args.text)*6
+    if args.n_frames is None:
+        if args.text[-1] not in ["?", ".", "!", ",", ";", ":"]: args.text += "."
+        args.text = args.text.capitalize()
+        args.n_frames = max(50,len(args.text) * 6)
+    
     infer(args.flowtron_path, args.waveglow_path, args.output_dir, args.text,
           args.id, args.n_frames, args.sigma, args.gate, args.seed)

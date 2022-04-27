@@ -4,7 +4,7 @@ import '../common/lib/chars.grm' as chars;
 digit = Optimize[bytelib.kDigit];
 star = Optimize[bytelib.kBytes*];
 space = Optimize[" "];
-hyphen = Optimize["-"];
+and = Optimize[space "و" space];
 
 lb = Optimize["[BOS]" | chars.Punc | space];
 rb = Optimize["[EOS]" | chars.Punc | space];
@@ -12,7 +12,7 @@ rb = Optimize["[EOS]" | chars.Punc | space];
 lb_nopunc = Optimize["[BOS]"|space];
 rb_nopunc = Optimize["[EOS]"|space];
 
-separator = Optimize[space|hyphen];
+separator = Optimize[and];
 
 
 #alone variable for alone number and for cent and mille (not contain 0 and 1)
@@ -32,7 +32,7 @@ tr_2digit_ordinals = Optimize[StringFile['dictionaries/number/ordinal/2digit_ord
 tr_2digit_cardinal = Optimize[StringFile['dictionaries/number/cardinal/2digit_cardinal.dict', byte]];
 tr_2digit_cardinal_alone = Optimize[StringFile['dictionaries/number/cardinal/2digit_cardinal_alone.dict', byte]];
 
-
+tr_hundred_cardinal = Optimize[StringFile['dictionaries/number/cardinal/hundred_cardinal.dict', byte]];
 
 tr_1digit = Optimize[tr_1digit_ordinal|tr_1digit_ordinals|tr_1digit_cardinal];
 tr_1digit_alone = Optimize[tr_1digit_alone_cardinal];
@@ -80,7 +80,9 @@ remove_separator = Optimize[(separator : "")];
 
 
 
-########################################## Cents ##############################################
+########################################## Hundred ##############################################
+
+tr_cent_2_digit = tr_hundred_cardinal 
 
 tr_cent_2_digit = Optimize[(cent_cardinal separator : "") tr_2digit];
 tr_cent_1_digit = Optimize[(cent_cardinal separator : "0") tr_1digit];
